@@ -1,0 +1,11 @@
+*.o
+*.suo
+*.filters
+*.db
+*.opendb
+*.TMP
+sprokyt_firmware/Debug
+sprokyt_firmware/Release
+CodeDB
+sprokyt_firmware-Debug-Win32
+sprokyt_firmware/VisualGDBCache/sprokyt_firmware-Debug
