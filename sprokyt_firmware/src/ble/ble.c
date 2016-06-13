@@ -22,6 +22,7 @@
 
 /* Private Macros -----------------------------------------------------------*/
 #define BDADDR_SIZE 6
+#define JOYSTICK_COUNT 4
 
 #define COPY_UUID_128_V2(uuid_struct, uuid_15, uuid_14, uuid_13, uuid_12, uuid_11, uuid_10, uuid_9, uuid_8, uuid_7, uuid_6, uuid_5, uuid_4, uuid_3, uuid_2, uuid_1, uuid_0) \
 do {\
@@ -47,12 +48,17 @@ do {\
 // LED service
 #define COPY_LED_SERVICE_UUID(uuid_struct)  COPY_UUID_128_V2(uuid_struct,0x0b,0x36,0x6e,0x80, 0xcf,0x3a, 0x11,0xe1, 0x9a,0xb4, 0x00,0x02,0xa5,0xd5,0xc5,0x1b)
 #define COPY_LED_UUID(uuid_struct)          COPY_UUID_128_V2(uuid_struct,0x0c,0x36,0x6e,0x80, 0xcf,0x3a, 0x11,0xe1, 0x9a,0xb4, 0x00,0x02,0xa5,0xd5,0xc5,0x1b)
+	
+// Input Service
+#define COPY_INPUT_SERVICE_UUID(uuid_struct)  COPY_UUID_128_V2(uuid_struct,0x0d,0x36,0x6e,0x80, 0xcf,0x3a, 0x11,0xe1, 0x9a,0xb4, 0x00,0x02,0xa5,0xd5,0xd5,0x2b)
+#define COPY_INPUT_CHAR_UUID(uuid_struct)          COPY_UUID_128_V2(uuid_struct,0x0e,0x36,0x6e,0x80, 0xcf,0x3a, 0x11,0xe1, 0x9a,0xb4, 0x00,0x02,0xa5,0xd5,0xd5,0x2b)
 
 /* Private variables ---------------------------------------------------------*/
 uint8_t bnrg_expansion_board = IDB04A1; /* at startup, suppose the X-NUCLEO-IDB04A1 is used */
 uint8_t SERVER_BDADDR[] = { 0x12, 0x34, 0x00, 0xE1, 0x80, 0x03 };
 uint8_t bdaddr[BDADDR_SIZE];
 AxesRaw_t axes_data = {0, 0, 0};
+Joystick_t joysticks[JOYSTICK_COUNT] = { {.x = 0, .y = 0}, {.x = 0, .y = 0} };
 volatile uint8_t do_set_connectable = 1;
 volatile uint16_t service_connection_handle = 0;
 volatile uint8_t is_notification_enabled = FALSE;
@@ -61,10 +67,12 @@ uint16_t sampleServHandle, TXCharHandle, RXCharHandle;
 uint16_t accServHandle, freeFallCharHandle, accCharHandle;
 uint16_t envSensServHandle, tempCharHandle, pressCharHandle, humidityCharHandle;
 uint16_t ledServHandle, ledButtonCharHandle;
+uint16_t inputServHandle, inputButtonCharHandle;
 
 /* Private function prototypes ---------------------------------------------------------*/
 tBleStatus AddAccService(void);
 tBleStatus AddLEDService(void);
+tBleStatus AddInputService(void);
 tBleStatus AddControlSensorService(void);
 void User_Process(AxesRaw_t* p_axes);
 void setBLEConnectable(void);
@@ -191,6 +199,12 @@ void Init_BLE()
 		PRINTF("LED service added successfully.\n");
 	else
 		PRINTF("Error while adding LED service.\n");
+	
+	ret = AddInputService();
+	if (ret == BLE_STATUS_SUCCESS)
+		PRINTF("LED service added successfully.\n");
+	else
+		PRINTF("Error while adding LED service.\n");
 
 		  /* Set output power level */
 	ret = aci_hal_set_tx_power_level(1, 4);
@@ -272,12 +286,7 @@ tBleStatus AddLEDService(void)
   
 	/* copy "LED service UUID" defined above to 'uuid' local variable */
 	COPY_LED_SERVICE_UUID(uuid);
-	/* 
-	 * now add "LED service" to GATT server, service handle is returned
-	 * via 'ledServHandle' parameter of aci_gatt_add_serv() API. 
-	 * Please refer to 'BlueNRG Application Command Interface.pdf' for detailed
-	 * API description 
-	*/  
+	
 	ret = aci_gatt_add_serv(UUID_TYPE_128,
 		uuid,
 		PRIMARY_SERVICE,
@@ -287,13 +296,7 @@ tBleStatus AddLEDService(void)
   
 	/* copy "LED button characteristic UUID" defined above to 'uuid' local variable */  
 	COPY_LED_UUID(uuid);
-	/* 
-	 * now add "LED button characteristic" to LED service, characteristic handle 
-	 * is returned via 'ledButtonCharHandle' parameter of aci_gatt_add_char() API.
-	 * This characteristic is writable, as specified by 'CHAR_PROP_WRITE' parameter.
-	 * Please refer to 'BlueNRG Application Command Interface.pdf' for detailed
-	 * API description 
-	*/   
+	
 	ret =  aci_gatt_add_char(ledServHandle,
 		UUID_TYPE_128,
 		uuid,
@@ -311,6 +314,49 @@ tBleStatus AddLEDService(void)
   
 fail:
 	PRINTF("Error while adding LED service.\n");
+	return BLE_STATUS_ERROR;
+}
+
+/*
+ * @brief  Add Input button service using a vendor specific profile.
+ * @param  None
+ * @retval Status
+ */
+tBleStatus AddInputService(void)
+{
+	tBleStatus ret;
+	uint8_t uuid[16];
+  
+	/* copy "Input service UUID" defined above to 'uuid' local variable */
+	COPY_INPUT_SERVICE_UUID(uuid);
+	
+	ret = aci_gatt_add_serv(UUID_TYPE_128,
+		uuid,
+		PRIMARY_SERVICE,
+		7,
+		&inputServHandle);
+	if (ret != BLE_STATUS_SUCCESS) goto fail;    
+  
+	/* copy "INPUT button characteristic UUID" defined above to 'uuid' local variable */  
+	COPY_INPUT_CHAR_UUID(uuid);
+	
+	ret =  aci_gatt_add_char(inputServHandle,
+		UUID_TYPE_128,
+		uuid,
+		4,
+		CHAR_PROP_WRITE | CHAR_PROP_WRITE_WITHOUT_RESP,
+		ATTR_PERMISSION_NONE,
+		GATT_NOTIFY_ATTRIBUTE_WRITE,
+		16,
+		1,
+		&inputButtonCharHandle);
+	if (ret != BLE_STATUS_SUCCESS) goto fail;  
+  
+	PRINTF("Service Input BUTTON added. Handle 0x%04X, Input button Charac handle: 0x%04X\n", inputServHandle, inputButtonCharHandle);	
+	return BLE_STATUS_SUCCESS; 
+  
+fail:
+	PRINTF("Error while adding INPUT service.\n");
 	return BLE_STATUS_ERROR;
 }
 
@@ -349,7 +395,7 @@ tBleStatus AddControlSensorService(void)
 		0,
 		&tempCharHandle);
 	if (ret != BLE_STATUS_SUCCESS) goto fail;
-  
+ 
 	charFormat.format = FORMAT_SINT16;
 	charFormat.exp = -1;
 	charFormat.unit = UNIT_TEMP_CELSIUS;
@@ -737,8 +783,30 @@ void Read_Request_CB(uint16_t handle)
 void Attribute_Modified_CB(uint16_t handle, uint8_t data_length, uint8_t *att_data)
 {
   /* If GATT client has modified 'LED button characteristic' value, toggle LED2 */
-	if (handle == ledButtonCharHandle + 1) {      
+	if (handle == ledButtonCharHandle + 1)
+	{      
 		BSP_LED_Toggle(LED2);
+	}
+	else if (handle == inputButtonCharHandle + 1)
+	{   
+		/*
+		Format:
+			1st byte - input index
+			2nd byte - first value (X axis for joysticks)
+			3rd byte - 2nd value (Y axis for joysticks)
+		*/
+		
+		if (data_length < 3)
+			return;
+		
+		uint8_t inputIndex = att_data[0];
+		if (inputIndex < JOYSTICK_COUNT)
+		{
+			joysticks[inputIndex].x = att_data[1];
+			joysticks[inputIndex].y = att_data[2];
+			
+			PRINTF("HWver %u, FWver %u", (uint8_t)joysticks[inputIndex].x, (uint8_t)joysticks[inputIndex].y);
+		}
 	}
 }
 

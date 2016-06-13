@@ -36,11 +36,21 @@
 /** 
 * @brief Structure containing acceleration value (in mg) of each axis.
 */
-typedef struct {
+typedef struct 
+{
 	int32_t AXIS_X;
 	int32_t AXIS_Y;
 	int32_t AXIS_Z;
 } AxesRaw_t;
+	 
+/** 
+* @brief Structure containing acceleration value (in mg) of each axis.
+*/
+typedef struct 
+{
+	uint8_t x;
+	uint8_t y;
+} Joystick_t;
 	 
 void Init_BLE();
 void Update_BLE();
