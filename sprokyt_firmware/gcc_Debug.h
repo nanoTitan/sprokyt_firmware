@@ -11,9 +11,6 @@
 #ifndef __HQ_FBIT__
 #define __HQ_FBIT__ 15
 #endif
-#ifndef STM32F411xE
-#define STM32F411xE 1
-#endif
 #ifndef __UINT_LEAST16_MAX__
 #define __UINT_LEAST16_MAX__ 0xffff
 #endif

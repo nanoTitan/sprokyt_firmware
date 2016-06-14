@@ -5,7 +5,7 @@
 BINARYDIR := Debug
 
 #Additional flags
-PREPROCESSOR_MACROS := DEBUG=1 USE_STM32F4XX_NUCLEO STM32F411xE
+PREPROCESSOR_MACROS := DEBUG=1 USE_STM32F4XX_NUCLEO
 INCLUDE_DIRS := ../../../../../../../STM32/X-CUBE-BLE1/Drivers/BSP/STM32F4xx-Nucleo ../../../../../../../STM32/X-CUBE-BLE1/Drivers/BSP/X-NUCLEO-IDB04A1 ../../../../../../../STM32/X-CUBE-BLE1/Middlewares/ST/LowPowerManager/Inc ../../../../../../../STM32/X-CUBE-BLE1/Middlewares/ST/STM32_BlueNRG/Interface ../../../../../../../STM32/X-CUBE-BLE1/Middlewares/ST/STM32_BlueNRG/STM32F4xx_HAL_BlueNRG_Drivers/inc ../../../../../../../STM32/X-CUBE-BLE1/Middlewares/ST/TimerServer/inc ../../../../../../../STM32/X-CUBE-BLE1/Middlewares/ST/TimerServer/STM32xx_HAL_TimerServer_Drivers/inc ../../../../../../../STM32/X-CUBE-BLE1/Middlewares/ST/STM32_BlueNRG/SimpleBlueNRG_HCI/includes ../../../../../../../STM32/X-CUBE-BLE1/Middlewares/ST/STM32_BlueNRG/SimpleBlueNRG_HCI/hci ../../../../../../../STM32/X-CUBE-BLE1/Middlewares/ST/STM32_BlueNRG/SimpleBlueNRG_HCI/hci/controller ../../../../../../../STM32/X-CUBE-BLE1/Middlewares/ST/STM32_BlueNRG/SimpleBlueNRG_HCI/utils src src/ble
 LIBRARY_DIRS := 
 LIBRARY_NAMES := 

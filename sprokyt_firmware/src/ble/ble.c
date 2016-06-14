@@ -1,5 +1,4 @@
 #include "ble.h"
-
 #include "cube_hal.h"
 #include "hal_types.h"
 #include "bluenrg_gatt_server.h"
@@ -18,6 +17,7 @@
 #include "bluenrg_utils.h"
 //#include "osal.h"
 
+#include "print.h"
 #include <stdlib.h>
 
 /* Private Macros -----------------------------------------------------------*/
@@ -68,6 +68,7 @@ uint16_t accServHandle, freeFallCharHandle, accCharHandle;
 uint16_t envSensServHandle, tempCharHandle, pressCharHandle, humidityCharHandle;
 uint16_t ledServHandle, ledButtonCharHandle;
 uint16_t inputServHandle, inputButtonCharHandle;
+
 
 /* Private function prototypes ---------------------------------------------------------*/
 tBleStatus AddAccService(void);
@@ -202,9 +203,9 @@ void Init_BLE()
 	
 	ret = AddInputService();
 	if (ret == BLE_STATUS_SUCCESS)
-		PRINTF("LED service added successfully.\n");
+		PRINTF("Input service added successfully.\n");
 	else
-		PRINTF("Error while adding LED service.\n");
+		PRINTF("Error while adding Input service.\n");
 
 		  /* Set output power level */
 	ret = aci_hal_set_tx_power_level(1, 4);
@@ -789,6 +790,7 @@ void Attribute_Modified_CB(uint16_t handle, uint8_t data_length, uint8_t *att_da
 	}
 	else if (handle == inputButtonCharHandle + 1)
 	{   
+	
 		/*
 		Format:
 			1st byte - input index
@@ -805,7 +807,8 @@ void Attribute_Modified_CB(uint16_t handle, uint8_t data_length, uint8_t *att_da
 			joysticks[inputIndex].x = att_data[1];
 			joysticks[inputIndex].y = att_data[2];
 			
-			PRINTF("HWver %u, FWver %u", (uint8_t)joysticks[inputIndex].x, (uint8_t)joysticks[inputIndex].y);
+			//ConPrintF("X: %u, Y: %u", (uint8_t)joysticks[inputIndex].x, (uint8_t)joysticks[inputIndex].y);
+			ConsoleBlink(joysticks[inputIndex].y);
 		}
 	}
 }

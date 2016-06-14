@@ -1,12 +1,11 @@
 #include <mbed.h>
-#include "stm32f4xx_hal_conf.h"
 #include "ble.h"
 
 /* Private function prototypes -----------------------------------------------*/
 static void Error_Handler(void);
 
 /* Private variables ---------------------------------------------------------*/
-DigitalOut g_LED(LED1);	// LED5
+Serial pc2(USBTX, USBRX);
 
 int main() 
 {
@@ -26,8 +25,8 @@ int main()
 static void Error_Handler(void)
 {
   /* Turn LED5 on */
-	g_LED = 1;
 	while (1)
 	{
+		pc2.printf("test test!!!");
 	}
 }
