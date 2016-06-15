@@ -1,8 +1,8 @@
 #include <mbed.h>
 #include "ble.h"
+#include "error.h"
 
 /* Private function prototypes -----------------------------------------------*/
-static void Error_Handler(void);
 
 /* Private variables ---------------------------------------------------------*/
 Serial pc2(USBTX, USBRX);
@@ -19,14 +19,5 @@ int main()
 	while (1)
 	{
 		Update_BLE();
-	}
-}
-
-static void Error_Handler(void)
-{
-  /* Turn LED5 on */
-	while (1)
-	{
-		pc2.printf("test test!!!");
 	}
 }

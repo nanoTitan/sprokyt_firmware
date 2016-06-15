@@ -1,14 +1,20 @@
 /**
-  ******************************************************************************
-  * @file    TIM/TIM_TimeBase/Inc/main.h 
-  * @author  MCD Application Team
-  * @version V1.0.1
-  * @date    29-January-2016
-  * @brief   Header for main.c module
-  ******************************************************************************
+  *******************************************************************************
+  * @file    Projects/Multi/Applications/DataLogFusion/Inc/DemoSerial.h
+  * @author  CL
+  * @version V1.5.0
+  * @date    4-April-2016
+  * @brief   header for DemoSerial.c.
+  *******************************************************************************
   * @attention
   *
   * <h2><center>&copy; COPYRIGHT(c) 2016 STMicroelectronics</center></h2>
+  *
+  * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
+  * You may not use this file except in compliance with the License.
+  * You may obtain a copy of the License at:
+  *
+  *        http://www.st.com/software_license_agreement_liberty_v2
   *
   * Redistribution and use in source and binary forms, with or without modification,
   * are permitted provided that the following conditions are met:
@@ -32,26 +38,41 @@
   * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
   * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   *
-  ******************************************************************************
+  ********************************************************************************
   */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __MAIN_H
-#define __MAIN_H
+#ifndef __DEMO_SERIAL_H__
+#define __DEMO_SERIAL_H__
 
-/* Includes ------------------------------------------------------------------*/
+/* define ------------------------------------------------------------*/
+#define DATALOG_TIM_COUNTER_CLK        10000
+#define DATALOG_TIM_PERIOD             10
 
-/* Exported types ------------------------------------------------------------*/
-/* Exported constants --------------------------------------------------------*/
-/* Exported macro ------------------------------------------------------------*/
-/* User can use this section to tailor TIMx instance used and associated 
-   resources */
 /* Definition for TIMx clock resources */
-#define TIMx_CLK_ENABLE                __HAL_RCC_TIM3_CLK_ENABLE
+#define TIMDataLog                           TIM2
+#define TIMDataLog_CLK_ENABLE                __TIM2_CLK_ENABLE
+#define TIMDataLog_CLK_DISABLE               __TIM2_CLK_DISABLE
+
+#include "cube_hal.h"
+#include "serial_protocol.h"
+#include "Serial_CMD.h"
+
+#define SENDER_UART                     0x01
+#define SENDER_USB                      0x02
+#define SENDER_SPI                      0x03
+
+#define DEV_ADDR                        50
+#define I2C_DATA_MAX_LENGTH_BYTES       16
 
 
-/* Exported functions ------------------------------------------------------- */
+#define STREAMING_MSG_LENGTH            51
 
-#endif /* __MAIN_H */
+void DataLogTimerInit(void);
+int HandleMSG(TMsg *Msg);
+void BUILD_REPLY_HEADER(TMsg *Msg);
+void BUILD_NACK_HEADER(TMsg *Msg);
+void INIT_STREAMING_MSG(TMsg *Msg);
+void INIT_STREAMING_HEADER(TMsg *Msg);
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+#endif /* __DEMO_SERIAL_H__ */

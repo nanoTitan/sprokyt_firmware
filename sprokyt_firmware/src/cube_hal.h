@@ -61,6 +61,40 @@
   #include "stm32l4xx_hal_conf.h"
 #endif
 
+/* Uncomment to enable the adaquate RTC Clock Source */
+#define RTC_CLOCK_SOURCE_LSE
+//#define RTC_CLOCK_SOURCE_LSI
+
+#ifdef USE_STM32F4XX_NUCLEO
+#define USARTx_TX_AF                     GPIO_AF7_USART2
+#define USARTx_RX_AF                     GPIO_AF7_USART2
+
+#ifdef RTC_CLOCK_SOURCE_LSI
+#define RTC_ASYNCH_PREDIV  0x7F
+#define RTC_SYNCH_PREDIV   0xF9
+#endif
+
+#ifdef RTC_CLOCK_SOURCE_LSE
+#define RTC_ASYNCH_PREDIV  0x7F
+#define RTC_SYNCH_PREDIV   0x00FF
+#endif
+#endif
+
+#ifdef USE_STM32L4XX_NUCLEO
+#define USARTx_TX_AF                     GPIO_AF7_USART2
+#define USARTx_RX_AF                     GPIO_AF7_USART2
+
+#ifdef RTC_CLOCK_SOURCE_LSI
+#define RTC_ASYNCH_PREDIV  0x7F
+#define RTC_SYNCH_PREDIV   0xF9
+#endif
+
+#ifdef RTC_CLOCK_SOURCE_LSE
+#define RTC_ASYNCH_PREDIV  0x7F
+#define RTC_SYNCH_PREDIV   0x00FF
+#endif
+#endif
+
 void SystemClock_Config(void);
 
 #endif //_CUBE_HAL_H_

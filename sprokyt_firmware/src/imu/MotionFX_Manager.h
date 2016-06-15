@@ -1,14 +1,20 @@
 /**
-  ******************************************************************************
-  * @file    TIM/TIM_TimeBase/Inc/main.h 
-  * @author  MCD Application Team
-  * @version V1.0.1
-  * @date    29-January-2016
-  * @brief   Header for main.c module
-  ******************************************************************************
+  *******************************************************************************
+  * @file    Projects/Multi/Applications/DataLogFusion/Inc/MotionFX_Manager.h
+  * @author  CL
+  * @version V1.5.0
+  * @date    4-April-2016
+  * @brief   header for MotionFX_Manager.c.
+  *******************************************************************************
   * @attention
   *
   * <h2><center>&copy; COPYRIGHT(c) 2016 STMicroelectronics</center></h2>
+  *
+  * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
+  * You may not use this file except in compliance with the License.
+  * You may obtain a copy of the License at:
+  *
+  *        http://www.st.com/software_license_agreement_liberty_v2
   *
   * Redistribution and use in source and binary forms, with or without modification,
   * are permitted provided that the following conditions are met:
@@ -32,26 +38,26 @@
   * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
   * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   *
-  ******************************************************************************
+  ********************************************************************************
   */
 
-/* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __MAIN_H
-#define __MAIN_H
+#ifndef _MOTIONFX_MANAGER_H_
+#define _MOTIONFX_MANAGER_H_
 
-/* Includes ------------------------------------------------------------------*/
-
-/* Exported types ------------------------------------------------------------*/
-/* Exported constants --------------------------------------------------------*/
-/* Exported macro ------------------------------------------------------------*/
-/* User can use this section to tailor TIMx instance used and associated 
-   resources */
-/* Definition for TIMx clock resources */
-#define TIMx_CLK_ENABLE                __HAL_RCC_TIM3_CLK_ENABLE
-
+#include "osx_motion_fx.h"
+#include "string.h"
+#include "x_nucleo_iks01a1_accelero.h"
+#include "x_nucleo_iks01a1_gyro.h"
 
 /* Exported functions ------------------------------------------------------- */
 
-#endif /* __MAIN_H */
+void MotionFX_manager_init(void);
+void MotionFX_manager_start_6X(void);
+void MotionFX_manager_stop_6X(void);
+void MotionFX_manager_start_9X(void);
+void MotionFX_manager_stop_9X(void);
+void MotionFX_manager_run(void);
+osxMFX_output* MotionFX_manager_getDataOUT(void);
+osxMFX_input* MotionFX_manager_getDataIN(void);
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+#endif //_MOTIONFX_MANAGER_H_
