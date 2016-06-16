@@ -211,7 +211,6 @@
     <ClCompile Include="src\clock.c" />
     <ClCompile Include="src\cube_hal_f4.c" />
     <ClCompile Include="src\imu\com.c" />
-    <ClCompile Include="src\imu\DemoSerial.c" />
     <ClCompile Include="src\imu\imu.c" />
     <ClCompile Include="src\imu\MotionFX_Manager.c" />
     <ClCompile Include="src\imu\serial_protocol.c" />
@@ -467,7 +466,6 @@
     <ClInclude Include="src\cube_hal.h" />
     <ClInclude Include="src\error.h" />
     <ClInclude Include="src\imu\com.h" />
-    <ClInclude Include="src\imu\DemoSerial.h" />
     <ClInclude Include="src\imu\imu.h" />
     <ClInclude Include="src\imu\MotionFX_Manager.h" />
     <ClInclude Include="src\imu\Serial_CMD.h" />

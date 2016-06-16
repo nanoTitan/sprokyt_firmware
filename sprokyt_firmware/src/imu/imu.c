@@ -160,7 +160,7 @@ void InitIMU(void)
 void UpdateIMU(void)
 {
 	/* Check if user button was pressed only when Sensor Fusion is active */
-	if ((BSP_PB_GetState(BUTTON_KEY) == GPIO_PIN_RESET) && SF_Active)
+	if ((BSP_PB_GetState(BUTTON_KEY) == GPIO_PIN_RESET) /*&& SF_Active*/)
 	{
 		while (BSP_PB_GetState(BUTTON_KEY) == GPIO_PIN_RESET)
 			;
@@ -275,18 +275,12 @@ static void Accelero_Sensor_Handler()
 {
 	uint8_t status = 0;
   
-	if (BSP_ACCELERO_IsInitialized(ACCELERO_handle, &status) == COMPONENT_OK && status == 1)
+	if (ACCELEROMETER_SENSOR && BSP_ACCELERO_IsInitialized(ACCELERO_handle, &status) == COMPONENT_OK && status == 1)
 	{
-		if (DataLoggerActive)
-		{
-			if (Sensors_Enabled & ACCELEROMETER_SENSOR)
-			{
-				BSP_ACCELERO_Get_Axes(ACCELERO_handle, &ACC_Value);
-				//Serialize_s32(&Msg->Data[15], ACC_Value.AXIS_X, 4);
-				//Serialize_s32(&Msg->Data[19], ACC_Value.AXIS_Y, 4);
-				//Serialize_s32(&Msg->Data[23], ACC_Value.AXIS_Z, 4);
-			}
-		}
+		BSP_ACCELERO_Get_Axes(ACCELERO_handle, &ACC_Value);
+		//Serialize_s32(&Msg->Data[15], ACC_Value.AXIS_X, 4);
+		//Serialize_s32(&Msg->Data[19], ACC_Value.AXIS_Y, 4);
+		//Serialize_s32(&Msg->Data[23], ACC_Value.AXIS_Z, 4);
 	}
 }
 
@@ -299,18 +293,12 @@ static void Gyro_Sensor_Handler()
 {
 	uint8_t status = 0;
   
-	if (BSP_GYRO_IsInitialized(GYRO_handle, &status) == COMPONENT_OK && status == 1)
+	if (GYROSCOPE_SENSOR && BSP_GYRO_IsInitialized(GYRO_handle, &status) == COMPONENT_OK && status == 1)
 	{
-		if (DataLoggerActive)
-		{
-			if (Sensors_Enabled & GYROSCOPE_SENSOR)
-			{
-				BSP_GYRO_Get_Axes(GYRO_handle, &GYR_Value);
-				//Serialize_s32(&Msg->Data[27], GYR_Value.AXIS_X, 4);
-				//Serialize_s32(&Msg->Data[31], GYR_Value.AXIS_Y, 4);
-				//Serialize_s32(&Msg->Data[35], GYR_Value.AXIS_Z, 4);
-			}
-		}
+		BSP_GYRO_Get_Axes(GYRO_handle, &GYR_Value);
+		//Serialize_s32(&Msg->Data[27], GYR_Value.AXIS_X, 4);
+		//Serialize_s32(&Msg->Data[31], GYR_Value.AXIS_Y, 4);
+		//Serialize_s32(&Msg->Data[35], GYR_Value.AXIS_Z, 4);
 	}
 }
 
@@ -325,16 +313,10 @@ static void Magneto_Sensor_Handler()
   
 	if (BSP_MAGNETO_IsInitialized(MAGNETO_handle, &status) == COMPONENT_OK && status == 1)
 	{
-		if (DataLoggerActive)
-		{
-			if (Sensors_Enabled & MAGNETIC_SENSOR)
-			{
-				BSP_MAGNETO_Get_Axes(MAGNETO_handle, &MAG_Value);
-				//Serialize_s32(&Msg->Data[39], (int32_t)(MAG_Value.AXIS_X - magOffset.magOffX), 4);
-				//Serialize_s32(&Msg->Data[43], (int32_t)(MAG_Value.AXIS_Y - magOffset.magOffY), 4);
-				//Serialize_s32(&Msg->Data[47], (int32_t)(MAG_Value.AXIS_Z - magOffset.magOffZ), 4);
-			}
-		}
+		BSP_MAGNETO_Get_Axes(MAGNETO_handle, &MAG_Value);
+		//Serialize_s32(&Msg->Data[39], (int32_t)(MAG_Value.AXIS_X - magOffset.magOffX), 4);
+		//Serialize_s32(&Msg->Data[43], (int32_t)(MAG_Value.AXIS_Y - magOffset.magOffY), 4);
+		//Serialize_s32(&Msg->Data[47], (int32_t)(MAG_Value.AXIS_Z - magOffset.magOffZ), 4);
 	}
 }
 
