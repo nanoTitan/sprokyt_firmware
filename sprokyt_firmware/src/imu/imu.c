@@ -12,7 +12,6 @@
 #include "x_nucleo_iks01a1_pressure.h"
 #include "x_nucleo_iks01a1_humidity.h"
 #include "x_nucleo_iks01a1_temperature.h"
-#include "DemoSerial.h"
 #include "MotionFX_Manager.h"
 #include <string.h> // strlen
 #include <stdio.h>  // sprintf
@@ -79,7 +78,6 @@ extern volatile uint8_t DataLoggerActive;
 
 /* Private variables ---------------------------------------------------------*/
 char dataOut[256];
-RTC_HandleTypeDef RtcHandle;
 volatile uint32_t Sensors_Enabled = 0;
 volatile uint32_t DataTxPeriod = 1000;
 SensorAxes_t ACC_Value;
@@ -97,6 +95,7 @@ volatile uint8_t SF_change = 0;
 TMsg Msg;
 /* DataLog timer */
 TIM_HandleTypeDef    DataLogTimHandle;
+
 uint32_t sysclk, hclk, pclk1, pclk2;
 void *ACCELERO_handle = NULL;
 void *GYRO_handle = NULL;
@@ -106,20 +105,16 @@ void *TEMPERATURE_handle = NULL;
 void *PRESSURE_handle = NULL;
 
 /* Private function prototypes -----------------------------------------------*/
-static void RTC_Config(void);
-static void RTC_TimeStampConfig(void);
-
 static void initializeAllSensors(void);
 static void enableAllSensors(void);
 static void floatToInt(float in, int32_t *out_int, int32_t *out_dec, int32_t dec_prec);
-static void RTC_Handler(TMsg *Msg);
-static void Accelero_Sensor_Handler(TMsg *Msg);
-static void Gyro_Sensor_Handler(TMsg *Msg);
-static void Magneto_Sensor_Handler(TMsg *Msg);
-static void Pressure_Sensor_Handler(TMsg *Msg);
-static void Humidity_Sensor_Handler(TMsg *Msg);
-static void Temperature_Sensor_Handler(TMsg *Msg);
-static void SF_Handler(TMsg *Msg);
+static void Accelero_Sensor_Handler();
+static void Gyro_Sensor_Handler();
+static void Magneto_Sensor_Handler();
+static void Pressure_Sensor_Handler();
+static void Humidity_Sensor_Handler();
+static void Temperature_Sensor_Handler();
+static void SF_Handler();
 static unsigned char SaveCalibrationToMemory(void);
 static unsigned char ResetCalibrationInMemory(void);
 static unsigned char RecallCalibrationFromMemory(void);
@@ -153,10 +148,6 @@ void InitIMU(void)
 	/* Initialize UART */
 	USARTConfig();
   
-	/* Initialize RTC */
-	RTC_Config();
-	RTC_TimeStampConfig();
-  
 	sysclk = HAL_RCC_GetSysClockFreq();
 	hclk = HAL_RCC_GetHCLKFreq();
 	pclk1 = HAL_RCC_GetPCLK1Freq();
@@ -164,8 +155,6 @@ void InitIMU(void)
   
 	/* Check if the calibration is already available in memory */
 	RecallCalibrationFromMemory();
-  
-	
 }
 
 void UpdateIMU(void)
@@ -189,17 +178,8 @@ void UpdateIMU(void)
 		BSP_LED_Off(LED2);
 	}
     
-	if (UART_ReceivedMSG((TMsg*) &Msg))
-	{
-		if (Msg.Data[0] == DEV_ADDR)
-		{
-			HandleMSG((TMsg*) &Msg);
-		}
-	}
-    
 	if (!SF_Active)
 	{
-		RTC_Handler(&Msg);
 		Pressure_Sensor_Handler(&Msg);
 		Humidity_Sensor_Handler(&Msg);
 		Temperature_Sensor_Handler(&Msg);
@@ -218,17 +198,34 @@ void UpdateIMU(void)
 static void initializeAllSensors(void)
 {
   /* Try to use LSM6DS3 DIL24 if present, otherwise use LSM6DS0 on board */
-	BSP_ACCELERO_Init(ACCELERO_SENSORS_AUTO, &ACCELERO_handle);
+	DrvStatusTypeDef result = BSP_ACCELERO_Init(ACCELERO_SENSORS_AUTO, &ACCELERO_handle);
+	if (result != COMPONENT_OK)
+		Error_Handler();
+	
 	/* Try to use LSM6DS3 if present, otherwise use LSM6DS0 */
-	BSP_GYRO_Init(GYRO_SENSORS_AUTO, &GYRO_handle);
+	result = BSP_GYRO_Init(GYRO_SENSORS_AUTO, &GYRO_handle);
+	if (result != COMPONENT_OK)
+		Error_Handler();
+	
 	/* Force to use LIS3MDL */
-	BSP_MAGNETO_Init(LIS3MDL_0, &MAGNETO_handle);
+	result = BSP_MAGNETO_Init(LIS3MDL_0, &MAGNETO_handle);
+	if (result != COMPONENT_OK)
+		Error_Handler();
+	
 	/* Force to use HTS221 */
-	BSP_HUMIDITY_Init(HTS221_H_0, &HUMIDITY_handle);
+	result = BSP_HUMIDITY_Init(HTS221_H_0, &HUMIDITY_handle);
+	if (result != COMPONENT_OK)
+		Error_Handler();
+	
 	/* Force to use HTS221 */
-	BSP_TEMPERATURE_Init(HTS221_T_0, &TEMPERATURE_handle);
+	result = BSP_TEMPERATURE_Init(HTS221_T_0, &TEMPERATURE_handle);
+	if (result != COMPONENT_OK)
+		Error_Handler();
+	
 	/* Try to use LPS22HB DIL24 or LPS25HB DIL24 if present, otherwise use LPS25HB on board */
-	BSP_PRESSURE_Init(PRESSURE_SENSORS_AUTO, &PRESSURE_handle);
+	result = BSP_PRESSURE_Init(PRESSURE_SENSORS_AUTO, &PRESSURE_handle);
+	if (result != COMPONENT_OK)
+		Error_Handler();
 }
 
 /**
@@ -269,36 +266,12 @@ static void floatToInt(float in, int32_t *out_int, int32_t *out_dec, int32_t dec
 	*out_dec = (int32_t)trunc(in * pow(10, dec_prec));
 }
 
-
-/**
- * @brief  Handles the time+date getting/sending
- * @param  Msg time+date part of the stream
- * @retval None
- */
-static void RTC_Handler(TMsg *Msg)
-{
-	uint8_t subSec = 0;
-	RTC_DateTypeDef sdatestructureget;
-	RTC_TimeTypeDef stimestructure;
-  
-	if (DataLoggerActive)
-	{
-		HAL_RTC_GetTime(&RtcHandle, &stimestructure, FORMAT_BIN);
-		HAL_RTC_GetDate(&RtcHandle, &sdatestructureget, FORMAT_BIN);
-		subSec = ((((((int) RTC_SYNCH_PREDIV) - ((int) stimestructure.SubSeconds)) * 100) / (RTC_SYNCH_PREDIV + 1)) & 0xff);
-		Msg->Data[3] = (uint8_t)stimestructure.Hours;
-		Msg->Data[4] = (uint8_t)stimestructure.Minutes;
-		Msg->Data[5] = (uint8_t)stimestructure.Seconds;
-		Msg->Data[6] = subSec;
-	}
-}
-
 /**
  * @brief  Handles the ACCELERO axes data getting/sending
  * @param  Msg ACCELERO part of the stream
  * @retval None
  */
-static void Accelero_Sensor_Handler(TMsg *Msg)
+static void Accelero_Sensor_Handler()
 {
 	uint8_t status = 0;
   
@@ -309,9 +282,9 @@ static void Accelero_Sensor_Handler(TMsg *Msg)
 			if (Sensors_Enabled & ACCELEROMETER_SENSOR)
 			{
 				BSP_ACCELERO_Get_Axes(ACCELERO_handle, &ACC_Value);
-				Serialize_s32(&Msg->Data[15], ACC_Value.AXIS_X, 4);
-				Serialize_s32(&Msg->Data[19], ACC_Value.AXIS_Y, 4);
-				Serialize_s32(&Msg->Data[23], ACC_Value.AXIS_Z, 4);
+				//Serialize_s32(&Msg->Data[15], ACC_Value.AXIS_X, 4);
+				//Serialize_s32(&Msg->Data[19], ACC_Value.AXIS_Y, 4);
+				//Serialize_s32(&Msg->Data[23], ACC_Value.AXIS_Z, 4);
 			}
 		}
 	}
@@ -322,7 +295,7 @@ static void Accelero_Sensor_Handler(TMsg *Msg)
  * @param  Msg GYRO part of the stream
  * @retval None
  */
-static void Gyro_Sensor_Handler(TMsg *Msg)
+static void Gyro_Sensor_Handler()
 {
 	uint8_t status = 0;
   
@@ -333,9 +306,9 @@ static void Gyro_Sensor_Handler(TMsg *Msg)
 			if (Sensors_Enabled & GYROSCOPE_SENSOR)
 			{
 				BSP_GYRO_Get_Axes(GYRO_handle, &GYR_Value);
-				Serialize_s32(&Msg->Data[27], GYR_Value.AXIS_X, 4);
-				Serialize_s32(&Msg->Data[31], GYR_Value.AXIS_Y, 4);
-				Serialize_s32(&Msg->Data[35], GYR_Value.AXIS_Z, 4);
+				//Serialize_s32(&Msg->Data[27], GYR_Value.AXIS_X, 4);
+				//Serialize_s32(&Msg->Data[31], GYR_Value.AXIS_Y, 4);
+				//Serialize_s32(&Msg->Data[35], GYR_Value.AXIS_Z, 4);
 			}
 		}
 	}
@@ -346,7 +319,7 @@ static void Gyro_Sensor_Handler(TMsg *Msg)
  * @param  Msg MAGNETO part of the stream
  * @retval None
  */
-static void Magneto_Sensor_Handler(TMsg *Msg)
+static void Magneto_Sensor_Handler()
 {
 	uint8_t status = 0;
   
@@ -357,9 +330,9 @@ static void Magneto_Sensor_Handler(TMsg *Msg)
 			if (Sensors_Enabled & MAGNETIC_SENSOR)
 			{
 				BSP_MAGNETO_Get_Axes(MAGNETO_handle, &MAG_Value);
-				Serialize_s32(&Msg->Data[39], (int32_t)(MAG_Value.AXIS_X - magOffset.magOffX), 4);
-				Serialize_s32(&Msg->Data[43], (int32_t)(MAG_Value.AXIS_Y - magOffset.magOffY), 4);
-				Serialize_s32(&Msg->Data[47], (int32_t)(MAG_Value.AXIS_Z - magOffset.magOffZ), 4);
+				//Serialize_s32(&Msg->Data[39], (int32_t)(MAG_Value.AXIS_X - magOffset.magOffX), 4);
+				//Serialize_s32(&Msg->Data[43], (int32_t)(MAG_Value.AXIS_Y - magOffset.magOffY), 4);
+				//Serialize_s32(&Msg->Data[47], (int32_t)(MAG_Value.AXIS_Z - magOffset.magOffZ), 4);
 			}
 		}
 	}
@@ -370,23 +343,15 @@ static void Magneto_Sensor_Handler(TMsg *Msg)
  * @param  Msg PRESSURE part of the stream
  * @retval None
  */
-static void Pressure_Sensor_Handler(TMsg *Msg)
+static void Pressure_Sensor_Handler()
 {
 	int32_t d1, d2;
 	uint8_t status = 0;
   
-	if (BSP_PRESSURE_IsInitialized(PRESSURE_handle, &status) == COMPONENT_OK && status == 1)
+	if (PRESSURE_SENSOR && BSP_PRESSURE_IsInitialized(PRESSURE_handle, &status) == COMPONENT_OK && status == 1)
 	{
-		if (DataLoggerActive)
-		{
-			if (Sensors_Enabled & PRESSURE_SENSOR)
-			{
-				BSP_PRESSURE_Get_Press(PRESSURE_handle, &PRESSURE_Value);
-				floatToInt(PRESSURE_Value, &d1, &d2, 2);
-				Serialize(&Msg->Data[7], d1, 2);
-				Serialize(&Msg->Data[9], d2, 2);
-			}
-		}
+		BSP_PRESSURE_Get_Press(PRESSURE_handle, &PRESSURE_Value);
+		floatToInt(PRESSURE_Value, &d1, &d2, 2);
 	}
 }
 
@@ -395,23 +360,15 @@ static void Pressure_Sensor_Handler(TMsg *Msg)
  * @param  Msg HUMIDITY part of the stream
  * @retval None
  */
-static void Humidity_Sensor_Handler(TMsg *Msg)
+static void Humidity_Sensor_Handler()
 {
 	int32_t d1, d2;
 	uint8_t status = 0;
   
-	if (BSP_HUMIDITY_IsInitialized(HUMIDITY_handle, &status) == COMPONENT_OK && status == 1)
+	if (HUMIDITY_SENSOR && BSP_HUMIDITY_IsInitialized(HUMIDITY_handle, &status) == COMPONENT_OK && status == 1)
 	{
-		if (DataLoggerActive)
-		{
-			if (Sensors_Enabled & HUMIDITY_SENSOR)
-			{
-				BSP_HUMIDITY_Get_Hum(HUMIDITY_handle, &HUMIDITY_Value);
-				floatToInt(HUMIDITY_Value, &d1, &d2, 2);
-				Serialize(&Msg->Data[13], d1, 1);
-				Serialize(&Msg->Data[14], d2, 1);
-			}
-		}
+		BSP_HUMIDITY_Get_Hum(HUMIDITY_handle, &HUMIDITY_Value);
+		floatToInt(HUMIDITY_Value, &d1, &d2, 2);
 	}
 }
 
@@ -420,23 +377,15 @@ static void Humidity_Sensor_Handler(TMsg *Msg)
  * @param  Msg TEMPERATURE part of the stream
  * @retval None
  */
-static void Temperature_Sensor_Handler(TMsg *Msg)
+static void Temperature_Sensor_Handler()
 {
 	int32_t d3, d4;
 	uint8_t status = 0;
   
-	if (BSP_TEMPERATURE_IsInitialized(TEMPERATURE_handle, &status) == COMPONENT_OK && status == 1)
+	if (TEMPERATURE_SENSOR && BSP_TEMPERATURE_IsInitialized(TEMPERATURE_handle, &status) == COMPONENT_OK && status == 1)
 	{
-		if (DataLoggerActive)
-		{
-			if (Sensors_Enabled & TEMPERATURE_SENSOR)
-			{
-				BSP_TEMPERATURE_Get_Temp(TEMPERATURE_handle, &TEMPERATURE_Value);
-				floatToInt(TEMPERATURE_Value, &d3, &d4, 2);
-				Serialize(&Msg->Data[11], d3, 1);
-				Serialize(&Msg->Data[12], d4, 1);
-			}
-		}
+		BSP_TEMPERATURE_Get_Temp(TEMPERATURE_handle, &TEMPERATURE_Value);
+		floatToInt(TEMPERATURE_Value, &d3, &d4, 2);
 	}
 }
 
@@ -445,7 +394,7 @@ static void Temperature_Sensor_Handler(TMsg *Msg)
  * @param  Msg Sensor Fusion part of the stream
  * @retval None
  */
-static void SF_Handler(TMsg *Msg)
+static void SF_Handler()
 {
 	uint8_t status_acc = 0;
 	uint8_t status_gyr = 0;
@@ -458,11 +407,7 @@ static void SF_Handler(TMsg *Msg)
 	if (status_acc && status_gyr && status_mag)
 	{
 		if (SF_Active)
-		{
-			uint8_t subSec = 0;
-			RTC_DateTypeDef sdatestructureget;
-			RTC_TimeTypeDef stimestructure;
-      
+		{      
 			if (SF_change == 1)
 			{
 				if (SF_6x_enabled == 0)
@@ -483,9 +428,6 @@ static void SF_Handler(TMsg *Msg)
 			BSP_ACCELERO_Get_Axes(ACCELERO_handle, &ACC_Value);
 			BSP_GYRO_Get_Axes(GYRO_handle, &GYR_Value);
 			BSP_MAGNETO_Get_Axes(MAGNETO_handle, &MAG_Value);
-      
-			INIT_STREAMING_HEADER(Msg);
-			Msg->Data[2] = CMD_SF_Data;
       
 			MotionFX_manager_run();
       
@@ -528,133 +470,15 @@ static void SF_Handler(TMsg *Msg)
       
 			if (SF_6x_enabled == 1)
 			{
-				memcpy(&Msg->Data[3], (uint8_t*)&MotionFX_Engine_Out->rotation_6X, 3 * sizeof(float));  // rot + Quat
-				memcpy(&Msg->Data[3 + (3 * sizeof(float))], (uint8_t*)&MotionFX_Engine_Out->quaternion_6X, 4 * sizeof(float)); // rot + Quat
+				//memcpy(&Msg->Data[3], (uint8_t*)&MotionFX_Engine_Out->rotation_6X, 3 * sizeof(float));  // rot + Quat
+				//memcpy(&Msg->Data[3 + (3 * sizeof(float))], (uint8_t*)&MotionFX_Engine_Out->quaternion_6X, 4 * sizeof(float)); // rot + Quat
 			}
 			else
 			{
-				memcpy(&Msg->Data[3], (uint8_t*)&MotionFX_Engine_Out->rotation_9X, 3 * sizeof(float));  // rot + Quat
-				memcpy(&Msg->Data[3 + (3 * sizeof(float))], (uint8_t*)&MotionFX_Engine_Out->quaternion_9X, 4 * sizeof(float)); // rot + Quat
+				//memcpy(&Msg->Data[3], (uint8_t*)&MotionFX_Engine_Out->rotation_9X, 3 * sizeof(float));  // rot + Quat
+				//memcpy(&Msg->Data[3 + (3 * sizeof(float))], (uint8_t*)&MotionFX_Engine_Out->quaternion_9X, 4 * sizeof(float)); // rot + Quat
 			}
-      
-			HAL_RTC_GetTime(&RtcHandle, &stimestructure, FORMAT_BIN);
-			HAL_RTC_GetDate(&RtcHandle, &sdatestructureget, FORMAT_BIN);
-			subSec = ((((((int) RTC_SYNCH_PREDIV) - ((int) stimestructure.SubSeconds)) * 100) / (RTC_SYNCH_PREDIV + 1)) & 0xff);
-			Msg->Data[31] = (uint8_t)stimestructure.Hours;
-			Msg->Data[32] = (uint8_t)stimestructure.Minutes;
-			Msg->Data[33] = (uint8_t)stimestructure.Seconds;
-			Msg->Data[34] = subSec;
-			Serialize_s32(&Msg->Data[35], (int32_t)ACC_Value.AXIS_X, 4);
-			Serialize_s32(&Msg->Data[39], (int32_t)ACC_Value.AXIS_Y, 4);
-			Serialize_s32(&Msg->Data[43], (int32_t)ACC_Value.AXIS_Z, 4);
-			Serialize_s32(&Msg->Data[47], (int32_t)GYR_Value.AXIS_X, 4);
-			Serialize_s32(&Msg->Data[51], (int32_t)GYR_Value.AXIS_Y, 4);
-			Serialize_s32(&Msg->Data[55], (int32_t)GYR_Value.AXIS_Z, 4);
-			Serialize_s32(&Msg->Data[59], (int32_t)(MAG_Value.AXIS_X - magOffset.magOffX), 4);
-			Serialize_s32(&Msg->Data[63], (int32_t)(MAG_Value.AXIS_Y - magOffset.magOffY), 4);
-			Serialize_s32(&Msg->Data[67], (int32_t)(MAG_Value.AXIS_Z - magOffset.magOffZ), 4);
-      
-			Msg->Len = 3 + 4 * 7 + 4 + 4 * 3 + 4 * 3 + 4 * 3;
-			UART_SendMsg(Msg);
 		}
-	}
-}
-
-/**
- * @brief  Configures the RTC
- * @param  None
- * @retval None
- */
-static void RTC_Config(void)
-{
-  /*##-1- Configure the RTC peripheral #######################################*/
-	RtcHandle.Instance = RTC;
-  
-	/* Configure RTC prescaler and RTC data registers */
-	/* RTC configured as follow:
-	- Hour Format    = Format 12
-	- Asynch Prediv  = Value according to source clock
-	- Synch Prediv   = Value according to source clock
-	- OutPut         = Output Disable
-	- OutPutPolarity = High Polarity
-	- OutPutType     = Open Drain */
-	RtcHandle.Init.HourFormat = RTC_HOURFORMAT_12;
-	RtcHandle.Init.AsynchPrediv = RTC_ASYNCH_PREDIV;
-	RtcHandle.Init.SynchPrediv = RTC_SYNCH_PREDIV;
-	RtcHandle.Init.OutPut = RTC_OUTPUT_DISABLE;
-	RtcHandle.Init.OutPutPolarity = RTC_OUTPUT_POLARITY_HIGH;
-	RtcHandle.Init.OutPutType = RTC_OUTPUT_TYPE_OPENDRAIN;
-  
-	if (HAL_RTC_Init(&RtcHandle) != HAL_OK)
-	{
-	  /* Initialization Error */
-		Error_Handler();
-	}
-}
-
-/**
- * @brief  Configures the current time and date
- * @param  None
- * @retval None
- */
-static void RTC_TimeStampConfig(void)
-{
-	RTC_DateTypeDef sdatestructure;
-	RTC_TimeTypeDef stimestructure;
-  
-	/*##-3- Configure the Date #################################################*/
-	/* Set Date: Tuesday February 18th 2014 */
-	sdatestructure.Year = 0x14;
-	sdatestructure.Month = RTC_MONTH_FEBRUARY;
-	sdatestructure.Date = 0x18;
-	sdatestructure.WeekDay = RTC_WEEKDAY_TUESDAY;
-  
-	if (HAL_RTC_SetDate(&RtcHandle, &sdatestructure, FORMAT_BCD) != HAL_OK)
-	{
-	  /* Initialization Error */
-		Error_Handler();
-	}
-  
-	/*##-4- Configure the Time #################################################*/
-	/* Set Time: 08:10:00 */
-	stimestructure.Hours = 0x08;
-	stimestructure.Minutes = 0x10;
-	stimestructure.Seconds = 0x00;
-	stimestructure.TimeFormat = RTC_HOURFORMAT12_AM;
-	stimestructure.DayLightSaving = RTC_DAYLIGHTSAVING_NONE;
-	stimestructure.StoreOperation = RTC_STOREOPERATION_RESET;
-  
-	if (HAL_RTC_SetTime(&RtcHandle, &stimestructure, FORMAT_BCD) != HAL_OK)
-	{
-	  /* Initialization Error */
-		Error_Handler();
-	}
-}
-
-
-/**
- * @brief  Configures the current time and date
- * @param  hh the hour value to be set
- * @param  mm the minute value to be set
- * @param  ss the second value to be set
- * @retval None
- */
-void RTC_TimeRegulate(uint8_t hh, uint8_t mm, uint8_t ss)
-{
-	RTC_TimeTypeDef stimestructure;
-  
-	stimestructure.TimeFormat = RTC_HOURFORMAT12_AM;
-	stimestructure.Hours = hh;
-	stimestructure.Minutes = mm;
-	stimestructure.Seconds = ss;
-	stimestructure.SubSeconds = 0;
-	stimestructure.DayLightSaving = RTC_DAYLIGHTSAVING_NONE;
-	stimestructure.StoreOperation = RTC_STOREOPERATION_RESET;
-  
-	if (HAL_RTC_SetTime(&RtcHandle, &stimestructure, FORMAT_BIN) != HAL_OK)
-	{
-	  /* Initialization Error */
-		Error_Handler();
 	}
 }
 

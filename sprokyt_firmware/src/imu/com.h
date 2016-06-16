@@ -45,6 +45,10 @@
 #ifndef __COM__H
 #define __COM__H
 
+#ifdef __cplusplus
+ extern "C" {
+#endif /* __cplusplus */
+
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "serial_protocol.h"
@@ -97,5 +101,9 @@ void USARTConfig(void);
 int UART_ReceivedMSG(TMsg *Msg);
 void UART_SendMsg(TMsg *Msg);
 void USART_DMA_Configuration(void);
+	 
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
 
 #endif /* __COM__H */

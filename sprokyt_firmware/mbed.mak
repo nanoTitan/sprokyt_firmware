@@ -28,6 +28,6 @@ CFLAGS +=
 CXXFLAGS += 
 ASFLAGS += 
 LDFLAGS +=  
-COMMONFLAGS += -mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=softfp
+COMMONFLAGS += -mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=hard
 LINKER_SCRIPT := $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/TARGET_NUCLEO_F411RE/TOOLCHAIN_GCC_ARM/STM32F411XE.ld
 

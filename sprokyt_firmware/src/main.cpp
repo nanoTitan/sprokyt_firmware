@@ -1,5 +1,6 @@
 #include <mbed.h>
 #include "ble.h"
+#include "imu.h"
 #include "error.h"
 
 /* Private function prototypes -----------------------------------------------*/
@@ -15,9 +16,11 @@ int main()
 	}
 	
 	Init_BLE();
+	InitIMU();
 	
 	while (1)
 	{
 		Update_BLE();
+		UpdateIMU();
 	}
 }

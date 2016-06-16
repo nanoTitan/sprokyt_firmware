@@ -194,6 +194,9 @@
 #ifndef __DEC32_EPSILON__
 #define __DEC32_EPSILON__ 1E-6DF
 #endif
+#ifndef __OPTIMIZE__
+#define __OPTIMIZE__ 1
+#endif
 #ifndef __CHAR_UNSIGNED__
 #define __CHAR_UNSIGNED__ 1
 #endif
@@ -241,6 +244,9 @@
 #endif
 #ifndef MBED_BUILD_TIMESTAMP
 #define MBED_BUILD_TIMESTAMP 1453433829.93
+#endif
+#ifndef NDEBUG
+#define NDEBUG 1
 #endif
 #ifndef __GCC_ATOMIC_CHAR16_T_LOCK_FREE
 #define __GCC_ATOMIC_CHAR16_T_LOCK_FREE 2
@@ -322,6 +328,9 @@
 #endif
 #ifndef __ULFRACT_MIN__
 #define __ULFRACT_MIN__ 0.0ULR
+#endif
+#ifndef RELEASE
+#define RELEASE 1
 #endif
 #ifndef __LDBL_HAS_QUIET_NAN__
 #define __LDBL_HAS_QUIET_NAN__ 1
@@ -536,9 +545,6 @@
 #endif
 #ifndef __UHA_FBIT__
 #define __UHA_FBIT__ 8
-#endif
-#ifndef __NO_INLINE__
-#define __NO_INLINE__ 1
 #endif
 #ifndef __SFRACT_MIN__
 #define __SFRACT_MIN__ (-0.5HR-0.5HR)
@@ -1116,43 +1122,107 @@
 #ifndef __ATOMIC_RELEASE
 #define __ATOMIC_RELEASE 3
 #endif
-#ifndef NDEBUG
-#define NDEBUG 1
-#endif
-#ifndef RELEASE
-#define RELEASE 1
-#endif
 #endif
 
 // --- Include directories begin --- //
-//$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed/libraries/mbed/targets/cmsis/TOOLCHAIN_GCC
-//$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed/libraries/mbed/hal
-//$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed/libraries/mbed/targets/cmsis
-//$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed/libraries/mbed/targets/hal
-//$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed/libraries/mbed/common
-//$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed/libraries/mbed/targets
-//$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed/libraries/mbed
-//$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed/libraries/mbed/api
-//$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4
-//$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/TARGET_NUCLEO_F411RE
-//$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/TARGET_NUCLEO_F411RE/TOOLCHAIN_GCC_ARM
-//$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed/libraries/mbed/targets/hal/TARGET_STM/TARGET_STM32F4/TARGET_NUCLEO_F411RE
-//$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed/libraries/mbed/targets/cmsis/TARGET_STM
-//$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed/libraries/mbed/targets/hal/TARGET_STM/TARGET_STM32F4
-//$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed/libraries/mbed/targets/hal/TARGET_STM
+//../../../../../../../STM32/X-CUBE-BLE1/Drivers/BSP/STM32F4xx-Nucleo
+//../../../../../../../STM32/X-CUBE-BLE1/Drivers/BSP/STM32L0xx_Nucleo
+//../../../../../../../STM32/X-CUBE-BLE1/Drivers/BSP/STM32L4xx_Nucleo
+//../../../../../../../STM32/X-CUBE-BLE1/Drivers/BSP/X-NUCLEO-IDB04A1
+//../../../../../../../STM32/X-CUBE-BLE1/Drivers/CMSIS/Device/ST/STM32F4xx/Include
+//../../../../../../../STM32/X-CUBE-BLE1/Drivers/CMSIS/Device/ST/STM32L0xx/Include
+//../../../../../../../STM32/X-CUBE-BLE1/Drivers/CMSIS/Device/ST/STM32L4xx/Include
+//../../../../../../../STM32/X-CUBE-BLE1/Drivers/CMSIS/Include
+//../../../../../../../STM32/X-CUBE-BLE1/Drivers/STM32F4xx_HAL_Driver/Inc
+//../../../../../../../STM32/X-CUBE-BLE1/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy
+//../../../../../../../STM32/X-CUBE-BLE1/Drivers/STM32L0xx_HAL_Driver/Inc
+//../../../../../../../STM32/X-CUBE-BLE1/Drivers/STM32L0xx_HAL_Driver/Inc/Legacy
+//../../../../../../../STM32/X-CUBE-BLE1/Drivers/STM32L4xx_HAL_Driver/Inc
+//../../../../../../../STM32/X-CUBE-BLE1/Drivers/STM32L4xx_HAL_Driver/Inc/Legacy
+//../../../../../../../STM32/X-CUBE-BLE1/Middlewares/ST/LowPowerManager/Inc
+//../../../../../../../STM32/X-CUBE-BLE1/Middlewares/ST/STM32_BlueNRG/Interface
+//../../../../../../../STM32/X-CUBE-BLE1/Middlewares/ST/STM32_BlueNRG/SimpleBlueNRG_HCI/includes
+//../../../../../../../STM32/X-CUBE-BLE1/Middlewares/ST/STM32_BlueNRG/STM32F4xx_HAL_BlueNRG_Drivers/inc
+//../../../../../../../STM32/X-CUBE-BLE1/Middlewares/ST/STM32_BlueNRG/STM32L0xx_HAL_BlueNRG_Drivers/inc
+//../../../../../../../STM32/X-CUBE-BLE1/Middlewares/ST/STM32_BlueNRG/STM32L4xx_HAL_BlueNRG_Drivers/inc
+//../../../../../../../STM32/X-CUBE-BLE1/Middlewares/ST/TimerServer/inc
+//../../../../../../../STM32/X-CUBE-BLE1/Middlewares/ST/TimerServer/STM32xx_HAL_TimerServer_Drivers/inc
+//../../../../../../../STM32/X-CUBE-BLE1/Projects/Multi/Applications/SampleAppThT/Inc
+//../../../../../../../STM32/X-CUBE-BLE1/Projects/Multi/Applications/SampleApp_DMA_LowPower/Inc
+//../../../../../../../STM32/X-CUBE-BLE1/Projects/Multi/Applications/SampleApp_DMA_LowPower/STM32xx_HAL_APP_Drivers/inc
+//../../../../../../../STM32/X-CUBE-BLE1/Projects/Multi/Applications/SensorDemo/Inc
+//../../../../../../../STM32/X-CUBE-BLE1/Projects/Multi/Applications/SensorDemo_DMA_LowPower/Inc
+//../../../../../../../STM32/X-CUBE-BLE1/Projects/Multi/Applications/SensorDemo_DMA_LowPower/STM32xx_HAL_APP_Drivers/inc
+//../../../../../../../STM32/X-CUBE-BLE1/Projects/Multi/Applications/Virtual_COM_Port/Inc
+//../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/Components/Common
+//../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/Components/hts221
+//../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/Components/lis3mdl
+//../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/Components/lps22hb
+//../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/Components/lps25hb
+//../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/Components/lsm6ds0
+//../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/Components/lsm6ds3
+//../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/STM32F4xx-Nucleo
+//../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/STM32L0xx_Nucleo
+//../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/STM32L1xx_Nucleo
+//../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/STM32L4xx_Nucleo
+//../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/X_NUCLEO_IKS01A1
+//../../../../../../../STM32/X-CUBE-MEMS1/Drivers/CMSIS/Device/ST/STM32F4xx/Include
+//../../../../../../../STM32/X-CUBE-MEMS1/Drivers/CMSIS/Device/ST/STM32L0xx/Include
+//../../../../../../../STM32/X-CUBE-MEMS1/Drivers/CMSIS/Device/ST/STM32L1xx/Include
+//../../../../../../../STM32/X-CUBE-MEMS1/Drivers/CMSIS/Device/ST/STM32L4xx/Include
+//../../../../../../../STM32/X-CUBE-MEMS1/Drivers/CMSIS/Include
+//../../../../../../../STM32/X-CUBE-MEMS1/Drivers/CMSIS/RTOS/Template
+//../../../../../../../STM32/X-CUBE-MEMS1/Drivers/STM32F4xx_HAL_Driver/Inc
+//../../../../../../../STM32/X-CUBE-MEMS1/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy
+//../../../../../../../STM32/X-CUBE-MEMS1/Drivers/STM32L0xx_HAL_Driver/Inc
+//../../../../../../../STM32/X-CUBE-MEMS1/Drivers/STM32L0xx_HAL_Driver/Inc/Legacy
+//../../../../../../../STM32/X-CUBE-MEMS1/Drivers/STM32L1xx_HAL_Driver/Inc
+//../../../../../../../STM32/X-CUBE-MEMS1/Drivers/STM32L1xx_HAL_Driver/Inc/Legacy
+//../../../../../../../STM32/X-CUBE-MEMS1/Drivers/STM32L4xx_HAL_Driver/Inc
+//../../../../../../../STM32/X-CUBE-MEMS1/Drivers/STM32L4xx_HAL_Driver/Inc/Legacy
+//../../../../../../../STM32/X-CUBE-MEMS1/Middlewares/ST/STM32_OSX_MotionFX_Library
+//../../../../../../../STM32/X-CUBE-MEMS1/Middlewares/ST/STM32_OSX_MotionFX_Library/Inc
+//../../../../../../../STM32/X-CUBE-MEMS1/Projects/Multi/Applications/DataLogFusion/Inc
+//../../../../../../../STM32/X-CUBE-MEMS1/Projects/Multi/Examples/6DOrientation/Inc
+//../../../../../../../STM32/X-CUBE-MEMS1/Projects/Multi/Examples/DataLog/Inc
+//../../../../../../../STM32/X-CUBE-MEMS1/Projects/Multi/Examples/DataLogTerminal/Inc
+//../../../../../../../STM32/X-CUBE-MEMS1/Projects/Multi/Examples/FreeFallDetection/Inc
+//../../../../../../../STM32/X-CUBE-MEMS1/Projects/Multi/Examples/LPS22HB_FIFOMode/Inc
+//../../../../../../../STM32/X-CUBE-MEMS1/Projects/Multi/Examples/Pedometer/Inc
+//../../../../../../../STM32/X-CUBE-MEMS1/Projects/Multi/Examples/SingleDoubleTap/Inc
+//../../../../../../../STM32/X-CUBE-MEMS1/Projects/Multi/Examples/TiltDetection/Inc
+//../../../../../../../STM32/X-CUBE-MEMS1/Projects/Multi/Examples/WakeUpDetection/Inc
+//$(LOCALAPPDATA)/VisualGDB/EmbeddedBSPs/arm-eabi/com.sysprogs.arm.mbed/libraries/mbed/targets/cmsis/TOOLCHAIN_GCC
+//$(LOCALAPPDATA)/VisualGDB/EmbeddedBSPs/arm-eabi/com.sysprogs.arm.mbed/libraries/mbed/hal
+//$(LOCALAPPDATA)/VisualGDB/EmbeddedBSPs/arm-eabi/com.sysprogs.arm.mbed/libraries/mbed/targets/cmsis
+//$(LOCALAPPDATA)/VisualGDB/EmbeddedBSPs/arm-eabi/com.sysprogs.arm.mbed/libraries/mbed/targets/hal
+//$(LOCALAPPDATA)/VisualGDB/EmbeddedBSPs/arm-eabi/com.sysprogs.arm.mbed/libraries/mbed/common
+//$(LOCALAPPDATA)/VisualGDB/EmbeddedBSPs/arm-eabi/com.sysprogs.arm.mbed/libraries/mbed/targets
+//$(LOCALAPPDATA)/VisualGDB/EmbeddedBSPs/arm-eabi/com.sysprogs.arm.mbed/libraries/mbed
+//$(LOCALAPPDATA)/VisualGDB/EmbeddedBSPs/arm-eabi/com.sysprogs.arm.mbed/libraries/mbed/api
+//$(LOCALAPPDATA)/VisualGDB/EmbeddedBSPs/arm-eabi/com.sysprogs.arm.mbed/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4
+//$(LOCALAPPDATA)/VisualGDB/EmbeddedBSPs/arm-eabi/com.sysprogs.arm.mbed/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/TARGET_NUCLEO_F411RE
+//$(LOCALAPPDATA)/VisualGDB/EmbeddedBSPs/arm-eabi/com.sysprogs.arm.mbed/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/TARGET_NUCLEO_F411RE/TOOLCHAIN_GCC_ARM
+//$(LOCALAPPDATA)/VisualGDB/EmbeddedBSPs/arm-eabi/com.sysprogs.arm.mbed/libraries/mbed/targets/hal/TARGET_STM/TARGET_STM32F4/TARGET_NUCLEO_F411RE
+//$(LOCALAPPDATA)/VisualGDB/EmbeddedBSPs/arm-eabi/com.sysprogs.arm.mbed/libraries/mbed/targets/cmsis/TARGET_STM
+//$(LOCALAPPDATA)/VisualGDB/EmbeddedBSPs/arm-eabi/com.sysprogs.arm.mbed/libraries/mbed/targets/hal/TARGET_STM/TARGET_STM32F4
+//$(LOCALAPPDATA)/VisualGDB/EmbeddedBSPs/arm-eabi/com.sysprogs.arm.mbed/libraries/mbed/targets/hal/TARGET_STM
 //c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/5.3.0/../../../../arm-eabi/include/c++/5.3.0
-//c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/5.3.0/../../../../arm-eabi/include/c++/5.3.0/arm-eabi/thumb/cortex_m4
+//c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/5.3.0/../../../../arm-eabi/include/c++/5.3.0/arm-eabi/thumb/fpu/cortex_m4
 //c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/5.3.0/../../../../arm-eabi/include/c++/5.3.0/backward
 //c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/5.3.0/include
 //c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/5.3.0/include-fixed
 //c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/5.3.0/../../../../arm-eabi/sys-include
 //c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/5.3.0/../../../../arm-eabi/include
+//src
+//src/ble
+//src/imu
 // --- Include directories end --- //
 
 
 // --- Library directories begin --- //
-//c:/sysgcc/arm-eabi/bin/../lib/gcc/arm-eabi/5.3.0/thumb/cortex_m4/
-//c:/sysgcc/arm-eabi/bin/../lib/gcc/arm-eabi/5.3.0/../../../../arm-eabi/lib/thumb/cortex_m4/
+//c:/sysgcc/arm-eabi/bin/../lib/gcc/arm-eabi/5.3.0/thumb/fpu/cortex_m4/
+//c:/sysgcc/arm-eabi/bin/../lib/gcc/arm-eabi/5.3.0/../../../../arm-eabi/lib/thumb/fpu/cortex_m4/
 //c:/sysgcc/arm-eabi/bin/../lib/gcc/arm-eabi/5.3.0/
 //c:/sysgcc/arm-eabi/bin/../lib/gcc/
 //c:/sysgcc/arm-eabi/bin/../lib/gcc/arm-eabi/5.3.0/../../../../arm-eabi/lib/

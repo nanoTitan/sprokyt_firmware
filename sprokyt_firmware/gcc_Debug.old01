@@ -1165,7 +1165,7 @@
 //$(LOCALAPPDATA)/VisualGDB/EmbeddedBSPs/arm-eabi/com.sysprogs.arm.mbed/libraries/mbed/targets/hal/TARGET_STM/TARGET_STM32F4
 //$(LOCALAPPDATA)/VisualGDB/EmbeddedBSPs/arm-eabi/com.sysprogs.arm.mbed/libraries/mbed/targets/hal/TARGET_STM
 //c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/5.3.0/../../../../arm-eabi/include/c++/5.3.0
-//c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/5.3.0/../../../../arm-eabi/include/c++/5.3.0/arm-eabi/thumb/cortex_m4
+//c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/5.3.0/../../../../arm-eabi/include/c++/5.3.0/arm-eabi/thumb/fpu/cortex_m4
 //c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/5.3.0/../../../../arm-eabi/include/c++/5.3.0/backward
 //c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/5.3.0/include
 //c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/5.3.0/include-fixed
@@ -1178,8 +1178,8 @@
 
 
 // --- Library directories begin --- //
-//c:/sysgcc/arm-eabi/bin/../lib/gcc/arm-eabi/5.3.0/thumb/cortex_m4/
-//c:/sysgcc/arm-eabi/bin/../lib/gcc/arm-eabi/5.3.0/../../../../arm-eabi/lib/thumb/cortex_m4/
+//c:/sysgcc/arm-eabi/bin/../lib/gcc/arm-eabi/5.3.0/thumb/fpu/cortex_m4/
+//c:/sysgcc/arm-eabi/bin/../lib/gcc/arm-eabi/5.3.0/../../../../arm-eabi/lib/thumb/fpu/cortex_m4/
 //c:/sysgcc/arm-eabi/bin/../lib/gcc/arm-eabi/5.3.0/
 //c:/sysgcc/arm-eabi/bin/../lib/gcc/
 //c:/sysgcc/arm-eabi/bin/../lib/gcc/arm-eabi/5.3.0/../../../../arm-eabi/lib/
