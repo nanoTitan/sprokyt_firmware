@@ -17,7 +17,6 @@
 #include "bluenrg_utils.h"
 //#include "osal.h"
 
-#include "print.h"
 #include <stdlib.h>
 
 /* Private Macros -----------------------------------------------------------*/
@@ -603,7 +602,8 @@ tBleStatus Free_Fall_Notify(void)
 		1,
 		&val);
 	
-	if (ret != BLE_STATUS_SUCCESS) {
+	if (ret != BLE_STATUS_SUCCESS) 
+	{
 		PRINTF("Error while updating FFall characteristic.\n");
 		return BLE_STATUS_ERROR ;
 	}
@@ -627,7 +627,8 @@ tBleStatus AccUpdate(AxesRaw_t *data)
 	
 	ret = aci_gatt_update_char_value(accServHandle, accCharHandle, 0, 6, buff);
 	
-	if (ret != BLE_STATUS_SUCCESS) {
+	if (ret != BLE_STATUS_SUCCESS) 
+	{
 		PRINTF("Error while updating ACC characteristic.\n");
 		return BLE_STATUS_ERROR ;
 	}
@@ -649,7 +650,8 @@ tBleStatus Temp_Update(int16_t temp)
 		2,
 		(uint8_t*)&temp);
   
-	if (ret != BLE_STATUS_SUCCESS) {
+	if (ret != BLE_STATUS_SUCCESS)
+	{
 		PRINTF("Error while updating TEMP characteristic.\n");
 		return BLE_STATUS_ERROR ;
 	}
@@ -672,7 +674,8 @@ tBleStatus Press_Update(int32_t press)
 		3,
 		(uint8_t*)&press);
   
-	if (ret != BLE_STATUS_SUCCESS) {
+	if (ret != BLE_STATUS_SUCCESS) 
+	{
 		PRINTF("Error while updating TEMP characteristic.\n");
 		return BLE_STATUS_ERROR ;
 	}
@@ -695,7 +698,8 @@ tBleStatus Humidity_Update(uint16_t humidity)
 		2,
 		(uint8_t*)&humidity);
   
-	if (ret != BLE_STATUS_SUCCESS) {
+	if (ret != BLE_STATUS_SUCCESS) 
+	{
 		PRINTF("Error while updating TEMP characteristic.\n");
 		return BLE_STATUS_ERROR ;
 	}
@@ -715,7 +719,8 @@ void GAPConnectionCompleteCB(uint8_t addr[6], uint16_t handle)
 	service_connection_handle = handle;
   
 	PRINTF("Connected to device:");
-	for (int i = 5; i > 0; i--) {
+	for (int i = 5; i > 0; i--) 
+	{
 		PRINTF("%02X-", addr[i]);
 	}
 	PRINTF("%02X\n", addr[0]);
@@ -807,8 +812,7 @@ void Attribute_Modified_CB(uint16_t handle, uint8_t data_length, uint8_t *att_da
 			joysticks[inputIndex].x = att_data[1];
 			joysticks[inputIndex].y = att_data[2];
 			
-			//ConPrintF("X: %u, Y: %u", (uint8_t)joysticks[inputIndex].x, (uint8_t)joysticks[inputIndex].y);
-			ConsoleBlink(joysticks[inputIndex].y);
+			//PRINTF("X: %u, Y: %u", (uint8_t)joysticks[inputIndex].x, (uint8_t)joysticks[inputIndex].y);
 		}
 	}
 }

@@ -1,7 +1,6 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "imu.h"
-#include "com.h"
 #include "error.h"
 #include "cube_hal.h"
 #include "stm32f4xx_nucleo.h"
@@ -16,6 +15,7 @@
 #include <string.h> // strlen
 #include <stdio.h>  // sprintf
 #include <math.h>   // trunc
+#include "debug.h"
 
 /** @addtogroup OSX_MOTION_FX_Applications
   * @{
@@ -92,7 +92,6 @@ float TEMPERATURE_Value;
 volatile uint8_t SF_Active = 0;
 volatile uint8_t SF_6x_enabled = 0;
 volatile uint8_t SF_change = 0;
-TMsg Msg;
 /* DataLog timer */
 TIM_HandleTypeDef    DataLogTimHandle;
 
@@ -105,8 +104,8 @@ void *TEMPERATURE_handle = NULL;
 void *PRESSURE_handle = NULL;
 
 /* Private function prototypes -----------------------------------------------*/
-static void initializeAllSensors(void);
-static void enableAllSensors(void);
+static void initializeAllSensors();
+static void enableAllSensors();
 static void floatToInt(float in, int32_t *out_int, int32_t *out_dec, int32_t dec_prec);
 static void Accelero_Sensor_Handler();
 static void Gyro_Sensor_Handler();
@@ -115,9 +114,9 @@ static void Pressure_Sensor_Handler();
 static void Humidity_Sensor_Handler();
 static void Temperature_Sensor_Handler();
 static void SF_Handler();
-static unsigned char SaveCalibrationToMemory(void);
-static unsigned char ResetCalibrationInMemory(void);
-static unsigned char RecallCalibrationFromMemory(void);
+static unsigned char SaveCalibrationToMemory();
+static unsigned char ResetCalibrationInMemory();
+static unsigned char RecallCalibrationFromMemory();
 
 /* Private functions ---------------------------------------------------------*/
 /**
@@ -137,16 +136,13 @@ static unsigned char RecallCalibrationFromMemory(void);
  * @retval Integer
  */
 void InitIMU(void)
-{ 
+{	
 	initializeAllSensors();
 	enableAllSensors();
   
 	MotionFX_manager_init();
   
 	MotionFX_manager_start_9X();
-  
-	/* Initialize UART */
-	USARTConfig();
   
 	sysclk = HAL_RCC_GetSysClockFreq();
 	hclk = HAL_RCC_GetHCLKFreq();
@@ -164,6 +160,7 @@ void UpdateIMU(void)
 	{
 		while (BSP_PB_GetState(BUTTON_KEY) == GPIO_PIN_RESET)
 			;
+		
 		/* Reset the Compass Calibration */
 		isCal = 0;
 		osx_MotionFX_compass_forceReCalibration();
@@ -180,12 +177,10 @@ void UpdateIMU(void)
     
 	if (!SF_Active)
 	{
-		Pressure_Sensor_Handler(&Msg);
-		Humidity_Sensor_Handler(&Msg);
-		Temperature_Sensor_Handler(&Msg);
-		Accelero_Sensor_Handler(&Msg);
-		Gyro_Sensor_Handler(&Msg);
-		Magneto_Sensor_Handler(&Msg);
+		Pressure_Sensor_Handler();
+		Accelero_Sensor_Handler();
+		Gyro_Sensor_Handler();
+		Magneto_Sensor_Handler();
 	}
 	
 }
@@ -198,7 +193,7 @@ void UpdateIMU(void)
 static void initializeAllSensors(void)
 {
   /* Try to use LSM6DS3 DIL24 if present, otherwise use LSM6DS0 on board */
-	DrvStatusTypeDef result = BSP_ACCELERO_Init(ACCELERO_SENSORS_AUTO, &ACCELERO_handle);
+	DrvStatusTypeDef result = BSP_ACCELERO_Init(ACCELERO_SENSORS_AUTO, &ACCELERO_handle);		// ACCELERO_SENSORS_AUTO, LSM6DS3_X_0, LSM6DS0_X_0
 	if (result != COMPONENT_OK)
 		Error_Handler();
 	
@@ -278,9 +273,7 @@ static void Accelero_Sensor_Handler()
 	if (ACCELEROMETER_SENSOR && BSP_ACCELERO_IsInitialized(ACCELERO_handle, &status) == COMPONENT_OK && status == 1)
 	{
 		BSP_ACCELERO_Get_Axes(ACCELERO_handle, &ACC_Value);
-		//Serialize_s32(&Msg->Data[15], ACC_Value.AXIS_X, 4);
-		//Serialize_s32(&Msg->Data[19], ACC_Value.AXIS_Y, 4);
-		//Serialize_s32(&Msg->Data[23], ACC_Value.AXIS_Z, 4);
+		PRINTF("Accel x: %d, y: %d, z: %d", ACC_Value.AXIS_X, ACC_Value.AXIS_Y, ACC_Value.AXIS_Z);
 	}
 }
 
@@ -296,9 +289,7 @@ static void Gyro_Sensor_Handler()
 	if (GYROSCOPE_SENSOR && BSP_GYRO_IsInitialized(GYRO_handle, &status) == COMPONENT_OK && status == 1)
 	{
 		BSP_GYRO_Get_Axes(GYRO_handle, &GYR_Value);
-		//Serialize_s32(&Msg->Data[27], GYR_Value.AXIS_X, 4);
-		//Serialize_s32(&Msg->Data[31], GYR_Value.AXIS_Y, 4);
-		//Serialize_s32(&Msg->Data[35], GYR_Value.AXIS_Z, 4);
+		PRINTF("Accel x: %d, y: %d, z: %d", GYR_Value.AXIS_X, GYR_Value.AXIS_Y, GYR_Value.AXIS_Z);
 	}
 }
 
@@ -314,9 +305,7 @@ static void Magneto_Sensor_Handler()
 	if (BSP_MAGNETO_IsInitialized(MAGNETO_handle, &status) == COMPONENT_OK && status == 1)
 	{
 		BSP_MAGNETO_Get_Axes(MAGNETO_handle, &MAG_Value);
-		//Serialize_s32(&Msg->Data[39], (int32_t)(MAG_Value.AXIS_X - magOffset.magOffX), 4);
-		//Serialize_s32(&Msg->Data[43], (int32_t)(MAG_Value.AXIS_Y - magOffset.magOffY), 4);
-		//Serialize_s32(&Msg->Data[47], (int32_t)(MAG_Value.AXIS_Z - magOffset.magOffZ), 4);
+		PRINTF("Accel x: %d, y: %d, z: %d", MAG_Value.AXIS_X, MAG_Value.AXIS_Y, MAG_Value.AXIS_Z);
 	}
 }
 
@@ -333,7 +322,7 @@ static void Pressure_Sensor_Handler()
 	if (PRESSURE_SENSOR && BSP_PRESSURE_IsInitialized(PRESSURE_handle, &status) == COMPONENT_OK && status == 1)
 	{
 		BSP_PRESSURE_Get_Press(PRESSURE_handle, &PRESSURE_Value);
-		floatToInt(PRESSURE_Value, &d1, &d2, 2);
+		PRINTF("Pressure: %f", PRESSURE_Value);
 	}
 }
 
@@ -350,7 +339,7 @@ static void Humidity_Sensor_Handler()
 	if (HUMIDITY_SENSOR && BSP_HUMIDITY_IsInitialized(HUMIDITY_handle, &status) == COMPONENT_OK && status == 1)
 	{
 		BSP_HUMIDITY_Get_Hum(HUMIDITY_handle, &HUMIDITY_Value);
-		floatToInt(HUMIDITY_Value, &d1, &d2, 2);
+		PRINTF("Humidity: %f", HUMIDITY_Value);
 	}
 }
 
@@ -367,7 +356,7 @@ static void Temperature_Sensor_Handler()
 	if (TEMPERATURE_SENSOR && BSP_TEMPERATURE_IsInitialized(TEMPERATURE_handle, &status) == COMPONENT_OK && status == 1)
 	{
 		BSP_TEMPERATURE_Get_Temp(TEMPERATURE_handle, &TEMPERATURE_Value);
-		floatToInt(TEMPERATURE_Value, &d3, &d4, 2);
+		PRINTF("Temperature: %f", TEMPERATURE_Value);
 	}
 }
 
@@ -382,14 +371,14 @@ static void SF_Handler()
 	uint8_t status_gyr = 0;
 	uint8_t status_mag = 0;
   
-	BSP_ACCELERO_IsInitialized(ACCELERO_handle, &status_acc);
-	BSP_GYRO_IsInitialized(GYRO_handle, &status_gyr);
-	BSP_MAGNETO_IsInitialized(MAGNETO_handle, &status_mag);
+	if (SF_Active)
+	{ 
+		BSP_ACCELERO_IsInitialized(ACCELERO_handle, &status_acc);
+		BSP_GYRO_IsInitialized(GYRO_handle, &status_gyr);
+		BSP_MAGNETO_IsInitialized(MAGNETO_handle, &status_mag);
   
-	if (status_acc && status_gyr && status_mag)
-	{
-		if (SF_Active)
-		{      
+		if (status_acc && status_gyr && status_mag)
+		{
 			if (SF_change == 1)
 			{
 				if (SF_6x_enabled == 0)
@@ -460,6 +449,7 @@ static void SF_Handler()
 				//memcpy(&Msg->Data[3], (uint8_t*)&MotionFX_Engine_Out->rotation_9X, 3 * sizeof(float));  // rot + Quat
 				//memcpy(&Msg->Data[3 + (3 * sizeof(float))], (uint8_t*)&MotionFX_Engine_Out->quaternion_9X, 4 * sizeof(float)); // rot + Quat
 			}
+		
 		}
 	}
 }
@@ -471,7 +461,7 @@ static void SF_Handler()
 */
 void HAL_TIM_OC_DelayElapsedCallback(TIM_HandleTypeDef *htim)
 {
-	SF_Handler(&Msg);
+	SF_Handler();
 }
 
 /**

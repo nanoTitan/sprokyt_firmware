@@ -15,8 +15,8 @@ LINUX_PACKAGES :=
 
 CFLAGS := -ggdb -ffunction-sections -O0 -mfloat-abi=hard
 CXXFLAGS := -ggdb -ffunction-sections -fno-exceptions -fno-rtti -O0 -mfloat-abi=hard
-ASFLAGS := -mfloat-abi=hard
-LDFLAGS := -Wl,-gc-sections -mfloat-abi=hard
+ASFLAGS := 
+LDFLAGS := -Wl,-gc-sections
 COMMONFLAGS := 
 LINKER_SCRIPT := 
 

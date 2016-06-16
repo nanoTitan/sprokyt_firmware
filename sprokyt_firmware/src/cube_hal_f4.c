@@ -44,7 +44,6 @@
 /* Includes ------------------------------------------------------------------*/
 #include "cube_hal.h"
 #include "main.h"
-#include "com.h"
 
 /** @addtogroup OSX_MOTION_FX_Applications
   * @{

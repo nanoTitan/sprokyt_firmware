@@ -11,6 +11,9 @@
 #ifndef __HQ_FBIT__
 #define __HQ_FBIT__ 15
 #endif
+#ifndef STM32F411xE
+#define STM32F411xE 1
+#endif
 #ifndef __UINT_LEAST16_MAX__
 #define __UINT_LEAST16_MAX__ 0xffff
 #endif
@@ -588,6 +591,9 @@
 #ifndef TOOLCHAIN_GCC
 #define TOOLCHAIN_GCC 1
 #endif
+#ifndef USE_STM32F4XX_NUCLEO
+#define USE_STM32F4XX_NUCLEO 1
+#endif
 #ifndef __ULLACCUM_IBIT__
 #define __ULLACCUM_IBIT__ 32
 #endif
@@ -1126,34 +1132,16 @@
 
 // --- Include directories begin --- //
 //../../../../../../../STM32/X-CUBE-BLE1/Drivers/BSP/STM32F4xx-Nucleo
-//../../../../../../../STM32/X-CUBE-BLE1/Drivers/BSP/STM32L0xx_Nucleo
-//../../../../../../../STM32/X-CUBE-BLE1/Drivers/BSP/STM32L4xx_Nucleo
 //../../../../../../../STM32/X-CUBE-BLE1/Drivers/BSP/X-NUCLEO-IDB04A1
-//../../../../../../../STM32/X-CUBE-BLE1/Drivers/CMSIS/Device/ST/STM32F4xx/Include
-//../../../../../../../STM32/X-CUBE-BLE1/Drivers/CMSIS/Device/ST/STM32L0xx/Include
-//../../../../../../../STM32/X-CUBE-BLE1/Drivers/CMSIS/Device/ST/STM32L4xx/Include
-//../../../../../../../STM32/X-CUBE-BLE1/Drivers/CMSIS/Include
-//../../../../../../../STM32/X-CUBE-BLE1/Drivers/STM32F4xx_HAL_Driver/Inc
-//../../../../../../../STM32/X-CUBE-BLE1/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy
-//../../../../../../../STM32/X-CUBE-BLE1/Drivers/STM32L0xx_HAL_Driver/Inc
-//../../../../../../../STM32/X-CUBE-BLE1/Drivers/STM32L0xx_HAL_Driver/Inc/Legacy
-//../../../../../../../STM32/X-CUBE-BLE1/Drivers/STM32L4xx_HAL_Driver/Inc
-//../../../../../../../STM32/X-CUBE-BLE1/Drivers/STM32L4xx_HAL_Driver/Inc/Legacy
 //../../../../../../../STM32/X-CUBE-BLE1/Middlewares/ST/LowPowerManager/Inc
 //../../../../../../../STM32/X-CUBE-BLE1/Middlewares/ST/STM32_BlueNRG/Interface
-//../../../../../../../STM32/X-CUBE-BLE1/Middlewares/ST/STM32_BlueNRG/SimpleBlueNRG_HCI/includes
 //../../../../../../../STM32/X-CUBE-BLE1/Middlewares/ST/STM32_BlueNRG/STM32F4xx_HAL_BlueNRG_Drivers/inc
-//../../../../../../../STM32/X-CUBE-BLE1/Middlewares/ST/STM32_BlueNRG/STM32L0xx_HAL_BlueNRG_Drivers/inc
-//../../../../../../../STM32/X-CUBE-BLE1/Middlewares/ST/STM32_BlueNRG/STM32L4xx_HAL_BlueNRG_Drivers/inc
 //../../../../../../../STM32/X-CUBE-BLE1/Middlewares/ST/TimerServer/inc
 //../../../../../../../STM32/X-CUBE-BLE1/Middlewares/ST/TimerServer/STM32xx_HAL_TimerServer_Drivers/inc
-//../../../../../../../STM32/X-CUBE-BLE1/Projects/Multi/Applications/SampleAppThT/Inc
-//../../../../../../../STM32/X-CUBE-BLE1/Projects/Multi/Applications/SampleApp_DMA_LowPower/Inc
-//../../../../../../../STM32/X-CUBE-BLE1/Projects/Multi/Applications/SampleApp_DMA_LowPower/STM32xx_HAL_APP_Drivers/inc
-//../../../../../../../STM32/X-CUBE-BLE1/Projects/Multi/Applications/SensorDemo/Inc
-//../../../../../../../STM32/X-CUBE-BLE1/Projects/Multi/Applications/SensorDemo_DMA_LowPower/Inc
-//../../../../../../../STM32/X-CUBE-BLE1/Projects/Multi/Applications/SensorDemo_DMA_LowPower/STM32xx_HAL_APP_Drivers/inc
-//../../../../../../../STM32/X-CUBE-BLE1/Projects/Multi/Applications/Virtual_COM_Port/Inc
+//../../../../../../../STM32/X-CUBE-BLE1/Middlewares/ST/STM32_BlueNRG/SimpleBlueNRG_HCI/includes
+//../../../../../../../STM32/X-CUBE-BLE1/Middlewares/ST/STM32_BlueNRG/SimpleBlueNRG_HCI/hci
+//../../../../../../../STM32/X-CUBE-BLE1/Middlewares/ST/STM32_BlueNRG/SimpleBlueNRG_HCI/hci/controller
+//../../../../../../../STM32/X-CUBE-BLE1/Middlewares/ST/STM32_BlueNRG/SimpleBlueNRG_HCI/utils
 //../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/Components/Common
 //../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/Components/hts221
 //../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/Components/lis3mdl
@@ -1161,37 +1149,9 @@
 //../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/Components/lps25hb
 //../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/Components/lsm6ds0
 //../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/Components/lsm6ds3
-//../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/STM32F4xx-Nucleo
-//../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/STM32L0xx_Nucleo
-//../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/STM32L1xx_Nucleo
-//../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/STM32L4xx_Nucleo
 //../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/X_NUCLEO_IKS01A1
-//../../../../../../../STM32/X-CUBE-MEMS1/Drivers/CMSIS/Device/ST/STM32F4xx/Include
-//../../../../../../../STM32/X-CUBE-MEMS1/Drivers/CMSIS/Device/ST/STM32L0xx/Include
-//../../../../../../../STM32/X-CUBE-MEMS1/Drivers/CMSIS/Device/ST/STM32L1xx/Include
-//../../../../../../../STM32/X-CUBE-MEMS1/Drivers/CMSIS/Device/ST/STM32L4xx/Include
-//../../../../../../../STM32/X-CUBE-MEMS1/Drivers/CMSIS/Include
-//../../../../../../../STM32/X-CUBE-MEMS1/Drivers/CMSIS/RTOS/Template
-//../../../../../../../STM32/X-CUBE-MEMS1/Drivers/STM32F4xx_HAL_Driver/Inc
-//../../../../../../../STM32/X-CUBE-MEMS1/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy
-//../../../../../../../STM32/X-CUBE-MEMS1/Drivers/STM32L0xx_HAL_Driver/Inc
-//../../../../../../../STM32/X-CUBE-MEMS1/Drivers/STM32L0xx_HAL_Driver/Inc/Legacy
-//../../../../../../../STM32/X-CUBE-MEMS1/Drivers/STM32L1xx_HAL_Driver/Inc
-//../../../../../../../STM32/X-CUBE-MEMS1/Drivers/STM32L1xx_HAL_Driver/Inc/Legacy
-//../../../../../../../STM32/X-CUBE-MEMS1/Drivers/STM32L4xx_HAL_Driver/Inc
-//../../../../../../../STM32/X-CUBE-MEMS1/Drivers/STM32L4xx_HAL_Driver/Inc/Legacy
 //../../../../../../../STM32/X-CUBE-MEMS1/Middlewares/ST/STM32_OSX_MotionFX_Library
 //../../../../../../../STM32/X-CUBE-MEMS1/Middlewares/ST/STM32_OSX_MotionFX_Library/Inc
-//../../../../../../../STM32/X-CUBE-MEMS1/Projects/Multi/Applications/DataLogFusion/Inc
-//../../../../../../../STM32/X-CUBE-MEMS1/Projects/Multi/Examples/6DOrientation/Inc
-//../../../../../../../STM32/X-CUBE-MEMS1/Projects/Multi/Examples/DataLog/Inc
-//../../../../../../../STM32/X-CUBE-MEMS1/Projects/Multi/Examples/DataLogTerminal/Inc
-//../../../../../../../STM32/X-CUBE-MEMS1/Projects/Multi/Examples/FreeFallDetection/Inc
-//../../../../../../../STM32/X-CUBE-MEMS1/Projects/Multi/Examples/LPS22HB_FIFOMode/Inc
-//../../../../../../../STM32/X-CUBE-MEMS1/Projects/Multi/Examples/Pedometer/Inc
-//../../../../../../../STM32/X-CUBE-MEMS1/Projects/Multi/Examples/SingleDoubleTap/Inc
-//../../../../../../../STM32/X-CUBE-MEMS1/Projects/Multi/Examples/TiltDetection/Inc
-//../../../../../../../STM32/X-CUBE-MEMS1/Projects/Multi/Examples/WakeUpDetection/Inc
 //$(LOCALAPPDATA)/VisualGDB/EmbeddedBSPs/arm-eabi/com.sysprogs.arm.mbed/libraries/mbed/targets/cmsis/TOOLCHAIN_GCC
 //$(LOCALAPPDATA)/VisualGDB/EmbeddedBSPs/arm-eabi/com.sysprogs.arm.mbed/libraries/mbed/hal
 //$(LOCALAPPDATA)/VisualGDB/EmbeddedBSPs/arm-eabi/com.sysprogs.arm.mbed/libraries/mbed/targets/cmsis
@@ -1208,7 +1168,7 @@
 //$(LOCALAPPDATA)/VisualGDB/EmbeddedBSPs/arm-eabi/com.sysprogs.arm.mbed/libraries/mbed/targets/hal/TARGET_STM/TARGET_STM32F4
 //$(LOCALAPPDATA)/VisualGDB/EmbeddedBSPs/arm-eabi/com.sysprogs.arm.mbed/libraries/mbed/targets/hal/TARGET_STM
 //c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/5.3.0/../../../../arm-eabi/include/c++/5.3.0
-//c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/5.3.0/../../../../arm-eabi/include/c++/5.3.0/arm-eabi/thumb/fpu/cortex_m4
+//c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/5.3.0/../../../../arm-eabi/include/c++/5.3.0/arm-eabi/thumb/cortex_m4
 //c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/5.3.0/../../../../arm-eabi/include/c++/5.3.0/backward
 //c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/5.3.0/include
 //c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/5.3.0/include-fixed
@@ -1221,8 +1181,8 @@
 
 
 // --- Library directories begin --- //
-//c:/sysgcc/arm-eabi/bin/../lib/gcc/arm-eabi/5.3.0/thumb/fpu/cortex_m4/
-//c:/sysgcc/arm-eabi/bin/../lib/gcc/arm-eabi/5.3.0/../../../../arm-eabi/lib/thumb/fpu/cortex_m4/
+//c:/sysgcc/arm-eabi/bin/../lib/gcc/arm-eabi/5.3.0/thumb/cortex_m4/
+//c:/sysgcc/arm-eabi/bin/../lib/gcc/arm-eabi/5.3.0/../../../../arm-eabi/lib/thumb/cortex_m4/
 //c:/sysgcc/arm-eabi/bin/../lib/gcc/arm-eabi/5.3.0/
 //c:/sysgcc/arm-eabi/bin/../lib/gcc/
 //c:/sysgcc/arm-eabi/bin/../lib/gcc/arm-eabi/5.3.0/../../../../arm-eabi/lib/
