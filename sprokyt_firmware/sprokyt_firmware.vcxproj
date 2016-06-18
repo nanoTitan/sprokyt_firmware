@@ -206,7 +206,7 @@
     <ClCompile Include="..\..\..\..\..\..\..\STM32\X-CUBE-BLE1\Middlewares\ST\STM32_BlueNRG\STM32F4xx_HAL_BlueNRG_Drivers\src\stm32f4xx_hal_bluenrg_gpio.c" />
     <ClCompile Include="..\..\..\..\..\..\..\STM32\X-CUBE-BLE1\Middlewares\ST\STM32_BlueNRG\STM32F4xx_HAL_BlueNRG_Drivers\src\stm32f4xx_hal_bluenrg_syscfg.c" />
     <ClCompile Include="..\..\..\..\..\..\..\STM32\X-CUBE-BLE1\Middlewares\ST\TimerServer\src\stm32xx_timerserver.c" />
-    <ClCompile Include="src\ble\ble.c" />
+    <ClCompile Include="src\ble\BLE.cpp" />
     <ClCompile Include="src\ble\bluenrg_interface.c" />
     <ClCompile Include="src\clock.c" />
     <ClCompile Include="src\cube_hal_f4.c" />
@@ -461,7 +461,7 @@
     <ClInclude Include="..\..\..\..\..\..\..\STM32\X-CUBE-BLE1\Middlewares\ST\TimerServer\inc\stm32xx_timerserver_conf.h" />
     <ClInclude Include="..\..\..\..\..\..\..\STM32\X-CUBE-BLE1\Middlewares\ST\TimerServer\STM32xx_HAL_TimerServer_Drivers\inc\stm32xx_hal_timerserver_exti.h" />
     <ClInclude Include="..\..\..\..\..\..\..\STM32\X-CUBE-BLE1\Middlewares\ST\TimerServer\STM32xx_HAL_TimerServer_Drivers\inc\stm32xx_hal_timerserver_rtc.h" />
-    <ClInclude Include="src\ble\ble.h" />
+    <ClInclude Include="src\ble\BLE.h" />
     <ClInclude Include="src\ble\bluenrg_interface.h" />
     <ClInclude Include="src\cube_hal.h" />
     <ClInclude Include="src\error.h" />

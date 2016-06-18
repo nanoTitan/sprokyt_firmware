@@ -1,12 +1,11 @@
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __BLE_H_
-#define __BLE_H_
+#pragma once
 
-#ifdef __cplusplus
- extern "C" {
-#endif
-
+extern "C" {
 #include "hci.h"
+}
+	
+#include <stdint.h>
 	 
 /*
 *         Main function to show how to use the BlueNRG Bluetooth Low Energy
@@ -32,7 +31,9 @@
 /* Exported defines ----------------------------------------------------------*/   
 #define IDB04A1 0
 #define IDB05A1 1
-	 
+#define BDADDR_SIZE 6
+#define JOYSTICK_COUNT 4
+
 /** 
 * @brief Structure containing acceleration value (in mg) of each axis.
 */
@@ -51,17 +52,56 @@ typedef struct
 	uint8_t x;
 	uint8_t y;
 } Joystick_t;
-	 
-void Init_BLE();
-void Update_BLE();
-	 
+
+
+void HCI_Event_CB(void *pckt);
+
+class BLE
+{
+public:
+	static void InitBLE();
+	static void Update();
+	static uint8_t GetExpansionBoard() { return bnrg_expansion_board; }
+	static void Read_Request_CB(uint16_t handle);
+	static void GAPDisconnectionCompleteCB(void);
+	static void GAPConnectionCompleteCB(uint8_t addr[6], uint16_t handle);
+	static void Attribute_Modified_CB(uint16_t handle, uint8_t data_length, uint8_t *att_data);
+	
+private:
+	static tBleStatus AddAccService(void);
+	static tBleStatus AddLEDService(void);
+	static tBleStatus AddInputService(void);
+	static tBleStatus AddControlSensorService(void);
+	static void User_Process(AxesRaw_t* p_axes);
+	static void setBLEConnectable(void);
+	static tBleStatus Free_Fall_Notify(void);
+	static tBleStatus AccUpdate(AxesRaw_t *data);
+	
+	static uint8_t SERVER_BDADDR[];// = { 0x12, 0x34, 0x00, 0xE1, 0x80, 0x03 };	
+	static uint8_t bdaddr[BDADDR_SIZE];
+	static uint8_t bnrg_expansion_board; /* at startup, suppose the X-NUCLEO-IDB04A1 is used */	
+	static AxesRaw_t axes_data[];
+	static volatile uint8_t do_set_connectable;
+	static volatile uint16_t service_connection_handle;
+	static volatile uint8_t is_notification_enabled;
+	static volatile int connected;
+	static uint16_t sampleServHandle;
+	static uint16_t TXCharHandle;
+	static uint16_t RXCharHandle;
+	static uint16_t accServHandle;
+	static uint16_t freeFallCharHandle;
+	static uint16_t accCharHandle;
+	static uint16_t envSensServHandle;
+	static uint16_t tempCharHandle;
+	static uint16_t pressCharHandle;
+	static uint16_t humidityCharHandle;
+	static uint16_t ledServHandle;
+	static uint16_t ledButtonCharHandle;
+	static uint16_t inputServHandle;
+	static uint16_t inputButtonCharHandle;
+};
+
 /** @addtogroup SPROKYT_BLE_Exported_Functions
 *  @{
 */
-void HCI_Event_CB(void *pckt);
-	 
-#ifdef __cplusplus
-}
-#endif
 
-#endif // __BLE_H_

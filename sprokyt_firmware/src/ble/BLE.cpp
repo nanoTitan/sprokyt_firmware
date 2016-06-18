@@ -1,28 +1,27 @@
-#include "ble.h"
+#include "BLE.h"
 #include "cube_hal.h"
 #include "hal_types.h"
-#include "bluenrg_gatt_server.h"
-#include "bluenrg_gap.h"
 #include "string.h"
-#include "bluenrg_gap_aci.h"
-#include "bluenrg_gatt_aci.h"
-#include "hci_const.h"
 #include "gp_timer.h"
-#include "bluenrg_hal_aci.h"
-#include "bluenrg_aci_const.h"   
 #include "hal.h"
 #include "sm.h"
 #include "debug.h"
+#include "math.h"
+
+extern "C" {
+#include "hci_const.h"
+#include "bluenrg_gatt_server.h"
+#include "bluenrg_gap.h"
+#include "bluenrg_gap_aci.h"
+#include "bluenrg_gatt_aci.h"
+#include "bluenrg_aci_const.h"  
+#include "bluenrg_hal_aci.h"
 #include "stm32_bluenrg_ble.h"
 #include "bluenrg_utils.h"
-#include "math.h"
-//#include "osal.h"
+}
 
 #include <stdlib.h>
 
-/* Private Macros -----------------------------------------------------------*/
-#define BDADDR_SIZE 6
-#define JOYSTICK_COUNT 4
 
 #define COPY_UUID_128_V2(uuid_struct, uuid_15, uuid_14, uuid_13, uuid_12, uuid_11, uuid_10, uuid_9, uuid_8, uuid_7, uuid_6, uuid_5, uuid_4, uuid_3, uuid_2, uuid_1, uuid_0) \
 do {\
@@ -53,36 +52,31 @@ do {\
 #define COPY_INPUT_SERVICE_UUID(uuid_struct)  COPY_UUID_128_V2(uuid_struct,0x0d,0x36,0x6e,0x80, 0xcf,0x3a, 0x11,0xe1, 0x9a,0xb4, 0x00,0x02,0xa5,0xd5,0xd5,0x2b)
 #define COPY_INPUT_CHAR_UUID(uuid_struct)          COPY_UUID_128_V2(uuid_struct,0x0e,0x36,0x6e,0x80, 0xcf,0x3a, 0x11,0xe1, 0x9a,0xb4, 0x00,0x02,0xa5,0xd5,0xd5,0x2b)
 
-/* Private variables ---------------------------------------------------------*/
-uint8_t bnrg_expansion_board = IDB04A1; /* at startup, suppose the X-NUCLEO-IDB04A1 is used */
-uint8_t SERVER_BDADDR[] = { 0x12, 0x34, 0x00, 0xE1, 0x80, 0x03 };
-uint8_t bdaddr[BDADDR_SIZE];
-AxesRaw_t axes_data = {0, 0, 0};
-volatile uint8_t do_set_connectable = 1;
-volatile uint16_t service_connection_handle = 0;
-volatile uint8_t is_notification_enabled = FALSE;
-volatile int connected;
-uint16_t sampleServHandle, TXCharHandle, RXCharHandle;
-uint16_t accServHandle, freeFallCharHandle, accCharHandle;
-uint16_t envSensServHandle, tempCharHandle, pressCharHandle, humidityCharHandle;
-uint16_t ledServHandle, ledButtonCharHandle;
-uint16_t inputServHandle, inputButtonCharHandle;
+	
+uint8_t BLE::SERVER_BDADDR[] = { 0x12, 0x34, 0x00, 0xE1, 0x80, 0x03 };
+uint8_t BLE::bdaddr[BDADDR_SIZE] = { 0, 0, 0, 0, 0, 0};
+uint8_t BLE::bnrg_expansion_board = IDB04A1;
+AxesRaw_t BLE::axes_data[] = { 0, 0, 0 };
+volatile uint8_t BLE::do_set_connectable = 1;
+volatile uint16_t BLE::service_connection_handle = 0;
+volatile uint8_t BLE::is_notification_enabled = FALSE;
+volatile int BLE::connected = 0;
+uint16_t BLE::sampleServHandle = 0;
+uint16_t BLE::TXCharHandle = 0;
+uint16_t BLE::RXCharHandle = 0;
+uint16_t BLE::accServHandle = 0;
+uint16_t BLE::freeFallCharHandle = 0;
+uint16_t BLE::accCharHandle = 0;
+uint16_t BLE::envSensServHandle = 0;
+uint16_t BLE::tempCharHandle = 0;
+uint16_t BLE::pressCharHandle = 0;
+uint16_t BLE::humidityCharHandle = 0;
+uint16_t BLE::ledServHandle = 0;
+uint16_t BLE::ledButtonCharHandle = 0;
+uint16_t BLE::inputServHandle = 0;
+uint16_t BLE::inputButtonCharHandle = 0;
 
-
-/* Private function prototypes ---------------------------------------------------------*/
-tBleStatus AddAccService(void);
-tBleStatus AddLEDService(void);
-tBleStatus AddInputService(void);
-tBleStatus AddControlSensorService(void);
-void User_Process(AxesRaw_t* p_axes);
-void setBLEConnectable(void);
-tBleStatus Free_Fall_Notify(void);
-tBleStatus AccUpdate(AxesRaw_t *data);
-void GAPConnectionCompleteCB(uint8_t addr[6], uint16_t handle);
-void GAPDisconnectionCompleteCB(void);
-
-/* Functions ---------------------------------------------------------*/
-void Init_BLE()
+void BLE::InitBLE()
 {
 	uint8_t  hwVersion = 0;
 	uint16_t fwVersion = 0;
@@ -195,7 +189,7 @@ void Init_BLE()
 		PRINTF("Error while adding Environmental Sensor service.\n");
 	
 	ret = AddLEDService();
-	if(ret == BLE_STATUS_SUCCESS)
+	if (ret == BLE_STATUS_SUCCESS)
 		PRINTF("LED service added successfully.\n");
 	else
 		PRINTF("Error while adding LED service.\n");
@@ -210,22 +204,13 @@ void Init_BLE()
 	ret = aci_hal_set_tx_power_level(1, 4);
 }
 
-void Update_BLE()
+void BLE::Update()
 {
 	HCI_Process();
-	User_Process(&axes_data);
+	//User_Process(&axes_data);
 }
 
-/** @defgroup SPROKYT_BLE_Exported_Functions 
- * @{
- */ 
-/**
- * @brief  Add an accelerometer service using a vendor specific profile.
- *
- * @param  None
- * @retval tBleStatus Status
- */
-tBleStatus AddAccService(void)
+tBleStatus BLE::AddAccService(void)
 {
 	tBleStatus ret;
 
@@ -279,7 +264,7 @@ fail:
  * @param  None
  * @retval Status
  */
-tBleStatus AddLEDService(void)
+tBleStatus BLE::AddLEDService(void)
 {
 	tBleStatus ret;
 	uint8_t uuid[16];
@@ -322,7 +307,7 @@ fail:
  * @param  None
  * @retval Status
  */
-tBleStatus AddInputService(void)
+tBleStatus BLE::AddInputService(void)
 {
 	tBleStatus ret;
 	uint8_t uuid[16];
@@ -366,7 +351,7 @@ fail:
  * @param  None
  * @retval Status
  */
-tBleStatus AddControlSensorService(void)
+tBleStatus BLE::AddControlSensorService(void)
 {
 	tBleStatus ret;
 	uint8_t uuid[16];
@@ -511,7 +496,7 @@ fail:
  * @param  AxesRaw_t* p_axes
  * @retval None
  */
-void User_Process(AxesRaw_t* p_axes)
+void BLE::User_Process(AxesRaw_t* p_axes)
 {
 	if (do_set_connectable) {
 		setBLEConnectable();
@@ -558,7 +543,7 @@ void User_Process(AxesRaw_t* p_axes)
  *  ret = aci_gap_update_adv_data(5, manuf_data);
  *
  */
-void setBLEConnectable(void)
+void BLE::setBLEConnectable(void)
 {  
 	tBleStatus ret;
   
@@ -590,7 +575,7 @@ void setBLEConnectable(void)
  * @param  None
  * @retval tBleStatus Status
  */
-tBleStatus Free_Fall_Notify(void)
+tBleStatus BLE::Free_Fall_Notify(void)
 {  
 	uint8_t val;
 	tBleStatus ret;
@@ -616,7 +601,7 @@ tBleStatus Free_Fall_Notify(void)
  * @param  Structure containing acceleration value in mg
  * @retval Status
  */
-tBleStatus AccUpdate(AxesRaw_t *data)
+tBleStatus BLE::AccUpdate(AxesRaw_t *data)
 {  
 	tBleStatus ret;    
 	uint8_t buff[6];
@@ -636,84 +621,12 @@ tBleStatus AccUpdate(AxesRaw_t *data)
 }
 
 /**
- * @brief  Update temperature characteristic value.
- * @param  Temperature in tenths of degree 
- * @retval Status
- */
-tBleStatus Temp_Update(int16_t temp)
-{  
-	tBleStatus ret;
-  
-	ret = aci_gatt_update_char_value(envSensServHandle,
-		tempCharHandle,
-		0,
-		2,
-		(uint8_t*)&temp);
-  
-	if (ret != BLE_STATUS_SUCCESS)
-	{
-		PRINTF("Error while updating TEMP characteristic.\n");
-		return BLE_STATUS_ERROR ;
-	}
-	return BLE_STATUS_SUCCESS;
-	
-}
-
-/**
- * @brief  Update pressure characteristic value.
- * @param  int32_t Pressure in mbar 
- * @retval tBleStatus Status
- */
-tBleStatus Press_Update(int32_t press)
-{  
-	tBleStatus ret;
-  
-	ret = aci_gatt_update_char_value(envSensServHandle,
-		pressCharHandle,
-		0,
-		3,
-		(uint8_t*)&press);
-  
-	if (ret != BLE_STATUS_SUCCESS) 
-	{
-		PRINTF("Error while updating TEMP characteristic.\n");
-		return BLE_STATUS_ERROR ;
-	}
-	return BLE_STATUS_SUCCESS;
-	
-}
-
-/**
- * @brief  Update humidity characteristic value.
- * @param  uint16_thumidity RH (Relative Humidity) in thenths of %
- * @retval tBleStatus      Status
- */
-tBleStatus Humidity_Update(uint16_t humidity)
-{  
-	tBleStatus ret;
-  
-	ret = aci_gatt_update_char_value(envSensServHandle,
-		humidityCharHandle,
-		0,
-		2,
-		(uint8_t*)&humidity);
-  
-	if (ret != BLE_STATUS_SUCCESS) 
-	{
-		PRINTF("Error while updating TEMP characteristic.\n");
-		return BLE_STATUS_ERROR ;
-	}
-	return BLE_STATUS_SUCCESS;
-  
-}
-
-/**
  * @brief  This function is called when there is a LE Connection Complete event.
  * @param  uint8_t Address of peer device
  * @param  uint16_t Connection handle
  * @retval None
  */
-void GAPConnectionCompleteCB(uint8_t addr[6], uint16_t handle)
+void BLE::GAPConnectionCompleteCB(uint8_t addr[6], uint16_t handle)
 {  
 	connected = TRUE;
 	service_connection_handle = handle;
@@ -731,7 +644,7 @@ void GAPConnectionCompleteCB(uint8_t addr[6], uint16_t handle)
  * @param  None 
  * @retval None
  */
-void GAPDisconnectionCompleteCB(void)
+void BLE::GAPDisconnectionCompleteCB(void)
 {
 	connected = FALSE;
 	PRINTF("Disconnected\n");
@@ -745,7 +658,7 @@ void GAPDisconnectionCompleteCB(void)
  * @param  uint16_t Handle of the attribute
  * @retval None
  */
-void Read_Request_CB(uint16_t handle)
+void BLE::Read_Request_CB(uint16_t handle)
 {  
 	if (handle == accCharHandle + 1) {
 		AccUpdate((AxesRaw_t*)&axes_data);
@@ -757,22 +670,7 @@ void Read_Request_CB(uint16_t handle)
 		                                    // If the user button is not pressed within
 		                                    // a short time after the connection,
 		                                    // a pop-up reports a "No valid characteristics found" error.
-		Temp_Update(data);
 	}
-	else if (handle == pressCharHandle + 1) {
-		int32_t data;
-		struct timer t;  
-		Timer_Set(&t, CLOCK_SECOND / 10);
-		data = 100000 + ((uint64_t)rand() * 1000) / RAND_MAX;
-		Press_Update(data);
-	}
-	else if (handle == humidityCharHandle + 1) {
-		uint16_t data;
-    
-		data = 450 + ((uint64_t)rand() * 100) / RAND_MAX;
-    
-		Humidity_Update(data);
-	}  
   
 	//EXIT:
 	if (service_connection_handle != 0)
@@ -786,7 +684,7 @@ void Read_Request_CB(uint16_t handle)
  * @param  Pointer to the modified attribute data
  * @retval None
  */
-void Attribute_Modified_CB(uint16_t handle, uint8_t data_length, uint8_t *att_data)
+void BLE::Attribute_Modified_CB(uint16_t handle, uint8_t data_length, uint8_t *att_data)
 {
   /* If GATT client has modified 'LED button characteristic' value, toggle LED2 */
 	if (handle == ledButtonCharHandle + 1)
@@ -832,7 +730,7 @@ void HCI_Event_CB(void *pckt)
     
 	case EVT_DISCONN_COMPLETE:
 		{
-			GAPDisconnectionCompleteCB();
+			BLE::GAPDisconnectionCompleteCB();
 		}
 		break;
     
@@ -844,7 +742,7 @@ void HCI_Event_CB(void *pckt)
 			case EVT_LE_CONN_COMPLETE:
 				{
 					evt_le_connection_complete *cc = (evt_le_connection_complete*)evt->data;
-					GAPConnectionCompleteCB(cc->peer_bdaddr, cc->handle);
+					BLE::GAPConnectionCompleteCB(cc->peer_bdaddr, cc->handle);
 				}
 				break;
 			}
@@ -859,13 +757,13 @@ void HCI_Event_CB(void *pckt)
 			// GATT Attribute modification
 			case EVT_BLUE_GATT_ATTRIBUTE_MODIFIED:         
 				{
-					if (bnrg_expansion_board == IDB05A1) {
+					if (BLE::GetExpansionBoard() == IDB05A1) {
 						evt_gatt_attr_modified_IDB05A1 *evt = (evt_gatt_attr_modified_IDB05A1*)blue_evt->data;
-						Attribute_Modified_CB(evt->attr_handle, evt->data_length, evt->att_data); 
+						BLE::Attribute_Modified_CB(evt->attr_handle, evt->data_length, evt->att_data); 
 					}
 					else {
 						evt_gatt_attr_modified_IDB04A1 *evt = (evt_gatt_attr_modified_IDB04A1*)blue_evt->data;
-						Attribute_Modified_CB(evt->attr_handle, evt->data_length, evt->att_data); 
+						BLE::Attribute_Modified_CB(evt->attr_handle, evt->data_length, evt->att_data); 
 					}                       
 				}
 				break;
@@ -873,7 +771,7 @@ void HCI_Event_CB(void *pckt)
 			case EVT_BLUE_GATT_READ_PERMIT_REQ:
 				{
 					evt_gatt_read_permit_req *pr = (evt_gatt_read_permit_req*)blue_evt->data;                    
-					Read_Request_CB(pr->attr_handle);                    
+					BLE::Read_Request_CB(pr->attr_handle);                    
 				}
 				break;
 			}

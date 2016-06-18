@@ -1,5 +1,5 @@
 #include <mbed.h>
-#include "ble.h"
+#include "BLE.h"
 #include "imu.h"
 #include "MotorController.h"
 #include "error.h"
@@ -16,7 +16,7 @@ int main()
 		Error_Handler(); 
 	}
 	
-	Init_BLE();
+	BLE::InitBLE();
 	Init_IMU();
 	MotorController::InitMotors();
 	
@@ -24,7 +24,7 @@ int main()
 	
 	while (1)
 	{
-		Update_BLE();
+		BLE::Update();
 		UpdateIMU();
 	}
 }
