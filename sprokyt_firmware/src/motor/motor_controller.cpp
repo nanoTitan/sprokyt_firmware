@@ -1,6 +1,6 @@
 #include "motor_controller.h"
 #include "mbed.h"
-#include "math.h"
+#include "math_ext.h"
 
 /*
 Arduino Name	-	Motor Index
@@ -14,7 +14,6 @@ D9				-	3
 
 /* Private Variables ------------------------------------------------------------------*/
 PwmOut _bldcArray[4] = { D3, D5, D6, D9 };
-PwmOut _bldc0(D9);
 Timeout _motorArmTimeout;
 bool _motorsArmed = false;
 
@@ -24,13 +23,11 @@ static void MotorTimeout();
 static void ArmMotorsCallback();
 
 void Init_MotorController(void)
-{
-	_bldc0.period_us(20000);						// 50 hertz
-	_bldc0.pulsewidth_us(1000);						// 1000us - 2000us is 0% - 100% power respectively
-	
+{	
 	for (int i = 0; i < MC_NUM_MOTORS; ++i)
 	{
-		_bldcArray[i].period_us(20000);						// 50 hertz
+		_bldcArray[i].period_us(20000);				// 50 hertz
+		_bldcArray[i].pulsewidth_us(1000);						// 1000us - 2000us is 0% - 100% power respectively
 	}
 	
 	ArmMotors();
@@ -39,7 +36,7 @@ void Init_MotorController(void)
 void SetMotor(uint8_t motorIndxMask, float power)
 {
 	// 1000us - 2000us is 0% - 100% power respectively
-	float x = clamp(power, 0.0f, 1.0f);
+	float x = clampf(power, 0.0f, 1.0f);
 	
 	if (motorIndxMask & 0x01)
 		_bldcArray[0].pulsewidth_us(1000 + (1000 * x));	

@@ -808,7 +808,7 @@ void Attribute_Modified_CB(uint16_t handle, uint8_t data_length, uint8_t *att_da
 		uint8_t motorIndexMask = att_data[0];
 		uint8_t value = att_data[1];
 		//SetMotor(motorIndexMask, (float)value * OneOver255);
-		SetMotor(1, 1);
+		//MotorController::SetMotorA(1, 1);
 		//PRINTF("X: %u, Y: %u", (uint8_t)joysticks[inputIndex].x, (uint8_t)joysticks[inputIndex].y);
 	}
 }
