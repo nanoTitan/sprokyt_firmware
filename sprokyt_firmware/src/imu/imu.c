@@ -135,7 +135,7 @@ static unsigned char RecallCalibrationFromMemory();
  * @param  None
  * @retval Integer
  */
-void InitIMU(void)
+void Init_IMU(void)
 {	
 	initializeAllSensors();
 	enableAllSensors();
@@ -182,6 +182,11 @@ void UpdateIMU(void)
 		Gyro_Sensor_Handler();
 		Magneto_Sensor_Handler();
 	}
+	
+}
+
+void Start_IMU()
+{
 	
 }
 
@@ -273,7 +278,7 @@ static void Accelero_Sensor_Handler()
 	if (ACCELEROMETER_SENSOR && BSP_ACCELERO_IsInitialized(ACCELERO_handle, &status) == COMPONENT_OK && status == 1)
 	{
 		BSP_ACCELERO_Get_Axes(ACCELERO_handle, &ACC_Value);
-		PRINTF("Accel x: %d, y: %d, z: %d", ACC_Value.AXIS_X, ACC_Value.AXIS_Y, ACC_Value.AXIS_Z);
+		//PRINTF("Accel x: %d, y: %d, z: %d\n", ACC_Value.AXIS_X, ACC_Value.AXIS_Y, ACC_Value.AXIS_Z);
 	}
 }
 
@@ -289,7 +294,7 @@ static void Gyro_Sensor_Handler()
 	if (GYROSCOPE_SENSOR && BSP_GYRO_IsInitialized(GYRO_handle, &status) == COMPONENT_OK && status == 1)
 	{
 		BSP_GYRO_Get_Axes(GYRO_handle, &GYR_Value);
-		PRINTF("Accel x: %d, y: %d, z: %d", GYR_Value.AXIS_X, GYR_Value.AXIS_Y, GYR_Value.AXIS_Z);
+		//PRINTF("Gyro x: %d, y: %d, z: %d\n", GYR_Value.AXIS_X, GYR_Value.AXIS_Y, GYR_Value.AXIS_Z);
 	}
 }
 
@@ -305,7 +310,7 @@ static void Magneto_Sensor_Handler()
 	if (BSP_MAGNETO_IsInitialized(MAGNETO_handle, &status) == COMPONENT_OK && status == 1)
 	{
 		BSP_MAGNETO_Get_Axes(MAGNETO_handle, &MAG_Value);
-		PRINTF("Accel x: %d, y: %d, z: %d", MAG_Value.AXIS_X, MAG_Value.AXIS_Y, MAG_Value.AXIS_Z);
+		//PRINTF("Mag x: %d, y: %d, z: %d\n", MAG_Value.AXIS_X, MAG_Value.AXIS_Y, MAG_Value.AXIS_Z);
 	}
 }
 
@@ -322,7 +327,7 @@ static void Pressure_Sensor_Handler()
 	if (PRESSURE_SENSOR && BSP_PRESSURE_IsInitialized(PRESSURE_handle, &status) == COMPONENT_OK && status == 1)
 	{
 		BSP_PRESSURE_Get_Press(PRESSURE_handle, &PRESSURE_Value);
-		PRINTF("Pressure: %f", PRESSURE_Value);
+		//PRINTF("Pressure: %f\n", PRESSURE_Value);
 	}
 }
 
@@ -339,7 +344,7 @@ static void Humidity_Sensor_Handler()
 	if (HUMIDITY_SENSOR && BSP_HUMIDITY_IsInitialized(HUMIDITY_handle, &status) == COMPONENT_OK && status == 1)
 	{
 		BSP_HUMIDITY_Get_Hum(HUMIDITY_handle, &HUMIDITY_Value);
-		PRINTF("Humidity: %f", HUMIDITY_Value);
+		PRINTF("Humidity: %f\n", HUMIDITY_Value);
 	}
 }
 
@@ -356,7 +361,7 @@ static void Temperature_Sensor_Handler()
 	if (TEMPERATURE_SENSOR && BSP_TEMPERATURE_IsInitialized(TEMPERATURE_handle, &status) == COMPONENT_OK && status == 1)
 	{
 		BSP_TEMPERATURE_Get_Temp(TEMPERATURE_handle, &TEMPERATURE_Value);
-		PRINTF("Temperature: %f", TEMPERATURE_Value);
+		PRINTF("Temperature: %f\n", TEMPERATURE_Value);
 	}
 }
 
@@ -370,6 +375,8 @@ static void SF_Handler()
 	uint8_t status_acc = 0;
 	uint8_t status_gyr = 0;
 	uint8_t status_mag = 0;
+	
+	PRINTF("I'm in SF Handler!!!\n");
   
 	if (SF_Active)
 	{ 

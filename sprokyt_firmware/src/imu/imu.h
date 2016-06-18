@@ -9,8 +9,9 @@
 
 #include <stdint.h>
 
-void InitIMU(void);
+void Init_IMU(void);
 void UpdateIMU(void);
+void Start_IMU();
 
 #ifdef __cplusplus
 }
