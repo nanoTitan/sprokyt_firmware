@@ -1,8 +1,9 @@
 #include <mbed.h>
 #include "ble.h"
 #include "imu.h"
-#include "motor_controller.h"
+#include "MotorController.h"
 #include "error.h"
+#include "test.h"
 
 /* Private function prototypes -----------------------------------------------*/
 
@@ -17,7 +18,7 @@ int main()
 	
 	Init_BLE();
 	Init_IMU();
-	Init_MotorController();
+	MotorController::InitMotors();
 	
 	//Start_IMU();	// Starts the IMU thread
 	

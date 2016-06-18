@@ -15,7 +15,6 @@
 #include "debug.h"
 #include "stm32_bluenrg_ble.h"
 #include "bluenrg_utils.h"
-#include "motor_controller.h"
 #include "math.h"
 //#include "osal.h"
 

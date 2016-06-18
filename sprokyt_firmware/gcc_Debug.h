@@ -1174,6 +1174,8 @@
 //src
 //src/ble
 //src/imu
+//src/motor
+//src/math
 // --- Include directories end --- //
 
 

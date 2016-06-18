@@ -1,4 +1,4 @@
-#include "motor_controller.h"
+#include "MotorController.h"
 #include "mbed.h"
 #include "math_ext.h"
 
@@ -18,11 +18,9 @@ Timeout _motorArmTimeout;
 bool _motorsArmed = false;
 
 /* Private Functions ------------------------------------------------------------------*/
-static void ArmMotors();
-static void MotorTimeout();
-static void ArmMotorsCallback();
 
-void Init_MotorController(void)
+
+void MotorController::InitMotors()
 {	
 	for (int i = 0; i < MC_NUM_MOTORS; ++i)
 	{
@@ -33,7 +31,7 @@ void Init_MotorController(void)
 	ArmMotors();
 }
 
-void SetMotor(uint8_t motorIndxMask, float power)
+void MotorController::SetMotor(uint8_t motorIndxMask, float power)
 {
 	// 1000us - 2000us is 0% - 100% power respectively
 	float x = clampf(power, 0.0f, 1.0f);
@@ -48,7 +46,7 @@ void SetMotor(uint8_t motorIndxMask, float power)
 		_bldcArray[3].pulsewidth_us(1000 + (1000 * x));	
 }
 
-void ArmMotors()
+void MotorController::ArmMotors()
 {
 	for (int i = 0; i < MC_NUM_MOTORS; ++i)
 	{
@@ -58,7 +56,7 @@ void ArmMotors()
 	_motorArmTimeout.attach(ArmMotorsCallback, 3.0f);
 }
 
-void ArmMotorsCallback()
+void MotorController::ArmMotorsCallback()
 {
 	_motorsArmed = true;
 }
