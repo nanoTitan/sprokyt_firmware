@@ -15,6 +15,8 @@
 #include "debug.h"
 #include "stm32_bluenrg_ble.h"
 #include "bluenrg_utils.h"
+#include "motor_controller.h"
+#include "math.h"
 //#include "osal.h"
 
 #include <stdlib.h>
@@ -57,7 +59,6 @@ uint8_t bnrg_expansion_board = IDB04A1; /* at startup, suppose the X-NUCLEO-IDB0
 uint8_t SERVER_BDADDR[] = { 0x12, 0x34, 0x00, 0xE1, 0x80, 0x03 };
 uint8_t bdaddr[BDADDR_SIZE];
 AxesRaw_t axes_data = {0, 0, 0};
-Joystick_t joysticks[JOYSTICK_COUNT] = { {.x = 0, .y = 0}, {.x = 0, .y = 0} };
 volatile uint8_t do_set_connectable = 1;
 volatile uint16_t service_connection_handle = 0;
 volatile uint8_t is_notification_enabled = FALSE;
@@ -794,26 +795,21 @@ void Attribute_Modified_CB(uint16_t handle, uint8_t data_length, uint8_t *att_da
 		BSP_LED_Toggle(LED2);
 	}
 	else if (handle == inputButtonCharHandle + 1)
-	{   
-	
+	{
 		/*
 		Format:
-			1st byte - input index
-			2nd byte - first value (X axis for joysticks)
-			3rd byte - 2nd value (Y axis for joysticks)
+			1st byte - Motor Index Mask (0x0 - 0xF)
+			2nd byte - value
 		*/
 		
-		if (data_length < 3)
+		if (data_length < 2)
 			return;
 		
-		uint8_t inputIndex = att_data[0];
-		if (inputIndex < JOYSTICK_COUNT)
-		{
-			joysticks[inputIndex].x = att_data[1];
-			joysticks[inputIndex].y = att_data[2];
-			
-			//PRINTF("X: %u, Y: %u", (uint8_t)joysticks[inputIndex].x, (uint8_t)joysticks[inputIndex].y);
-		}
+		uint8_t motorIndexMask = att_data[0];
+		uint8_t value = att_data[1];
+		//SetMotor(motorIndexMask, (float)value * OneOver255);
+		SetMotor(1, 1);
+		//PRINTF("X: %u, Y: %u", (uint8_t)joysticks[inputIndex].x, (uint8_t)joysticks[inputIndex].y);
 	}
 }
 

@@ -1,6 +1,8 @@
 #ifndef _MATH_H_
 #define _MATH_H_
 
+#define OneOver255 0.0039215f
+
 float minf(float x, float y);
 int min(int x, int y);
 float maxf(float x, float y);
