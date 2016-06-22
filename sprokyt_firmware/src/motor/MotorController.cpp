@@ -8,6 +8,12 @@ D3				-	0
 D5				-	1
 D6				-	2
 D9				-	3
+
+Motor Name to Mask
+A	0x1
+B	0x2
+C	0x4
+D	0x8
 */
 
 #define MC_NUM_MOTORS 4

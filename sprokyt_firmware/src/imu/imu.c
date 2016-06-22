@@ -15,6 +15,7 @@
 #include <string.h> // strlen
 #include <stdio.h>  // sprintf
 #include <math.h>   // trunc
+#include "math_ext.h"
 #include "debug.h"
 
 /** @addtogroup OSX_MOTION_FX_Applications
@@ -92,8 +93,9 @@ float TEMPERATURE_Value;
 volatile uint8_t SF_Active = 0;
 volatile uint8_t SF_6x_enabled = 0;
 volatile uint8_t SF_change = 0;
-/* DataLog timer */
 TIM_HandleTypeDef    DataLogTimHandle;
+EulerAngle_t _eulerAngles;
+Quaternion_t _quaternion;
 
 uint32_t sysclk, hclk, pclk1, pclk2;
 void *ACCELERO_handle = NULL;
@@ -448,15 +450,16 @@ static void SF_Handler()
       
 			if (SF_6x_enabled == 1)
 			{
-				//memcpy(&Msg->Data[3], (uint8_t*)&MotionFX_Engine_Out->rotation_6X, 3 * sizeof(float));  // rot + Quat
-				//memcpy(&Msg->Data[3 + (3 * sizeof(float))], (uint8_t*)&MotionFX_Engine_Out->quaternion_6X, 4 * sizeof(float)); // rot + Quat
+				memcpy(&_eulerAngles, (uint8_t*)&MotionFX_Engine_Out->rotation_6X, 3 * sizeof(float));  // Euler rotation
+				memcpy(&_quaternion, (uint8_t*)&MotionFX_Engine_Out->quaternion_6X, 4 * sizeof(float)); // Quaternion
 			}
 			else
 			{
-				//memcpy(&Msg->Data[3], (uint8_t*)&MotionFX_Engine_Out->rotation_9X, 3 * sizeof(float));  // rot + Quat
-				//memcpy(&Msg->Data[3 + (3 * sizeof(float))], (uint8_t*)&MotionFX_Engine_Out->quaternion_9X, 4 * sizeof(float)); // rot + Quat
+				memcpy(&_eulerAngles, (uint8_t*)&MotionFX_Engine_Out->rotation_9X, 3 * sizeof(float));  // Euler rotation
+				memcpy(&_quaternion, (uint8_t*)&MotionFX_Engine_Out->quaternion_9X, 4 * sizeof(float)); // Quaternion
 			}
-		
+			
+			PRINTF("pitch: %f, roll: %f, yaw: %f\n", _eulerAngles.x, _eulerAngles.y, _eulerAngles.z);		
 		}
 	}
 }

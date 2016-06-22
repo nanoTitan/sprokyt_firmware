@@ -699,14 +699,15 @@ void BLE::Attribute_Modified_CB(uint16_t handle, uint8_t data_length, uint8_t *a
 			2nd byte - value
 		*/
 		
-		if (data_length < 2)
+		if (data_length < 3)
 			return;
 		
-		uint8_t motorIndexMask = att_data[0];
+		uint8_t motorIndex = att_data[0];
 		uint8_t value = att_data[1];
+		uint8_t direction = att_data[2];
 		//SetMotor(motorIndexMask, (float)value * OneOver255);
 		//MotorController::SetMotorA(1, 1);
-		//PRINTF("X: %u, Y: %u", (uint8_t)joysticks[inputIndex].x, (uint8_t)joysticks[inputIndex].y);
+		PRINTF("motor: %u, value: %u, dir: %u", motorIndex, value, direction);
 	}
 }
 
