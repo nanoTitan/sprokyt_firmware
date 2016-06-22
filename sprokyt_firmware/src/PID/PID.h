@@ -2,9 +2,9 @@
 
 #pragma once
 
-#include <stdlib.h>
+
 #include <stdint.h>
-#include <cmath>
+#include "math.h"
 
 struct PIDInfo
 {
@@ -77,7 +77,7 @@ public:
 	inline void kP(const float v) { m_kp = v; }
 	inline void kI(const float v) { m_ki = v; }
 	inline void kD(const float v) { m_kd = v; }
-	inline void imax(const int16_t v) { m_imax = abs(v); }
+	inline void imax(const int16_t v) { m_imax = fabs(v); }
 	inline float get_integrator() const { return m_integrator;	}
 
 private:

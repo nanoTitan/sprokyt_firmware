@@ -1,9 +1,11 @@
 // PID.cpp
 
 #include "PID.h"
+
+extern "C" {
 #include "stm32f4xx_hal.h"
-#include <cmath>
 #include "math_ext.h"
+}
 
 float PID::get_pid(float error, float scaler)
 {
@@ -30,7 +32,7 @@ float PID::get_pid(float error, float scaler)
 	{
 		float derivative;
 
-		if (std::isnan(m_lastDerivative))
+		if (__isnanf(m_lastDerivative))
 		{
 			// Since we reset, suppress the first derivative term as we don't want a sudden change in input to cause a large D output change			
 			derivative = 0;

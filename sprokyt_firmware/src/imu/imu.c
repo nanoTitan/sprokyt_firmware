@@ -12,6 +12,7 @@
 #include "x_nucleo_iks01a1_humidity.h"
 #include "x_nucleo_iks01a1_temperature.h"
 #include "MotionFX_Manager.h"
+#include "ControlManager.h"
 #include <string.h> // strlen
 #include <stdio.h>  // sprintf
 #include <math.h>   // trunc
@@ -451,15 +452,22 @@ static void SF_Handler()
 			if (SF_6x_enabled == 1)
 			{
 				memcpy(&_eulerAngles, (uint8_t*)&MotionFX_Engine_Out->rotation_6X, 3 * sizeof(float));  // Euler rotation
-				memcpy(&_quaternion, (uint8_t*)&MotionFX_Engine_Out->quaternion_6X, 4 * sizeof(float)); // Quaternion
+				//memcpy(&_quaternion, (uint8_t*)&MotionFX_Engine_Out->quaternion_6X, 4 * sizeof(float)); // Quaternion
+				
+				/*
+				ControlManager::Instance().GetController()->UpdateIMU( 
+					MotionFX_Engine_Out->rotation_6X[0],
+					MotionFX_Engine_Out->rotation_6X[1],
+					MotionFX_Engine_Out->rotation_6X[2]);
+					*/
 			}
 			else
 			{
 				memcpy(&_eulerAngles, (uint8_t*)&MotionFX_Engine_Out->rotation_9X, 3 * sizeof(float));  // Euler rotation
-				memcpy(&_quaternion, (uint8_t*)&MotionFX_Engine_Out->quaternion_9X, 4 * sizeof(float)); // Quaternion
+				//memcpy(&_quaternion, (uint8_t*)&MotionFX_Engine_Out->quaternion_9X, 4 * sizeof(float)); // Quaternion
 			}
 			
-			PRINTF("pitch: %f, roll: %f, yaw: %f\n", _eulerAngles.x, _eulerAngles.y, _eulerAngles.z);		
+				
 		}
 	}
 }
