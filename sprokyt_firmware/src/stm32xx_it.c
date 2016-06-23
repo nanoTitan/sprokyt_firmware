@@ -39,7 +39,6 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32xx_it.h"
-#include "main.h"
 #include "debug.h"
 
 /** @addtogroup X-CUBE-BLE1_Applications
@@ -60,7 +59,7 @@
 /* Private variables ---------------------------------------------------------*/
 volatile uint32_t ms_counter = 0;
 volatile uint8_t button_event = 0;
-//extern TIM_HandleTypeDef    TimHandle;
+extern TIM_HandleTypeDef    SFTimHandle;
 
 /* SPI handler declared in "main.c" file */
 extern SPI_HandleTypeDef SpiHandle;
@@ -175,9 +174,9 @@ void PUSH_BUTTON_EXTI_IRQHandler(void)
   * @param  None
   * @retval None
   */
-void TIM3_IRQHandler(void)
+void TIM_SF_IRQHandler(void)
 {
-	//HAL_TIM_IRQHandler(&TimHandle);
+	HAL_TIM_IRQHandler(&SFTimHandle);
 }
 
 /**

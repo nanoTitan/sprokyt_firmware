@@ -85,7 +85,6 @@ private:
 	static volatile uint16_t service_connection_handle;
 	static volatile uint8_t is_notification_enabled;
 	static volatile int connected;
-	static uint16_t sampleServHandle;
 	static uint16_t TXCharHandle;
 	static uint16_t RXCharHandle;
 	static uint16_t accServHandle;

@@ -44,10 +44,15 @@
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
 /* Exported macro ------------------------------------------------------------*/
-/* User can use this section to tailor TIMx instance used and associated 
-   resources */
+
 /* Definition for TIMx clock resources */
-#define TIMx_CLK_ENABLE                __HAL_RCC_TIM3_CLK_ENABLE
+#define TIM_SF			                     TIM2
+#define TIM_SF_CLK_ENABLE                    __TIM2_CLK_ENABLE
+#define TIM_SF_CLK_DISABLE                   __TIM2_CLK_DISABLE
+
+/* Definition for TIMx's NVIC */
+#define TIM_SF_IRQn							 TIM2_IRQn
+#define TIM_SF_IRQHandler					 TIM2_IRQHandler
 
 
 /* Exported functions ------------------------------------------------------- */

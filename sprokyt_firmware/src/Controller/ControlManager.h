@@ -13,11 +13,11 @@ enum CONTROLLER_TYPE
 class ControlManager
 {
 public:
-	static const ControlManager& Instance();
+	static ControlManager* Instance();
 	~ControlManager();
 	
 	void CreateController(CONTROLLER_TYPE cType);
-	const Controller* GetController();
+	Controller* GetController();
 	
 private:
 	ControlManager();

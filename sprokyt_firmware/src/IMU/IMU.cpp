@@ -1,8 +1,14 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "imu.h"
-#include "error.h"
+#include "main.h"
 #include "cube_hal.h"
+#include "ControlManager.h"
+#include <string.h> // strlen
+#include <stdio.h>  // sprintf
+#include "debug.h"
+
+extern "C" {
 #include "stm32f4xx_nucleo.h"
 #include "x_nucleo_iks01a1.h"
 #include "x_nucleo_iks01a1_accelero.h"
@@ -11,27 +17,13 @@
 #include "x_nucleo_iks01a1_pressure.h"
 #include "x_nucleo_iks01a1_humidity.h"
 #include "x_nucleo_iks01a1_temperature.h"
-#include "MotionFX_Manager.h"
-#include "ControlManager.h"
-#include <string.h> // strlen
-#include <stdio.h>  // sprintf
-#include <math.h>   // trunc
-#include "math_ext.h"
-#include "debug.h"
-
-/** @addtogroup OSX_MOTION_FX_Applications
-  * @{
-  */
-
-/** @addtogroup DATALOGFUSION
-  * @{
-  */
-
+#include "error.h"
+}
 /* Private define ------------------------------------------------------------*/
 
 /* Definition for TIMx's NVIC */
-#define TIMDataLog_IRQn                      TIM2_IRQn
-#define TIMDataLog_IRQHandler                TIM2_IRQHandler
+#define SF_TIM_COUNTER_CLK					 10000
+#define SF_TIM_PERIOD						 10
 
 // Enable sensor masks
 #define PRESSURE_SENSOR                         0x00000001
@@ -79,26 +71,11 @@ uint32_t CalibrationStructureRAM[8] __attribute__((section(".noinit")));
 extern volatile uint8_t DataLoggerActive;
 
 /* Private variables ---------------------------------------------------------*/
-char dataOut[256];
-volatile uint32_t Sensors_Enabled = 0;
-volatile uint32_t DataTxPeriod = 1000;
+osxMFX_calibFactor magOffset;
 SensorAxes_t ACC_Value;
 SensorAxes_t GYR_Value;
 SensorAxes_t MAG_Value;
-osxMFX_calibFactor magOffset;
-uint8_t calibIndex = 0;         // run calibration @ 25Hz
-unsigned char isCal = 0;
-float PRESSURE_Value;
-float HUMIDITY_Value;
-float TEMPERATURE_Value;
-volatile uint8_t SF_Active = 0;
-volatile uint8_t SF_6x_enabled = 0;
-volatile uint8_t SF_change = 0;
-TIM_HandleTypeDef    DataLogTimHandle;
-EulerAngle_t _eulerAngles;
-Quaternion_t _quaternion;
-
-uint32_t sysclk, hclk, pclk1, pclk2;
+TIM_HandleTypeDef    SFTimHandle;
 void *ACCELERO_handle = NULL;
 void *GYRO_handle = NULL;
 void *MAGNETO_handle = NULL;
@@ -107,19 +84,7 @@ void *TEMPERATURE_handle = NULL;
 void *PRESSURE_handle = NULL;
 
 /* Private function prototypes -----------------------------------------------*/
-static void initializeAllSensors();
-static void enableAllSensors();
-static void floatToInt(float in, int32_t *out_int, int32_t *out_dec, int32_t dec_prec);
-static void Accelero_Sensor_Handler();
-static void Gyro_Sensor_Handler();
-static void Magneto_Sensor_Handler();
-static void Pressure_Sensor_Handler();
-static void Humidity_Sensor_Handler();
-static void Temperature_Sensor_Handler();
-static void SF_Handler();
-static unsigned char SaveCalibrationToMemory();
-static unsigned char ResetCalibrationInMemory();
-static unsigned char RecallCalibrationFromMemory();
+
 
 /* Private functions ---------------------------------------------------------*/
 /**
@@ -138,10 +103,43 @@ static unsigned char RecallCalibrationFromMemory();
  * @param  None
  * @retval Integer
  */
-void Init_IMU(void)
+IMU::IMU()
+:PRESSURE_Value(0),
+ HUMIDITY_Value(0),
+ TEMPERATURE_Value(0),
+ SF_Active(0),
+ SF_6x_enabled(0),
+ SF_change(0),
+ sysclk(0),
+ hclk(0),
+ pclk1(0),
+ pclk2(0),
+ calibIndex(0),         // run calibration @ 25Hz
+ isCal(0)
+{
+	_eulerAngles.x = _eulerAngles.y = _eulerAngles.z = 0;
+	_quaternion.w = _quaternion.x = _quaternion.y = _quaternion.z = 0;
+}
+
+IMU::~IMU()
 {	
-	initializeAllSensors();
-	enableAllSensors();
+}
+
+IMU* IMU::Instance()
+{
+	static IMU* pInstance = NULL;
+	if (!pInstance)
+	{
+		pInstance = new IMU();
+	}
+	
+	return pInstance;
+}
+
+void IMU::InitIMU()
+{	
+	InitializeAllSensors();
+	EnableAllSensors();
   
 	MotionFX_manager_init();
   
@@ -154,9 +152,12 @@ void Init_IMU(void)
   
 	/* Check if the calibration is already available in memory */
 	RecallCalibrationFromMemory();
+	
+	/*Initialize the sensor fusion*/ 
+	SFTimerInit();
 }
 
-void UpdateIMU(void)
+void IMU::UpdateIMU(void)
 {
 	/* Check if user button was pressed only when Sensor Fusion is active */
 	if ((BSP_PB_GetState(BUTTON_KEY) == GPIO_PIN_RESET) /*&& SF_Active*/)
@@ -188,17 +189,12 @@ void UpdateIMU(void)
 	
 }
 
-void Start_IMU()
-{
-	
-}
-
 /**
  * @brief  Initialize all sensors
  * @param  None
  * @retval None
  */
-static void initializeAllSensors(void)
+void IMU::InitializeAllSensors(void)
 {
   /* Try to use LSM6DS3 DIL24 if present, otherwise use LSM6DS0 on board */
 	DrvStatusTypeDef result = BSP_ACCELERO_Init(ACCELERO_SENSORS_AUTO, &ACCELERO_handle);		// ACCELERO_SENSORS_AUTO, LSM6DS3_X_0, LSM6DS0_X_0
@@ -236,7 +232,7 @@ static void initializeAllSensors(void)
  * @param  None
  * @retval None
  */
-static void enableAllSensors(void)
+void IMU::EnableAllSensors(void)
 {
 	BSP_ACCELERO_Sensor_Enable(ACCELERO_handle);
 	BSP_GYRO_Sensor_Enable(GYRO_handle);
@@ -255,7 +251,7 @@ static void enableAllSensors(void)
  * @param  dec_prec the decimal precision to be used
  * @retval None
  */
-static void floatToInt(float in, int32_t *out_int, int32_t *out_dec, int32_t dec_prec)
+void IMU::FloatToInt(float in, int32_t *out_int, int32_t *out_dec, int32_t dec_prec)
 {
 	*out_int = (int32_t)in;
 	if (in >= 0.0f)
@@ -274,7 +270,7 @@ static void floatToInt(float in, int32_t *out_int, int32_t *out_dec, int32_t dec
  * @param  Msg ACCELERO part of the stream
  * @retval None
  */
-static void Accelero_Sensor_Handler()
+void IMU::Accelero_Sensor_Handler()
 {
 	uint8_t status = 0;
   
@@ -290,7 +286,7 @@ static void Accelero_Sensor_Handler()
  * @param  Msg GYRO part of the stream
  * @retval None
  */
-static void Gyro_Sensor_Handler()
+void IMU::Gyro_Sensor_Handler()
 {
 	uint8_t status = 0;
   
@@ -306,7 +302,7 @@ static void Gyro_Sensor_Handler()
  * @param  Msg MAGNETO part of the stream
  * @retval None
  */
-static void Magneto_Sensor_Handler()
+void IMU::Magneto_Sensor_Handler()
 {
 	uint8_t status = 0;
   
@@ -322,7 +318,7 @@ static void Magneto_Sensor_Handler()
  * @param  Msg PRESSURE part of the stream
  * @retval None
  */
-static void Pressure_Sensor_Handler()
+void IMU::Pressure_Sensor_Handler()
 {
 	int32_t d1, d2;
 	uint8_t status = 0;
@@ -339,7 +335,7 @@ static void Pressure_Sensor_Handler()
  * @param  Msg HUMIDITY part of the stream
  * @retval None
  */
-static void Humidity_Sensor_Handler()
+void IMU::Humidity_Sensor_Handler()
 {
 	int32_t d1, d2;
 	uint8_t status = 0;
@@ -356,7 +352,7 @@ static void Humidity_Sensor_Handler()
  * @param  Msg TEMPERATURE part of the stream
  * @retval None
  */
-static void Temperature_Sensor_Handler()
+void IMU::Temperature_Sensor_Handler()
 {
 	int32_t d3, d4;
 	uint8_t status = 0;
@@ -369,17 +365,84 @@ static void Temperature_Sensor_Handler()
 }
 
 /**
+ * @brief  Initialize Sensor Fusion timer
+ * @param  None
+ * @retval None
+ */
+void IMU::SFTimerInit()
+{
+	TIM_OC_InitTypeDef sConfig;
+	uint16_t uhPrescalerValue;
+	//uint16_t uhCapturedValue = 0;
+  
+	/* Compute the prescaler value to have TIM3 counter clock equal to 10 KHz */
+	uhPrescalerValue = (uint16_t)((SystemCoreClock) / SF_TIM_COUNTER_CLK) - 1;
+  
+	/*##-1- Configure the TIM peripheral #######################################*/
+	/* Set TIMx instance */
+	SFTimHandle.Instance = TIM_SF;
+  
+	/* Initialize TIM3 peripheral as follow:
+	+ Period = 65535
+	+ Prescaler = (SystemCoreClock/2)/60000
+	+ ClockDivision = 0
+	+ Counter direction = Up
+	*/
+  
+	uint32_t timer_period = (SF_TIM_COUNTER_CLK / (1000 / SF_TIM_PERIOD)) - 1;
+	SFTimHandle.Init.Period = timer_period;
+	SFTimHandle.Init.Prescaler = uhPrescalerValue;
+	SFTimHandle.Init.ClockDivision = 0;
+	SFTimHandle.Init.CounterMode = TIM_COUNTERMODE_UP;
+	SFTimHandle.Init.RepetitionCounter = 0;
+	if (HAL_TIM_OC_Init(&SFTimHandle) != HAL_OK)
+	{
+	  /* Initialization Error */
+		Error_Handler();
+	}
+  
+	/*##-2- Configure the PWM channels #########################################*/
+	/* Common configuration */
+	sConfig.OCMode = TIM_OCMODE_TIMING;
+	sConfig.OCPolarity = TIM_OCPOLARITY_HIGH;
+	sConfig.OCNPolarity = TIM_OCNPOLARITY_HIGH;
+	sConfig.OCFastMode = TIM_OCFAST_DISABLE;
+	sConfig.OCIdleState = TIM_OCIDLESTATE_SET;
+	sConfig.OCNIdleState = TIM_OCNIDLESTATE_SET;
+  
+	/* Set the pulse value for channel 1 */
+	sConfig.Pulse = timer_period / 2;
+  
+	if (HAL_TIM_OC_ConfigChannel(&SFTimHandle, &sConfig, TIM_CHANNEL_1) != HAL_OK)
+	{
+	  /* Initialization Error */
+		Error_Handler();
+	}
+  
+  
+	/*##-4- Start the Output Compare mode in interrupt mode ####################*/
+	/* Start Channel1 */
+	if (HAL_TIM_OC_Start_IT(&SFTimHandle, TIM_CHANNEL_1) != HAL_OK)
+	{
+	  /* Initialization Error */
+		Error_Handler();
+	}
+	
+	SF_Active = 1;
+}
+
+/**
  * @brief  Handles the Sensor Fusion
  * @param  Msg Sensor Fusion part of the stream
  * @retval None
  */
-static void SF_Handler()
+void IMU::SF_Handler()
 {
 	uint8_t status_acc = 0;
 	uint8_t status_gyr = 0;
 	uint8_t status_mag = 0;
 	
-	PRINTF("I'm in SF Handler!!!\n");
+	//PRINTF("SF_Active: %d\n", (int)SF_Active);
   
 	if (SF_Active)
 	{ 
@@ -451,23 +514,24 @@ static void SF_Handler()
       
 			if (SF_6x_enabled == 1)
 			{
-				memcpy(&_eulerAngles, (uint8_t*)&MotionFX_Engine_Out->rotation_6X, 3 * sizeof(float));  // Euler rotation
+				//memcpy(&_eulerAngles, (uint8_t*)&MotionFX_Engine_Out->rotation_6X, 3 * sizeof(float));  // Euler rotation
 				//memcpy(&_quaternion, (uint8_t*)&MotionFX_Engine_Out->quaternion_6X, 4 * sizeof(float)); // Quaternion
 				
-				/*
-				ControlManager::Instance().GetController()->UpdateIMU( 
+				ControlManager::Instance()->GetController()->UpdateIMU(
 					MotionFX_Engine_Out->rotation_6X[0],
 					MotionFX_Engine_Out->rotation_6X[1],
 					MotionFX_Engine_Out->rotation_6X[2]);
-					*/
 			}
 			else
 			{
-				memcpy(&_eulerAngles, (uint8_t*)&MotionFX_Engine_Out->rotation_9X, 3 * sizeof(float));  // Euler rotation
+				//memcpy(&_eulerAngles, (uint8_t*)&MotionFX_Engine_Out->rotation_9X, 3 * sizeof(float));  // Euler rotation
 				//memcpy(&_quaternion, (uint8_t*)&MotionFX_Engine_Out->quaternion_9X, 4 * sizeof(float)); // Quaternion
-			}
-			
 				
+				ControlManager::Instance()->GetController()->UpdateIMU(
+					MotionFX_Engine_Out->rotation_9X[0],
+					MotionFX_Engine_Out->rotation_9X[1],
+					MotionFX_Engine_Out->rotation_9X[2]);
+			}
 		}
 	}
 }
@@ -479,7 +543,7 @@ static void SF_Handler()
 */
 void HAL_TIM_OC_DelayElapsedCallback(TIM_HandleTypeDef *htim)
 {
-	SF_Handler();
+	IMU::Instance()->SF_Handler();
 }
 
 /**
@@ -513,7 +577,7 @@ uint32_t user_currentTimeGetElapsedMS(uint32_t Tick1)
  * @param  None
  * @retval 1 in case of success, 0 otherwise
  */
-static unsigned char SaveCalibrationToMemory(void)
+unsigned char IMU::SaveCalibrationToMemory(void)
 {
 	unsigned char Success = 1;
   
@@ -614,7 +678,7 @@ static unsigned char SaveCalibrationToMemory(void)
  * @param  None
  * @retval 1 in case of success, 0 otherwise
  */
-static unsigned char ResetCalibrationInMemory(void)
+unsigned char IMU::ResetCalibrationInMemory(void)
 #ifdef OSXMOTIONFX_STORE_CALIB_FLASH
 {
   /* Reset Calibration Values in FLASH */
@@ -680,7 +744,7 @@ static unsigned char ResetCalibrationInMemory(void)
  * @param  None
  * @retval 1 in case of success, 0 otherwise
  */
-static unsigned char RecallCalibrationFromMemory(void)
+unsigned char IMU::RecallCalibrationFromMemory(void)
 #ifdef OSXMOTIONFX_STORE_CALIB_FLASH
 {
   /* ReLoad the Calibration Values from FLASH */

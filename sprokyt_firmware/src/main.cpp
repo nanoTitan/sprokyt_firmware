@@ -1,13 +1,8 @@
 #include <mbed.h>
 #include "BLE.h"
-#include "imu.h"
+#include "IMU.h"
 #include "MotorController.h"
 #include "error.h"
-#include "test.h"
-
-/* Private function prototypes -----------------------------------------------*/
-
-/* Private variables ---------------------------------------------------------*/
 
 int main() 
 {
@@ -17,14 +12,35 @@ int main()
 	}
 	
 	BLE::InitBLE();
-	Init_IMU();
+	IMU::Instance()->InitIMU();
 	MotorController::InitMotors();
 	
-	//Start_IMU();	// Starts the IMU thread
-	
 	while (1)
-	{
+	{		
 		BLE::Update();
-		UpdateIMU();
+		IMU::Instance()->UpdateIMU();
 	}
 }
+
+
+/*
+int main() 
+{
+	if (HAL_Init() != HAL_OK)
+	{
+		Error_Handler(); 
+	}
+	
+	MotorController::InitMotors();
+	wait_ms(3000);
+	
+	while (1)
+	{		
+		for (float i = 0.1f; i < 1.0f; i += 0.1f)
+		{
+			MotorController::SetMotor(0x08, i);
+			wait_ms(500);
+		}
+	}
+}
+*/

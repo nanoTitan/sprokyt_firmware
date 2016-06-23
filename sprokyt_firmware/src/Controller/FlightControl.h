@@ -9,7 +9,7 @@ public:
 	FlightControl();
 	~FlightControl();
 	
-	void Update(float yaw, float pitch, float roll);
+	void UpdateIMU(float yaw, float pitch, float roll);
 	
 private:
 	

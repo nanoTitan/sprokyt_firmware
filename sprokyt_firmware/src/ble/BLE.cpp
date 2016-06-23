@@ -61,7 +61,6 @@ volatile uint8_t BLE::do_set_connectable = 1;
 volatile uint16_t BLE::service_connection_handle = 0;
 volatile uint8_t BLE::is_notification_enabled = FALSE;
 volatile int BLE::connected = 0;
-uint16_t BLE::sampleServHandle = 0;
 uint16_t BLE::TXCharHandle = 0;
 uint16_t BLE::RXCharHandle = 0;
 uint16_t BLE::accServHandle = 0;

@@ -14,7 +14,7 @@ public:
 	Controller() {}
 	virtual ~Controller() {}
 	
-	virtual void Update(float yaw, float pitch, float roll) = 0;
+	virtual void UpdateIMU(float yaw, float pitch, float roll) = 0;
 	
 private:
 	

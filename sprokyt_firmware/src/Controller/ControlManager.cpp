@@ -12,7 +12,7 @@ ControlManager::~ControlManager()
 	DestroyController();
 }
 
-const ControlManager& ControlManager::Instance()
+ControlManager* ControlManager::Instance()
 {
 	static ControlManager* pInstance = NULL;
 	if (!pInstance)
@@ -20,7 +20,7 @@ const ControlManager& ControlManager::Instance()
 		pInstance = new ControlManager();
 	}
 	
-	return *pInstance;
+	return pInstance;
 }
 
 void ControlManager::CreateController(CONTROLLER_TYPE cType)
@@ -47,7 +47,7 @@ void ControlManager::CreateController(CONTROLLER_TYPE cType)
 	}
 }
 
-const Controller* ControlManager::GetController()
+Controller* ControlManager::GetController()
 {
 	return m_pController;
 }

@@ -45,6 +45,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "cube_hal.h"
+#include "main.h"
 
 /** @addtogroup X-CUBE-BLE1_Applications
  *  @{
@@ -70,6 +71,7 @@ void PendSV_Handler(void);
 void SysTick_Handler(void);
 void BNRG_SPI_EXTI_IRQHandler(void);
 void PUSH_BUTTON_EXTI_IRQHandler(void);
+void TIM_SF_IRQHandler(void);
 
 /**
  * @}

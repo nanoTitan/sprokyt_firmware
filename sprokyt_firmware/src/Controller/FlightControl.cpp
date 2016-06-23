@@ -25,7 +25,7 @@ FlightControl::~FlightControl()
 {
 }
 
-void FlightControl::Update(float yaw, float pitch, float roll)
+void FlightControl::UpdateIMU(float yaw, float pitch, float roll)
 {
-	PRINTF("pitch: %f, roll: %f, yaw: %f\n", RadiansToDeg(yaw), RadiansToDeg(pitch), RadiansToDeg(roll));
+	PRINTF("%f, %f, %f\n", RadiansToDeg(yaw), RadiansToDeg(pitch), RadiansToDeg(roll));
 }
