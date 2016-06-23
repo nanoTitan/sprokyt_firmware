@@ -3,6 +3,7 @@
 #ifndef _IMU_H_
 #define _IMU_H_
 
+#include "mbed.h"
 #include "math_ext.h"
 #include <stdint.h>
 
@@ -20,11 +21,14 @@ public:
 	void InitIMU();
 	void UpdateIMU(void);
 	void SFTimerInit();
-	void SF_Handler();
+	void InitSFTicker();
+	
+	static void SF_Handler();
 	
 private:
 	IMU();
 	
+	void UpdateSensorFusion();
 	void InitializeAllSensors();
 	void EnableAllSensors();
 	void FloatToInt(float in, int32_t *out_int, int32_t *out_dec, int32_t dec_prec);
@@ -39,6 +43,7 @@ private:
 	unsigned char ResetCalibrationInMemory();
 	unsigned char RecallCalibrationFromMemory();
 		
+	Ticker m_sfTicker;
 	float PRESSURE_Value;
 	float HUMIDITY_Value;
 	float TEMPERATURE_Value;

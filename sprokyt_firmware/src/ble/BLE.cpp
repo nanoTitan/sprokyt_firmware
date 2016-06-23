@@ -688,7 +688,7 @@ void BLE::Attribute_Modified_CB(uint16_t handle, uint8_t data_length, uint8_t *a
   /* If GATT client has modified 'LED button characteristic' value, toggle LED2 */
 	if (handle == ledButtonCharHandle + 1)
 	{      
-		BSP_LED_Toggle(LED2);
+		BSP_LED_Toggle(LED_2);
 	}
 	else if (handle == inputButtonCharHandle + 1)
 	{

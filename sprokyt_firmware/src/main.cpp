@@ -1,4 +1,5 @@
 #include <mbed.h>
+#include "ControlManager.h"
 #include "BLE.h"
 #include "IMU.h"
 #include "MotorController.h"
@@ -11,6 +12,8 @@ int main()
 		Error_Handler(); 
 	}
 	
+	// Must initialize ControlManager before 
+	ControlManager::Instance()->CreateController(CONTROLLER_FLIGHT);
 	BLE::InitBLE();
 	IMU::Instance()->InitIMU();
 	MotorController::InitMotors();

@@ -9,7 +9,7 @@
 #include "debug.h"
 
 extern "C" {
-#include "stm32f4xx_nucleo.h"
+//#include "stm32f4xx_nucleo.h"
 #include "x_nucleo_iks01a1.h"
 #include "x_nucleo_iks01a1_accelero.h"
 #include "x_nucleo_iks01a1_gyro.h"
@@ -76,6 +76,7 @@ SensorAxes_t ACC_Value;
 SensorAxes_t GYR_Value;
 SensorAxes_t MAG_Value;
 TIM_HandleTypeDef    SFTimHandle;
+TIM_OC_InitTypeDef   sConfig;
 void *ACCELERO_handle = NULL;
 void *GYRO_handle = NULL;
 void *MAGNETO_handle = NULL;
@@ -154,7 +155,8 @@ void IMU::InitIMU()
 	RecallCalibrationFromMemory();
 	
 	/*Initialize the sensor fusion*/ 
-	SFTimerInit();
+	InitSFTicker();
+	//SFTimerInit();
 }
 
 void IMU::UpdateIMU(void)
@@ -176,7 +178,7 @@ void IMU::UpdateIMU(void)
 		magOffset.magOffZ = 0;
       
 		/* Switch off the LED */
-		BSP_LED_Off(LED2);
+		//BSP_LED_Off(LED2);
 	}
     
 	if (!SF_Active)
@@ -371,11 +373,10 @@ void IMU::Temperature_Sensor_Handler()
  */
 void IMU::SFTimerInit()
 {
-	TIM_OC_InitTypeDef sConfig;
 	uint16_t uhPrescalerValue;
 	//uint16_t uhCapturedValue = 0;
   
-	/* Compute the prescaler value to have TIM3 counter clock equal to 10 KHz */
+	/* Compute the prescaler value to have TIM counter clock equal to 10 KHz */
 	uhPrescalerValue = (uint16_t)((SystemCoreClock) / SF_TIM_COUNTER_CLK) - 1;
   
 	/*##-1- Configure the TIM peripheral #######################################*/
@@ -392,7 +393,7 @@ void IMU::SFTimerInit()
 	uint32_t timer_period = (SF_TIM_COUNTER_CLK / (1000 / SF_TIM_PERIOD)) - 1;
 	SFTimHandle.Init.Period = timer_period;
 	SFTimHandle.Init.Prescaler = uhPrescalerValue;
-	SFTimHandle.Init.ClockDivision = 0;
+	SFTimHandle.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
 	SFTimHandle.Init.CounterMode = TIM_COUNTERMODE_UP;
 	SFTimHandle.Init.RepetitionCounter = 0;
 	if (HAL_TIM_OC_Init(&SFTimHandle) != HAL_OK)
@@ -432,11 +433,28 @@ void IMU::SFTimerInit()
 }
 
 /**
+ * @brief  Initialize Sensor Fusion timer for mbed
+ * @param  None
+ * @retval None
+ */
+void IMU::InitSFTicker()
+{
+	m_sfTicker.attach(&SF_Handler, 0.3333f);
+	
+	SF_Active = 1;
+}
+
+/**
  * @brief  Handles the Sensor Fusion
  * @param  Msg Sensor Fusion part of the stream
  * @retval None
  */
 void IMU::SF_Handler()
+{
+	IMU::Instance()->UpdateSensorFusion();
+}
+
+void IMU::UpdateSensorFusion()
 {
 	uint8_t status_acc = 0;
 	uint8_t status_gyr = 0;
@@ -506,7 +524,7 @@ void IMU::SF_Handler()
 					SaveCalibrationToMemory();
           
 					/* Switch on the Led */
-					BSP_LED_On(LED2);
+					//BSP_LED_On(LED2);
 				}
 			}
       
@@ -837,18 +855,18 @@ unsigned char IMU::RecallCalibrationFromMemory(void)
 		if (isCal == 0x01)
 		{
 		  /* Switch on the Led */
-			BSP_LED_On(LED2);
+			//BSP_LED_On(LED2);
 		}
 		else
 		{
 		  /* Switch off the Led */
-			BSP_LED_Off(LED2);
+			//BSP_LED_Off(LED2);
 		}
 	}
 	else
 	{
 	  /* Switch off the Led */
-		BSP_LED_Off(LED2);
+		//BSP_LED_Off(LED2);
 		isCal = 0;
 	}
   
