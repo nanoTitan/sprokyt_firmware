@@ -26,24 +26,29 @@ int main()
 }
 
 
-/*
-int main() 
-{
-	if (HAL_Init() != HAL_OK)
-	{
-		Error_Handler(); 
-	}
-	
-	MotorController::InitMotors();
-	wait_ms(3000);
-	
-	while (1)
-	{		
-		for (float i = 0.1f; i < 1.0f; i += 0.1f)
-		{
-			MotorController::SetMotor(0x08, i);
-			wait_ms(500);
-		}
-	}
-}
-*/
+
+//int main() 
+//{
+//	if (HAL_Init() != HAL_OK)
+//	{
+//		Error_Handler(); 
+//	}
+//	
+//	MotorController::InitMotors();
+//	wait_ms(3000);
+//	
+//	MotorController::SetMotor(0x0F, 20, 0);
+//	
+//	while (1)
+//	{		
+//		/*
+//		for (uint8_t i = 25; i <= 255; i += 25)
+//		{
+//			MotorController::SetMotor(0x06, i, 0);
+//			wait_ms(500);
+//		}
+//		*/
+//	}
+//	
+//	MotorController::SetMotor(0x06, 0, 0);
+//}

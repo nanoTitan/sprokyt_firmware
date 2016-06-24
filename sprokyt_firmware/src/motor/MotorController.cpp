@@ -37,10 +37,10 @@ void MotorController::InitMotors()
 	ArmMotors();
 }
 
-void MotorController::SetMotor(uint8_t motorIndxMask, float power)
+void MotorController::SetMotor(uint8_t motorIndxMask, uint8_t power, uint8_t direction)
 {
 	// 1000us - 2000us is 0% - 100% power respectively
-	float x = clampf(power, 0.0f, 1.0f);
+	float x = map(power, 0, 255, 0.0f, 1.0f);
 	
 	if (motorIndxMask & 0x01)
 		_bldcArray[0].pulsewidth_us(1000 + (1000 * x));	

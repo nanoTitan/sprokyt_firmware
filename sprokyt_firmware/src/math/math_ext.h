@@ -40,4 +40,15 @@ static float RadiansToDeg(float radians)
 	return radians * M_180_PI;
 }
 
+static float map(uint8_t x, uint8_t in_min, uint8_t in_max, float out_min, uint8_t out_max)
+{
+	if (x <= in_min)
+		return out_min;
+	
+	if (x >= in_max)
+		return out_max;
+	
+	return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+}
+
 #endif // _MATH_EXT_H_

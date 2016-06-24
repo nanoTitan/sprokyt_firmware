@@ -7,6 +7,7 @@
 #include "sm.h"
 #include "debug.h"
 #include "math.h"
+#include "ControlManager.h"
 
 extern "C" {
 #include "hci_const.h"
@@ -704,9 +705,9 @@ void BLE::Attribute_Modified_CB(uint16_t handle, uint8_t data_length, uint8_t *a
 		uint8_t motorIndex = att_data[0];
 		uint8_t value = att_data[1];
 		uint8_t direction = att_data[2];
-		//SetMotor(motorIndexMask, (float)value * M_1_255);
-		//MotorController::SetMotorA(1, 1);
+		
 		PRINTF("motor: %u, value: %u, dir: %u", motorIndex, value, direction);
+		ControlManager::Instance()->UpdateMotor(motorIndex, value, direction);
 	}
 }
 

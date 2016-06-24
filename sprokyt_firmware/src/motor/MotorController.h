@@ -6,7 +6,7 @@ class MotorController
 {
 public:
 	static void InitMotors();
-	static void SetMotor(unsigned char motorIndxMask, float power);
+	static void SetMotor(uint8_t motorIndxMask, uint8_t power, uint8_t direction);
 	
 private:
 	static void ArmMotors();

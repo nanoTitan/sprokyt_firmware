@@ -461,95 +461,94 @@ void IMU::UpdateSensorFusion()
 	uint8_t status_mag = 0;
 	
 	//PRINTF("SF_Active: %d\n", (int)SF_Active);
+	if (!SF_Active)
+		return;
   
-	if (SF_Active)
-	{ 
-		BSP_ACCELERO_IsInitialized(ACCELERO_handle, &status_acc);
-		BSP_GYRO_IsInitialized(GYRO_handle, &status_gyr);
-		BSP_MAGNETO_IsInitialized(MAGNETO_handle, &status_mag);
+	BSP_ACCELERO_IsInitialized(ACCELERO_handle, &status_acc);
+	BSP_GYRO_IsInitialized(GYRO_handle, &status_gyr);
+	BSP_MAGNETO_IsInitialized(MAGNETO_handle, &status_mag);
   
-		if (status_acc && status_gyr && status_mag)
+	if (status_acc && status_gyr && status_mag)
+	{
+		if (SF_change == 1)
 		{
-			if (SF_change == 1)
+			if (SF_6x_enabled == 0)
 			{
-				if (SF_6x_enabled == 0)
-				{
-					MotionFX_manager_stop_9X();
-					MotionFX_manager_start_6X();
-					SF_6x_enabled = 1;
-				}
-				else
-				{
-					MotionFX_manager_stop_6X();
-					MotionFX_manager_start_9X();
-					SF_6x_enabled = 0;
-				}
-				SF_change = 0;
-			}
-      
-			BSP_ACCELERO_Get_Axes(ACCELERO_handle, &ACC_Value);
-			BSP_GYRO_Get_Axes(GYRO_handle, &GYR_Value);
-			BSP_MAGNETO_Get_Axes(MAGNETO_handle, &MAG_Value);
-      
-			MotionFX_manager_run();
-      
-			/* Check if is calibrated */
-			if (isCal != 0x01)
-			{
-			  /* Run Compass Calibration @ 25Hz */
-				calibIndex++;
-				if (calibIndex == 4)
-				{
-					SensorAxes_t ACC_Loc, MAG_Loc;
-					calibIndex = 0;
-					ACC_Loc.AXIS_X = ACC_Value.AXIS_X;
-					ACC_Loc.AXIS_Y = ACC_Value.AXIS_Y;
-					ACC_Loc.AXIS_Z = ACC_Value.AXIS_Z;
-					MAG_Loc.AXIS_X = MAG_Value.AXIS_X;
-					MAG_Loc.AXIS_Y = MAG_Value.AXIS_Y;
-					MAG_Loc.AXIS_Z = MAG_Value.AXIS_Z;
-					osx_MotionFX_compass_saveAcc(ACC_Loc.AXIS_X, ACC_Loc.AXIS_Y, ACC_Loc.AXIS_Z); /* Accelerometer data ENU systems coordinate  */
-					osx_MotionFX_compass_saveMag(MAG_Loc.AXIS_X, MAG_Loc.AXIS_Y, MAG_Loc.AXIS_Z); /* Magnetometer data ENU systems coordinate */
-					osx_MotionFX_compass_run();
-				}
-        
-				/* Check if is calibrated */
-				isCal = osx_MotionFX_compass_isCalibrated();
-				if (isCal == 0x01)
-				{
-				  /* Get new magnetometer offset */
-					osx_MotionFX_getCalibrationData(&magOffset);
-          
-					/* Save the calibration in Memory */
-					SaveCalibrationToMemory();
-          
-					/* Switch on the Led */
-					//BSP_LED_On(LED2);
-				}
-			}
-      
-			osxMFX_output *MotionFX_Engine_Out = MotionFX_manager_getDataOUT();
-      
-			if (SF_6x_enabled == 1)
-			{
-				//memcpy(&_eulerAngles, (uint8_t*)&MotionFX_Engine_Out->rotation_6X, 3 * sizeof(float));  // Euler rotation
-				//memcpy(&_quaternion, (uint8_t*)&MotionFX_Engine_Out->quaternion_6X, 4 * sizeof(float)); // Quaternion
-				
-				ControlManager::Instance()->GetController()->UpdateIMU(
-					MotionFX_Engine_Out->rotation_6X[0],
-					MotionFX_Engine_Out->rotation_6X[1],
-					MotionFX_Engine_Out->rotation_6X[2]);
+				MotionFX_manager_stop_9X();
+				MotionFX_manager_start_6X();
+				SF_6x_enabled = 1;
 			}
 			else
 			{
-				//memcpy(&_eulerAngles, (uint8_t*)&MotionFX_Engine_Out->rotation_9X, 3 * sizeof(float));  // Euler rotation
-				//memcpy(&_quaternion, (uint8_t*)&MotionFX_Engine_Out->quaternion_9X, 4 * sizeof(float)); // Quaternion
-				
-				ControlManager::Instance()->GetController()->UpdateIMU(
-					MotionFX_Engine_Out->rotation_9X[0],
-					MotionFX_Engine_Out->rotation_9X[1],
-					MotionFX_Engine_Out->rotation_9X[2]);
+				MotionFX_manager_stop_6X();
+				MotionFX_manager_start_9X();
+				SF_6x_enabled = 0;
 			}
+			SF_change = 0;
+		}
+      
+		BSP_ACCELERO_Get_Axes(ACCELERO_handle, &ACC_Value);
+		BSP_GYRO_Get_Axes(GYRO_handle, &GYR_Value);
+		BSP_MAGNETO_Get_Axes(MAGNETO_handle, &MAG_Value);
+      
+		MotionFX_manager_run();
+      
+		/* Check if is calibrated */
+		if (isCal != 0x01)
+		{
+			/* Run Compass Calibration @ 25Hz */
+			calibIndex++;
+			if (calibIndex == 4)
+			{
+				SensorAxes_t ACC_Loc, MAG_Loc;
+				calibIndex = 0;
+				ACC_Loc.AXIS_X = ACC_Value.AXIS_X;
+				ACC_Loc.AXIS_Y = ACC_Value.AXIS_Y;
+				ACC_Loc.AXIS_Z = ACC_Value.AXIS_Z;
+				MAG_Loc.AXIS_X = MAG_Value.AXIS_X;
+				MAG_Loc.AXIS_Y = MAG_Value.AXIS_Y;
+				MAG_Loc.AXIS_Z = MAG_Value.AXIS_Z;
+				osx_MotionFX_compass_saveAcc(ACC_Loc.AXIS_X, ACC_Loc.AXIS_Y, ACC_Loc.AXIS_Z); /* Accelerometer data ENU systems coordinate  */
+				osx_MotionFX_compass_saveMag(MAG_Loc.AXIS_X, MAG_Loc.AXIS_Y, MAG_Loc.AXIS_Z); /* Magnetometer data ENU systems coordinate */
+				osx_MotionFX_compass_run();
+			}
+        
+			/* Check if is calibrated */
+			isCal = osx_MotionFX_compass_isCalibrated();
+			if (isCal == 0x01)
+			{
+				/* Get new magnetometer offset */
+				osx_MotionFX_getCalibrationData(&magOffset);
+          
+				/* Save the calibration in Memory */
+				SaveCalibrationToMemory();
+          
+				/* Switch on the Led */
+				//BSP_LED_On(LED2);
+			}
+		}
+      
+		osxMFX_output *MotionFX_Engine_Out = MotionFX_manager_getDataOUT();
+      
+		if (SF_6x_enabled == 1)
+		{
+			//memcpy(&_eulerAngles, (uint8_t*)&MotionFX_Engine_Out->rotation_6X, 3 * sizeof(float));  // Euler rotation
+			//memcpy(&_quaternion, (uint8_t*)&MotionFX_Engine_Out->quaternion_6X, 4 * sizeof(float)); // Quaternion
+				
+			ControlManager::Instance()->GetController()->UpdateIMU(
+				MotionFX_Engine_Out->rotation_6X[0],
+				MotionFX_Engine_Out->rotation_6X[1],
+				MotionFX_Engine_Out->rotation_6X[2]);
+		}
+		else
+		{
+			//memcpy(&_eulerAngles, (uint8_t*)&MotionFX_Engine_Out->rotation_9X, 3 * sizeof(float));  // Euler rotation
+			//memcpy(&_quaternion, (uint8_t*)&MotionFX_Engine_Out->quaternion_9X, 4 * sizeof(float)); // Quaternion
+				
+			ControlManager::Instance()->GetController()->UpdateIMU(
+				MotionFX_Engine_Out->rotation_9X[0],
+				MotionFX_Engine_Out->rotation_9X[1],
+				MotionFX_Engine_Out->rotation_9X[2]);
 		}
 	}
 }
