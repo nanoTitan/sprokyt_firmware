@@ -188,7 +188,6 @@ void IMU::UpdateIMU(void)
 		Gyro_Sensor_Handler();
 		Magneto_Sensor_Handler();
 	}
-	
 }
 
 /**
@@ -439,7 +438,7 @@ void IMU::SFTimerInit()
  */
 void IMU::InitSFTicker()
 {
-	m_sfTicker.attach(&SF_Handler, 0.3333f);
+	m_sfTicker.attach(&SF_Handler, 1.0f);
 	
 	SF_Active = 1;
 }
@@ -463,7 +462,7 @@ void IMU::UpdateSensorFusion()
 	//PRINTF("SF_Active: %d\n", (int)SF_Active);
 	if (!SF_Active)
 		return;
-  
+	
 	BSP_ACCELERO_IsInitialized(ACCELERO_handle, &status_acc);
 	BSP_GYRO_IsInitialized(GYRO_handle, &status_gyr);
 	BSP_MAGNETO_IsInitialized(MAGNETO_handle, &status_mag);
@@ -490,7 +489,7 @@ void IMU::UpdateSensorFusion()
 		BSP_ACCELERO_Get_Axes(ACCELERO_handle, &ACC_Value);
 		BSP_GYRO_Get_Axes(GYRO_handle, &GYR_Value);
 		BSP_MAGNETO_Get_Axes(MAGNETO_handle, &MAG_Value);
-      
+		
 		MotionFX_manager_run();
       
 		/* Check if is calibrated */
@@ -527,9 +526,9 @@ void IMU::UpdateSensorFusion()
 				//BSP_LED_On(LED2);
 			}
 		}
-      
+		
 		osxMFX_output *MotionFX_Engine_Out = MotionFX_manager_getDataOUT();
-      
+		
 		if (SF_6x_enabled == 1)
 		{
 			//memcpy(&_eulerAngles, (uint8_t*)&MotionFX_Engine_Out->rotation_6X, 3 * sizeof(float));  // Euler rotation

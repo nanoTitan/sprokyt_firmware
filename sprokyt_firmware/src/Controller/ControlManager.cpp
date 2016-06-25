@@ -61,6 +61,11 @@ void ControlManager::DestroyController()
 	}
 }
 
+void ControlManager::Update()
+{
+	m_pController->Update();
+}
+
 void ControlManager::UpdateMotor(uint8_t motorIndex, uint8_t value, uint8_t direction)
 {
 	m_pController->UpdateMotor(motorIndex, value, direction);

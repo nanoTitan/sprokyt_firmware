@@ -16,6 +16,7 @@ public:
 	Controller() {}
 	virtual ~Controller() {}
 	
+	virtual void Update() = 0;
 	virtual void UpdateIMU(float yaw, float pitch, float roll) = 0;
 	virtual void UpdateMotor(uint8_t motorIndex, uint8_t value, uint8_t direction) = 0;
 private:

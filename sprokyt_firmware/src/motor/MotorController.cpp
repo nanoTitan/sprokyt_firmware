@@ -2,22 +2,6 @@
 #include "mbed.h"
 #include "math_ext.h"
 
-/*
-Arduino Name	-	Motor Index
-D3				-	0
-D5				-	1
-D6				-	2
-D9				-	3
-
-Motor Name to Mask
-A	0x1
-B	0x2
-C	0x4
-D	0x8
-*/
-
-#define MC_NUM_MOTORS 4
-
 /* Private Variables ------------------------------------------------------------------*/
 PwmOut _bldcArray[4] = { D3, D5, D6, D9 };
 Timeout _motorArmTimeout;

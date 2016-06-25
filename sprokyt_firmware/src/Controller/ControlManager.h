@@ -18,6 +18,7 @@ public:
 	
 	void CreateController(CONTROLLER_TYPE cType);
 	Controller* GetController();
+	void Update();
 	void UpdateMotor(uint8_t motorIndex, uint8_t value, uint8_t direction);
 	
 private:

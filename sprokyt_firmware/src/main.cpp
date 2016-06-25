@@ -22,6 +22,7 @@ int main()
 	{		
 		BLE::Update();
 		IMU::Instance()->UpdateIMU();
+		ControlManager::Instance()->Update();
 	}
 }
 
