@@ -1164,6 +1164,11 @@
 //$(LOCALAPPDATA)/VisualGDB/EmbeddedBSPs/arm-eabi/com.sysprogs.arm.mbed/libraries/mbed/targets/cmsis/TARGET_STM
 //$(LOCALAPPDATA)/VisualGDB/EmbeddedBSPs/arm-eabi/com.sysprogs.arm.mbed/libraries/mbed/targets/hal/TARGET_STM/TARGET_STM32F4
 //$(LOCALAPPDATA)/VisualGDB/EmbeddedBSPs/arm-eabi/com.sysprogs.arm.mbed/libraries/mbed/targets/hal/TARGET_STM
+//$(LOCALAPPDATA)/VisualGDB/EmbeddedBSPs/arm-eabi/com.sysprogs.arm.mbed/libraries/rtos/rtos
+//$(LOCALAPPDATA)/VisualGDB/EmbeddedBSPs/arm-eabi/com.sysprogs.arm.mbed/libraries/rtos/rtx
+//$(LOCALAPPDATA)/VisualGDB/EmbeddedBSPs/arm-eabi/com.sysprogs.arm.mbed/libraries/rtos/rtx/TARGET_CORTEX_M/TARGET_RTOS_M4_M7
+//$(LOCALAPPDATA)/VisualGDB/EmbeddedBSPs/arm-eabi/com.sysprogs.arm.mbed/libraries/rtos/rtx/TARGET_CORTEX_M
+//$(LOCALAPPDATA)/VisualGDB/EmbeddedBSPs/arm-eabi/com.sysprogs.arm.mbed/libraries/rtos/rtx/TARGET_CORTEX_M/TARGET_RTOS_M4_M7/TOOLCHAIN_GCC
 //c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/5.3.0/../../../../arm-eabi/include/c++/5.3.0
 //c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/5.3.0/../../../../arm-eabi/include/c++/5.3.0/arm-eabi/thumb/cortex_m4
 //c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/5.3.0/../../../../arm-eabi/include/c++/5.3.0/backward
@@ -1176,6 +1181,8 @@
 //src/imu
 //src/motor
 //src/math
+//src/Controller
+//src/PID
 // --- Include directories end --- //
 
 

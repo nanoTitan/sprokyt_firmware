@@ -6,7 +6,8 @@
 FlightControl::FlightControl()
 :m_sfYaw(0),
  m_sfPitch(0),
- m_sfRoll(0)
+ m_sfRoll(0),
+ m_doUpdate(false)
 {
 	m_pidArray[PID_PITCH_RATE].kP(0.7);
 //  m_pidArray[PID_PITCH_RATE].kI(1);
@@ -42,18 +43,22 @@ void FlightControl::UpdateIMU(float yaw, float pitch, float roll)
 	m_sfYaw = yaw;
 	m_sfPitch = pitch;
 	m_sfRoll = roll;
+	m_doUpdate = true;
 }
 
 void FlightControl::UpdateBalance()
 {
+	if (!m_doUpdate)
+		return;
+	
 	uint8_t rcthr = 50;
 	if (rcthr > 10)
 	{   // *** MINIMUM THROTTLE TO DO CORRECTIONS MAKE THIS 20pts ABOVE YOUR MIN THR STICK ***/
 		
 		// TODO: Gaurd this with a mutex for multithreading
-		long yaw_output   = m_pidArray[PID_YAW_RATE].get_pid(m_sfYaw - 0, 1);
-		long pitch_output = m_pidArray[PID_PITCH_RATE].get_pid(m_sfPitch - 0, 1);  
-		long roll_output  = m_pidArray[PID_ROLL_RATE].get_pid(m_sfRoll - 0, 1);  
+		float yaw_output   = m_pidArray[PID_YAW_RATE].get_pid(m_sfYaw - 0, 1);
+		float pitch_output = m_pidArray[PID_PITCH_RATE].get_pid(m_sfPitch - 0, 1);  
+		float roll_output  = m_pidArray[PID_ROLL_RATE].get_pid(m_sfRoll - 0, 1);  
 		
 		/*
 		(A)--(B)
@@ -61,6 +66,9 @@ void FlightControl::UpdateBalance()
 		   /\
 		(D)--(C)
 		*/
+		
+		PRINTF("%f, %f, %f\n", yaw_output, pitch_output, roll_output);
+		
 		
 		MotorController::SetMotor(MOTOR_A, rcthr - roll_output - pitch_output, 0);
 		MotorController::SetMotor(MOTOR_D, rcthr - roll_output + pitch_output, 0);
@@ -75,6 +83,8 @@ void FlightControl::UpdateBalance()
 		for (int i = 0; i < 6; i++) // reset PID integrals whilst on the ground
 			m_pidArray[i].reset_I();
 	}
+	
+	m_doUpdate = false;
 }
 
 void FlightControl::UpdateMotor(uint8_t motorIndex, uint8_t value, uint8_t direction)

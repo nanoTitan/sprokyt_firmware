@@ -13,10 +13,12 @@ int main()
 	}
 	
 	// Must initialize ControlManager before 
+	MotorController::InitMotors();
+	wait_ms(3000);
+	
 	ControlManager::Instance()->CreateController(CONTROLLER_FLIGHT);
 	BLE::InitBLE();
 	IMU::Instance()->InitIMU();
-	MotorController::InitMotors();
 	
 	while (1)
 	{		
@@ -38,7 +40,24 @@ int main()
 //	MotorController::InitMotors();
 //	wait_ms(3000);
 //	
-//	MotorController::SetMotor(0x0F, 20, 0);
+//	MotorController::SetMotor(0x01, 20, 0);	
+//	wait_ms(3000);
+//	
+//	MotorController::SetMotor(0x01, 0, 0);
+//	MotorController::SetMotor(0x02, 20, 0);
+//	wait_ms(3000);
+//	
+//	MotorController::SetMotor(0x02, 0, 0);
+//	MotorController::SetMotor(0x04, 20, 0);
+//	wait_ms(3000);
+//	
+//	MotorController::SetMotor(0x04, 0, 0);
+//	MotorController::SetMotor(0x08, 20, 0);
+//	wait_ms(3000);
+//	
+//	MotorController::SetMotor(0x08, 20, 0);
+//	wait_ms(5000);
+//	MotorController::SetMotor(0x08, 0, 0);
 //	
 //	while (1)
 //	{		
@@ -50,6 +69,4 @@ int main()
 //		}
 //		*/
 //	}
-//	
-//	MotorController::SetMotor(0x06, 0, 0);
 //}

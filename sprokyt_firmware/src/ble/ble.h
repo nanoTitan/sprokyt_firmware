@@ -53,8 +53,10 @@ typedef struct
 	uint8_t y;
 } Joystick_t;
 
-
-void HCI_Event_CB(void *pckt);
+extern "C"
+{
+	void HCI_Event_CB(void *pckt);
+}
 
 class BLE
 {
@@ -72,7 +74,7 @@ private:
 	static tBleStatus AddLEDService(void);
 	static tBleStatus AddInputService(void);
 	static tBleStatus AddControlSensorService(void);
-	static void User_Process(AxesRaw_t* p_axes);
+	static void User_Process();
 	static void setBLEConnectable(void);
 	static tBleStatus Free_Fall_Notify(void);
 	static tBleStatus AccUpdate(AxesRaw_t *data);

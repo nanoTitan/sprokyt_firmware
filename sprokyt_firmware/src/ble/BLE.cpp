@@ -207,7 +207,7 @@ void BLE::InitBLE()
 void BLE::Update()
 {
 	HCI_Process();
-	//User_Process(&axes_data);
+	User_Process();
 }
 
 tBleStatus BLE::AddAccService(void)
@@ -496,30 +496,11 @@ fail:
  * @param  AxesRaw_t* p_axes
  * @retval None
  */
-void BLE::User_Process(AxesRaw_t* p_axes)
+void BLE::User_Process()
 {
 	if (do_set_connectable) {
 		setBLEConnectable();
 		do_set_connectable = FALSE;
-	}  
-
-	  /* Check if the user has pushed the button */
-	if (BSP_PB_GetState(BUTTON_KEY) == RESET)
-	{
-		while (BSP_PB_GetState(BUTTON_KEY) == RESET)
-			;
-    
-		//BSP_LED_Toggle(LED2); //used for debugging (BSP_LED_Init() above must be also enabled)
-    
-		if (connected)
-		{
-		  /* Update acceleration data */
-			p_axes->AXIS_X += 100;
-			p_axes->AXIS_Y += 100;
-			p_axes->AXIS_Z += 100;
-			//PRINTF("ACC: X=%6d Y=%6d Z=%6d\r\n", p_axes->AXIS_X, p_axes->AXIS_Y, p_axes->AXIS_Z);
-			AccUpdate(p_axes);
-		}
 	}
 }
 
@@ -687,11 +668,7 @@ void BLE::Read_Request_CB(uint16_t handle)
 void BLE::Attribute_Modified_CB(uint16_t handle, uint8_t data_length, uint8_t *att_data)
 {
   /* If GATT client has modified 'LED button characteristic' value, toggle LED2 */
-	if (handle == ledButtonCharHandle + 1)
-	{      
-		BSP_LED_Toggle(LED_2);
-	}
-	else if (handle == inputButtonCharHandle + 1)
+	if (handle == inputButtonCharHandle + 1)
 	{
 		/*
 		Format:
@@ -706,7 +683,7 @@ void BLE::Attribute_Modified_CB(uint16_t handle, uint8_t data_length, uint8_t *a
 		uint8_t value = att_data[1];
 		uint8_t direction = att_data[2];
 		
-		PRINTF("motor: %u, value: %u, dir: %u", motorIndex, value, direction);
+		//PRINTF("indx: %u, value: %u, dir: %u\n", motorIndex, value, direction);
 		ControlManager::Instance()->UpdateMotor(motorIndex, value, direction);
 	}
 }

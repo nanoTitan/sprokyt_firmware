@@ -9,7 +9,7 @@
 #include "debug.h"
 
 extern "C" {
-//#include "stm32f4xx_nucleo.h"
+#include "stm32f4xx_nucleo.h"
 #include "x_nucleo_iks01a1.h"
 #include "x_nucleo_iks01a1_accelero.h"
 #include "x_nucleo_iks01a1_gyro.h"
@@ -139,6 +139,9 @@ IMU* IMU::Instance()
 
 void IMU::InitIMU()
 {	
+	BSP_LED_Init(LED_2);
+	BSP_LED_Off(LED_2);
+	
 	InitializeAllSensors();
 	EnableAllSensors();
   
@@ -169,6 +172,7 @@ void IMU::UpdateIMU(void)
 		
 		/* Reset the Compass Calibration */
 		isCal = 0;
+		SF_Active = 1;
 		osx_MotionFX_compass_forceReCalibration();
       
 		ResetCalibrationInMemory();
@@ -178,7 +182,7 @@ void IMU::UpdateIMU(void)
 		magOffset.magOffZ = 0;
       
 		/* Switch off the LED */
-		//BSP_LED_Off(LED2);
+		BSP_LED_Off(LED_2);
 	}
     
 	if (!SF_Active)
@@ -187,6 +191,10 @@ void IMU::UpdateIMU(void)
 		Accelero_Sensor_Handler();
 		Gyro_Sensor_Handler();
 		Magneto_Sensor_Handler();
+	}
+	else
+	{
+		UpdateSensorFusion();
 	}
 }
 
@@ -427,8 +435,6 @@ void IMU::SFTimerInit()
 	  /* Initialization Error */
 		Error_Handler();
 	}
-	
-	SF_Active = 1;
 }
 
 /**
@@ -438,9 +444,7 @@ void IMU::SFTimerInit()
  */
 void IMU::InitSFTicker()
 {
-	m_sfTicker.attach(&SF_Handler, 1.0f);
-	
-	SF_Active = 1;
+	//m_sfTicker.attach(&SF_Handler, 1.0f);
 }
 
 /**
@@ -453,20 +457,56 @@ void IMU::SF_Handler()
 	IMU::Instance()->UpdateSensorFusion();
 }
 
+void IMU::CalibrateSensorFusion()
+{
+	if (!SF_Active || isCal)
+		return;
+    
+	/* Run Compass Calibration @ 25Hz */
+	calibIndex++;
+	if (calibIndex == 4)
+	{
+		SensorAxes_t ACC_Loc, MAG_Loc;
+		calibIndex = 0;
+		ACC_Loc.AXIS_X = ACC_Value.AXIS_X;
+		ACC_Loc.AXIS_Y = ACC_Value.AXIS_Y;
+		ACC_Loc.AXIS_Z = ACC_Value.AXIS_Z;
+		MAG_Loc.AXIS_X = MAG_Value.AXIS_X;
+		MAG_Loc.AXIS_Y = MAG_Value.AXIS_Y;
+		MAG_Loc.AXIS_Z = MAG_Value.AXIS_Z;
+		osx_MotionFX_compass_saveAcc(ACC_Loc.AXIS_X, ACC_Loc.AXIS_Y, ACC_Loc.AXIS_Z); /* Accelerometer data ENU systems coordinate  */
+		osx_MotionFX_compass_saveMag(MAG_Loc.AXIS_X, MAG_Loc.AXIS_Y, MAG_Loc.AXIS_Z); /* Magnetometer data ENU systems coordinate */
+		osx_MotionFX_compass_run();
+	}
+    
+	/* Check if is calibrated */
+	isCal = osx_MotionFX_compass_isCalibrated();
+	if (isCal == 0x01)
+	{
+		/* Get new magnetometer offset */
+		osx_MotionFX_getCalibrationData(&magOffset);
+          
+		/* Save the calibration in Memory */
+		SaveCalibrationToMemory();
+          
+		/* Switch on the Led */
+		BSP_LED_On(LED_2);
+	}
+}
+
 void IMU::UpdateSensorFusion()
 {
-	uint8_t status_acc = 0;
-	uint8_t status_gyr = 0;
-	uint8_t status_mag = 0;
-	
-	//PRINTF("SF_Active: %d\n", (int)SF_Active);
 	if (!SF_Active)
 		return;
+	
+	uint8_t status_acc = 0;
+	uint8_t status_gyr = 0;
+	uint8_t status_mag = 0;	
 	
 	BSP_ACCELERO_IsInitialized(ACCELERO_handle, &status_acc);
 	BSP_GYRO_IsInitialized(GYRO_handle, &status_gyr);
 	BSP_MAGNETO_IsInitialized(MAGNETO_handle, &status_mag);
-  
+
 	if (status_acc && status_gyr && status_mag)
 	{
 		if (SF_change == 1)
@@ -495,40 +535,13 @@ void IMU::UpdateSensorFusion()
 		/* Check if is calibrated */
 		if (isCal != 0x01)
 		{
-			/* Run Compass Calibration @ 25Hz */
-			calibIndex++;
-			if (calibIndex == 4)
-			{
-				SensorAxes_t ACC_Loc, MAG_Loc;
-				calibIndex = 0;
-				ACC_Loc.AXIS_X = ACC_Value.AXIS_X;
-				ACC_Loc.AXIS_Y = ACC_Value.AXIS_Y;
-				ACC_Loc.AXIS_Z = ACC_Value.AXIS_Z;
-				MAG_Loc.AXIS_X = MAG_Value.AXIS_X;
-				MAG_Loc.AXIS_Y = MAG_Value.AXIS_Y;
-				MAG_Loc.AXIS_Z = MAG_Value.AXIS_Z;
-				osx_MotionFX_compass_saveAcc(ACC_Loc.AXIS_X, ACC_Loc.AXIS_Y, ACC_Loc.AXIS_Z); /* Accelerometer data ENU systems coordinate  */
-				osx_MotionFX_compass_saveMag(MAG_Loc.AXIS_X, MAG_Loc.AXIS_Y, MAG_Loc.AXIS_Z); /* Magnetometer data ENU systems coordinate */
-				osx_MotionFX_compass_run();
-			}
-        
-			/* Check if is calibrated */
-			isCal = osx_MotionFX_compass_isCalibrated();
-			if (isCal == 0x01)
-			{
-				/* Get new magnetometer offset */
-				osx_MotionFX_getCalibrationData(&magOffset);
-          
-				/* Save the calibration in Memory */
-				SaveCalibrationToMemory();
-          
-				/* Switch on the Led */
-				//BSP_LED_On(LED2);
-			}
+			CalibrateSensorFusion();
 		}
 		
-		osxMFX_output *MotionFX_Engine_Out = MotionFX_manager_getDataOUT();
+		if (!isCal)
+			return;
 		
+		osxMFX_output *MotionFX_Engine_Out = MotionFX_manager_getDataOUT();
 		if (SF_6x_enabled == 1)
 		{
 			//memcpy(&_eulerAngles, (uint8_t*)&MotionFX_Engine_Out->rotation_6X, 3 * sizeof(float));  // Euler rotation
@@ -812,18 +825,20 @@ unsigned char IMU::RecallCalibrationFromMemory(void)
 		if (isCal == 0x01)
 		{
 		  /* Switch on the Led */
-			BSP_LED_On(LED2);
+			BSP_LED_On(LED_2);
+			SF_Active = 1;
 		}
 		else
 		{
 		  /* Switch off the Led */
-			BSP_LED_Off(LED2);
+			BSP_LED_Off(LED_2);
+			SF_Active = 0;
 		}
 	}
 	else
 	{
 	  /* Switch off the Led */
-		BSP_LED_Off(LED2);
+		BSP_LED_Off(LED_2);
 		isCal = 0;
 	}
   
@@ -853,18 +868,18 @@ unsigned char IMU::RecallCalibrationFromMemory(void)
 		if (isCal == 0x01)
 		{
 		  /* Switch on the Led */
-			//BSP_LED_On(LED2);
+			BSP_LED_On(LED_2);
 		}
 		else
 		{
 		  /* Switch off the Led */
-			//BSP_LED_Off(LED2);
+			BSP_LED_Off(LED_2);
 		}
 	}
 	else
 	{
 	  /* Switch off the Led */
-		//BSP_LED_Off(LED2);
+		BSP_LED_Off(LED_2);
 		isCal = 0;
 	}
   

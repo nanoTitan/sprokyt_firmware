@@ -30,7 +30,6 @@ public:
 	static void SetMotor(uint8_t motorIndxMask, uint8_t power, uint8_t direction);
 	
 private:
-	static void ArmMotors();
 	static void MotorTimeout();
 	static void ArmMotorsCallback();
 	

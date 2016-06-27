@@ -28,6 +28,7 @@ public:
 private:
 	IMU();
 	
+	void CalibrateSensorFusion();
 	void UpdateSensorFusion();
 	void InitializeAllSensors();
 	void EnableAllSensors();

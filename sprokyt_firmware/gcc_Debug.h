@@ -1008,6 +1008,9 @@
 #ifndef __INTMAX_TYPE__
 #define __INTMAX_TYPE__ long long int
 #endif
+#ifndef OSXMOTIONFX_STORE_CALIB_FLASH
+#define OSXMOTIONFX_STORE_CALIB_FLASH 1
+#endif
 #ifndef __DEC128_MAX_EXP__
 #define __DEC128_MAX_EXP__ 6145
 #endif
@@ -1176,6 +1179,8 @@
 //src/imu
 //src/motor
 //src/math
+//src/Controller
+//src/PID
 // --- Include directories end --- //
 
 

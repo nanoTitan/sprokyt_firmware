@@ -20,4 +20,5 @@ private:
 	float m_sfYaw;
 	float m_sfPitch;
 	float m_sfRoll;
+	bool m_doUpdate;
 };
