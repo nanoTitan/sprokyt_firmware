@@ -5,6 +5,10 @@
 #include "math_ext.h"
 #include "debug.h"
 
+extern "C" {
+#include "MotionFX_Manager.h"
+}
+
 
 /* Private variables ---------------------------------------------------------*/
 PID m_pidArray[PID_COUNT];
@@ -47,7 +51,7 @@ void FlightControl_update()
 	*/
 	
 	// ACRO stabilization
-	if (m_rcThrottle > 10)
+	if (m_rcThrottle > 0.1f)
 	{
 		// *** MINIMUM THROTTLE TO DO CORRECTIONS MAKE THIS 20pts ABOVE YOUR MIN THR STICK ***/
 		
@@ -67,23 +71,34 @@ void FlightControl_update()
 		}
 		
 		// Rate PIDs
-		float yaw_output   = m_pidArray[PID_YAW_RATE].get_pid(yaw_stab_output - IMU_get_yaw(), 1);
-		float pitch_output = m_pidArray[PID_PITCH_RATE].get_pid(pitch_stab_output - IMU_get_pitch(), 1);  
-		float roll_output  = m_pidArray[PID_ROLL_RATE].get_pid(roll_stab_output - IMU_get_roll(), 1);  
+		osxMFX_input* pInput = MotionFX_manager_getDataIN();
+		float bias[3] = {0, 0, 0};
+		osx_MotionFX_getGbias(bias);
+		float gx = pInput->gyro[0] - bias[0];
+		float gy = pInput->gyro[1] - bias[1];
+		float gz = pInput->gyro[2] - bias[2];
 		
+		float yaw_output   = m_pidArray[PID_YAW_RATE].get_pid(yaw_stab_output - gx, 1);
+		float pitch_output = m_pidArray[PID_PITCH_RATE].get_pid(pitch_stab_output - gy, 1);  
+		float roll_output  = m_pidArray[PID_ROLL_RATE].get_pid(roll_stab_output - gz, 1);  
+		
+		// Convert degress back to throttle values
+		yaw_output = map(yaw_output, -150, 150, -1, 1);
+		pitch_output = map(pitch_output, -45, 45, -1, 1);
+		roll_output = map(roll_output, -45, 45, -1, 1);
 		PRINTF("%f, %f, %f\n", yaw_output, pitch_output, roll_output);
 		
 		// MEMS facing Forwards
-//		MotorController::SetMotor(MOTOR_A, m_rcThrottle - roll_output - pitch_output, 0);
-//		MotorController::SetMotor(MOTOR_D, m_rcThrottle - roll_output + pitch_output, 0);
-//		MotorController::SetMotor(MOTOR_B, m_rcThrottle + roll_output - pitch_output, 0);
-//		MotorController::SetMotor(MOTOR_C, m_rcThrottle + roll_output + pitch_output, 0);
+		MotorController_setMotor(MOTOR_A, m_rcThrottle - roll_output - pitch_output /*- yaw_output*/, 0);
+		MotorController_setMotor(MOTOR_D, m_rcThrottle - roll_output + pitch_output /*+ yaw_output*/, 0);
+		MotorController_setMotor(MOTOR_B, m_rcThrottle + roll_output - pitch_output /*+ yaw_output*/, 0);
+		MotorController_setMotor(MOTOR_C, m_rcThrottle + roll_output + pitch_output /*- yaw_output*/, 0);
 		
-		// MEMS facing backwards
-		MotorController_setMotor(MOTOR_C, m_rcThrottle - roll_output - pitch_output /*- yaw_output*/, 0);
-		MotorController_setMotor(MOTOR_B, m_rcThrottle - roll_output + pitch_output /*+ yaw_output*/, 0);
-		MotorController_setMotor(MOTOR_D, m_rcThrottle + roll_output - pitch_output /*+ yaw_output*/, 0);
-		MotorController_setMotor(MOTOR_A, m_rcThrottle + roll_output + pitch_output /*- yaw_output*/, 0);		
+//		// MEMS facing backwards
+//		MotorController_setMotor(MOTOR_C, m_rcThrottle - roll_output - pitch_output /*- yaw_output*/, 0);
+//		MotorController_setMotor(MOTOR_B, m_rcThrottle - roll_output + pitch_output /*+ yaw_output*/, 0);
+//		MotorController_setMotor(MOTOR_D, m_rcThrottle + roll_output - pitch_output /*+ yaw_output*/, 0);
+//		MotorController_setMotor(MOTOR_A, m_rcThrottle + roll_output + pitch_output /*- yaw_output*/, 0);		
 	}
 	else
 	{
@@ -111,14 +126,14 @@ void FlightControl_setInstruction(uint8_t instruction, uint8_t value)
 	}
 	else if (instruction == INSTRUCTION_YAW)
 	{
-		m_rcYaw = map(value, 0, 255, 0, 1);
+		m_rcYaw = map(value, 0, 255, -150, 150);
 	}
 	else if (instruction == INSTRUCTION_PITCH)
 	{
-		m_rcPitch = map(value, 0, 255, 0, 1);
+		m_rcPitch = map(value, 0, 255, -45, 45);
 	}
 	else if (instruction == INSTRUCTION_ROLL)
 	{
-		m_rcRoll = map(value, 0, 255, 0, 1);
+		m_rcRoll = map(value, 0, 255, -45, 45);
 	}
 }

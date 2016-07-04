@@ -31,4 +31,4 @@ D	0x8
 #define MOTOR_ALL 0xFF
 
 void MotorController_init();
-void MotorController_setMotor(uint8_t motorIndxMask, uint8_t power, uint8_t direction);
+void MotorController_setMotor(uint8_t motorIndxMask, float power, uint8_t direction);

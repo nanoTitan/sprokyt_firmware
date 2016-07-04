@@ -364,34 +364,6 @@ fail:
 	return BLE_STATUS_ERROR;
 }
 
-/*
- * @brief  Add Input button service using a vendor specific profile.
- * @param  None
- * @retval Status
- */
-tBleStatus BLE::AddInstructionService(void)
-{
-	tBleStatus ret;
-	uint8_t uuid[16];
-  
-	/* copy "Instruction service UUID" defined above to 'uuid' local variable */
-	COPY_INSTRUCTION_SERVICE_UUID(uuid);
-	
-	ret = aci_gatt_add_serv(UUID_TYPE_128,
-		uuid,
-		PRIMARY_SERVICE,
-		7,
-		&inputServHandle);
-	if (ret != BLE_STATUS_SUCCESS) goto fail;    
-
-		
-	return BLE_STATUS_SUCCESS; 
-  
-fail:
-	PRINTF("Error while adding INPUT service.\n");
-	return BLE_STATUS_ERROR;
-}
-
 /**
  * @brief  Add the Control Sensor service.
  *

@@ -41,19 +41,19 @@ int main()
 //	MotorController_init();
 //	wait_ms(3000);
 //	
-//	MotorController_setMotor(0x01, 20, 0);	
+//	MotorController_setMotor(0x01, 0.2f, 0);	
 //	wait_ms(3000);
 //	
 //	MotorController_setMotor(0x01, 0, 0);
-//	MotorController_setMotor(0x02, 20, 0);
+//	MotorController_setMotor(0x02, 0.2f, 0);
 //	wait_ms(3000);
 //	
 //	MotorController_setMotor(0x02, 0, 0);
-//	MotorController_setMotor(0x04, 20, 0);
+//	MotorController_setMotor(0x04, 0.2f, 0);
 //	wait_ms(3000);
 //	
 //	MotorController_setMotor(0x04, 0, 0);
-//	MotorController_setMotor(0x08, 20, 0);
+//	MotorController_setMotor(0x08, 0.2f, 0);
 //	wait_ms(3000);
 //	
 //	MotorController_setMotor(0x08, 0, 0);
