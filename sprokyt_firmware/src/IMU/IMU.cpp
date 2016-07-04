@@ -193,17 +193,17 @@ float IMU_get_sf_roll()
 
 float IMU_get_yaw()
 {
-	return sf_yaw;
+	return GYR_Value.AXIS_Z;
 }
 
 float IMU_get_pitch()
 {
-	return sf_pitch;
+	return GYR_Value.AXIS_Y;
 }
 
 float IMU_get_roll()
 {
-	return sf_roll;
+	return GYR_Value.AXIS_X;
 }
 
 /**
