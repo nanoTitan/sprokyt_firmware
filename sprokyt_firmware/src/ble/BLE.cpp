@@ -50,11 +50,8 @@ do {\
 #define COPY_LED_UUID(uuid_struct)          COPY_UUID_128_V2(uuid_struct,0x0c,0x36,0x6e,0x80, 0xcf,0x3a, 0x11,0xe1, 0x9a,0xb4, 0x00,0x02,0xa5,0xd5,0xc5,0x1b)
 	
 // Input Service
-#define COPY_INPUT_SERVICE_UUID(uuid_struct)  COPY_UUID_128_V2(uuid_struct,0x0d,0x36,0x6e,0x80, 0xcf,0x3a, 0x11,0xe1, 0x9a,0xb4, 0x00,0x02,0xa5,0xd5,0xd5,0x2b)
-#define COPY_INPUT_CHAR_UUID(uuid_struct)     COPY_UUID_128_V2(uuid_struct,0x0e,0x36,0x6e,0x80, 0xcf,0x3a, 0x11,0xe1, 0x9a,0xb4, 0x00,0x02,0xa5,0xd5,0xd5,0x2b)
-	
-// Instruction Service
-#define COPY_INSTRUCTION_SERVICE_UUID(uuid_struct)  COPY_UUID_128_V2(uuid_struct,0x0d,0x36,0x6e,0x80, 0xcf,0x3a, 0x11,0xe1, 0x9a,0xb4, 0x00,0x02,0xa5,0xd5,0xe5,0x2b)
+#define COPY_INPUT_SERVICE_UUID(uuid_struct)		COPY_UUID_128_V2(uuid_struct,0x0d,0x36,0x6e,0x80, 0xcf,0x3a, 0x11,0xe1, 0x9a,0xb4, 0x00,0x02,0xa5,0xd5,0xd5,0x2b)
+#define COPY_INPUT_CHAR_UUID(uuid_struct)			COPY_UUID_128_V2(uuid_struct,0x0e,0x36,0x6e,0x80, 0xcf,0x3a, 0x11,0xe1, 0x9a,0xb4, 0x00,0x02,0xa5,0xd5,0xd5,0x2b)
 #define COPY_INSTRUCTION_CHAR_UUID(uuid_struct)     COPY_UUID_128_V2(uuid_struct,0x0e,0x36,0x6e,0x80, 0xcf,0x3a, 0x11,0xe1, 0x9a,0xb4, 0x00,0x02,0xa5,0xd5,0xe5,0x2b)
 
 	
@@ -79,7 +76,6 @@ uint16_t BLE::ledServHandle = 0;
 uint16_t BLE::ledButtonCharHandle = 0;
 uint16_t BLE::inputServHandle = 0;
 uint16_t BLE::inputButtonCharHandle = 0;
-uint16_t BLE::instructionServHandle = 0;
 uint16_t BLE::instructionButtonCharHandle = 0;
 
 void BLE::InitBLE()
@@ -344,6 +340,23 @@ tBleStatus BLE::AddInputService(void)
 	if (ret != BLE_STATUS_SUCCESS) goto fail;  
   
 	PRINTF("Service Input BUTTON added. Handle 0x%04X, Input button Charac handle: 0x%04X\n", inputServHandle, inputButtonCharHandle);	
+	
+	/* copy "Instructionn characteristic UUID" defined above to 'uuid' local variable */  
+	COPY_INSTRUCTION_CHAR_UUID(uuid);
+	
+	ret =  aci_gatt_add_char(inputServHandle,
+		UUID_TYPE_128,
+		uuid,
+		4,
+		CHAR_PROP_WRITE | CHAR_PROP_WRITE_WITHOUT_RESP,
+		ATTR_PERMISSION_NONE,
+		GATT_NOTIFY_ATTRIBUTE_WRITE,
+		16,
+		1,
+		&instructionButtonCharHandle);
+	if (ret != BLE_STATUS_SUCCESS) goto fail;  
+  
+	PRINTF("Service Instruction added. Handle 0x%04X, Input button Charac handle: 0x%04X\n", inputServHandle, instructionButtonCharHandle);
 	return BLE_STATUS_SUCCESS; 
   
 fail:
@@ -371,22 +384,7 @@ tBleStatus BLE::AddInstructionService(void)
 		&inputServHandle);
 	if (ret != BLE_STATUS_SUCCESS) goto fail;    
 
-	/* copy "Instructionn characteristic UUID" defined above to 'uuid' local variable */  
-	COPY_INSTRUCTION_CHAR_UUID(uuid);
-	
-	ret =  aci_gatt_add_char(instructionServHandle,
-		UUID_TYPE_128,
-		uuid,
-		4,
-		CHAR_PROP_WRITE | CHAR_PROP_WRITE_WITHOUT_RESP,
-		ATTR_PERMISSION_NONE,
-		GATT_NOTIFY_ATTRIBUTE_WRITE,
-		16,
-		1,
-		&instructionButtonCharHandle);
-	if (ret != BLE_STATUS_SUCCESS) goto fail;  
-  
-	PRINTF("Service Instruction added. Handle 0x%04X, Input button Charac handle: 0x%04X\n", instructionServHandle, instructionButtonCharHandle);	
+		
 	return BLE_STATUS_SUCCESS; 
   
 fail:
