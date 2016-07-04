@@ -3,32 +3,30 @@
 #include "imu.h"
 #include "main.h"
 #include "cube_hal.h"
-#include "ControlManager.h"
+#include "control_manager.h"
+#include "math_ext.h"
+#include "sensor.h"
 #include <string.h> // strlen
 #include <stdio.h>  // sprintf
 #include "debug.h"
 
 extern "C" {
 #include "stm32f4xx_nucleo.h"
+#include "MotionFX_Manager.h"
 #include "x_nucleo_iks01a1.h"
 #include "x_nucleo_iks01a1_accelero.h"
 #include "x_nucleo_iks01a1_gyro.h"
 #include "x_nucleo_iks01a1_magneto.h"
 #include "x_nucleo_iks01a1_pressure.h"
-#include "x_nucleo_iks01a1_humidity.h"
-#include "x_nucleo_iks01a1_temperature.h"
 #include "error.h"
 }
-/* Private define ------------------------------------------------------------*/
-
+	
 /* Definition for TIMx's NVIC */
 #define SF_TIM_COUNTER_CLK					 10000
 #define SF_TIM_PERIOD						 10
 
 // Enable sensor masks
 #define PRESSURE_SENSOR                         0x00000001
-#define TEMPERATURE_SENSOR                      0x00000002
-#define HUMIDITY_SENSOR                         0x00000004
 #define UV_SENSOR                               0x00000008  // for future use
 #define ACCELEROMETER_SENSOR                    0x00000010
 #define GYROSCOPE_SENSOR                        0x00000020
@@ -68,77 +66,57 @@ uint32_t CalibrationStructureRAM[8] __attribute__((section(".noinit")));
 #endif /* OSXMOTIONFX_STORE_CALIB_FLASH */
 
 /* Extern variables ----------------------------------------------------------*/
-extern volatile uint8_t DataLoggerActive;
 
 /* Private variables ---------------------------------------------------------*/
-osxMFX_calibFactor magOffset;
 SensorAxes_t ACC_Value;
 SensorAxes_t GYR_Value;
 SensorAxes_t MAG_Value;
+osxMFX_calibFactor magOffset;
 TIM_HandleTypeDef    SFTimHandle;
 TIM_OC_InitTypeDef   sConfig;
 void *ACCELERO_handle = NULL;
 void *GYRO_handle = NULL;
 void *MAGNETO_handle = NULL;
-void *HUMIDITY_handle = NULL;
-void *TEMPERATURE_handle = NULL;
 void *PRESSURE_handle = NULL;
+//Ticker m_sfTicker;
+float sf_yaw = 0;
+float sf_pitch = 0;
+float sf_roll = 0;
+float PRESSURE_Value = 0;
+uint8_t SF_Active = 0;
+uint8_t SF_6x_enabled = 0;
+uint8_t SF_change = 0;
+EulerAngle_t _eulerAngles;
+Quaternion_t _quaternion;
+uint32_t sysclk = 0;
+uint32_t hclk = 0;
+uint32_t pclk1 = 0;
+uint32_t pclk2 = 0;	
+uint8_t calibIndex = 0;         // run calibration @ 25Hz
+uint8_t isCal = 0;
 
 /* Private function prototypes -----------------------------------------------*/
-
+static void CalibrateSensorFusion();
+static void UpdateSensorFusion();
+static void InitializeAllSensors();
+static void EnableAllSensors();
+static void SF_Handler();
+static void InitSFTicker();
+static void SFTimerInit();
+static void Accelero_Sensor_Handler();
+static void Gyro_Sensor_Handler();
+static void Magneto_Sensor_Handler();
+static void Pressure_Sensor_Handler();
+static unsigned char SaveCalibrationToMemory(void);
+static unsigned char ResetCalibrationInMemory();
+static unsigned char RecallCalibrationFromMemory();
 
 /* Private functions ---------------------------------------------------------*/
-/**
- * @brief  Main function is to show how to use X_NUCLEO_IKS01A1 expansion board to send sensor fusion data from a Nucleo board
- *         using UART to a connected PC or Desktop and display it on Sensors_DataLog specific application,
- *         which is developed by STMicroelectronics and provided with X-CUBE-MEMS1 package.
- *
- *         After connection has been established with Sensors_DataLog application provided with X-CUBE-MEMS1 package:
- *         - the user can view the data from various on-board environment sensors like Temperature, Humidity and Pressure
- *         - the user can also view data from various on-board MEMS sensors as well like Accelerometer, Gyroscope and Magnetometer
- *         - the user can also visualize this data as graphs
- *         - the user can also visualize a cube animation that shows sensor fusion outputs
- *         - the user can also visualize MEMS data (Accelerometer, Gyroscope and Magnetometer) and sensor fusion data (quaternions and Euler angles) when sensor fusion is activated
- *         - the user can calibrate the Magnetometer when sensor fusion is activated pressing on the user button; the calibration data are stored in memory; this procedure
- *           is needed only when fusion 9X is used
- * @param  None
- * @retval Integer
- */
-IMU::IMU()
-:PRESSURE_Value(0),
- HUMIDITY_Value(0),
- TEMPERATURE_Value(0),
- SF_Active(0),
- SF_6x_enabled(0),
- SF_change(0),
- sysclk(0),
- hclk(0),
- pclk1(0),
- pclk2(0),
- calibIndex(0),         // run calibration @ 25Hz
- isCal(0)
-{
+void IMU_init()
+{	
 	_eulerAngles.x = _eulerAngles.y = _eulerAngles.z = 0;
 	_quaternion.w = _quaternion.x = _quaternion.y = _quaternion.z = 0;
-}
-
-IMU::~IMU()
-{	
-}
-
-IMU* IMU::Instance()
-{
-	static IMU* pInstance = NULL;
-	if (!pInstance)
-	{
-		pInstance = new IMU();
-	}
 	
-	return pInstance;
-}
-
-void IMU::InitIMU()
-{	
 	BSP_LED_Init(LED_2);
 	BSP_LED_Off(LED_2);
 	
@@ -162,7 +140,7 @@ void IMU::InitIMU()
 	//SFTimerInit();
 }
 
-void IMU::UpdateIMU(void)
+void IMU_update(void)
 {
 	/* Check if user button was pressed only when Sensor Fusion is active */
 	if ((BSP_PB_GetState(BUTTON_KEY) == GPIO_PIN_RESET) /*&& SF_Active*/)
@@ -198,12 +176,42 @@ void IMU::UpdateIMU(void)
 	}
 }
 
+float IMU_get_sf_yaw()
+{
+	return sf_yaw;
+}
+
+float IMU_get_sf_pitch()
+{
+	return sf_pitch;
+}
+
+float IMU_get_sf_roll()
+{
+	return sf_roll;
+}
+
+float IMU_get_yaw()
+{
+	return sf_yaw;
+}
+
+float IMU_get_pitch()
+{
+	return sf_pitch;
+}
+
+float IMU_get_roll()
+{
+	return sf_roll;
+}
+
 /**
  * @brief  Initialize all sensors
  * @param  None
  * @retval None
  */
-void IMU::InitializeAllSensors(void)
+void InitializeAllSensors(void)
 {
   /* Try to use LSM6DS3 DIL24 if present, otherwise use LSM6DS0 on board */
 	DrvStatusTypeDef result = BSP_ACCELERO_Init(ACCELERO_SENSORS_AUTO, &ACCELERO_handle);		// ACCELERO_SENSORS_AUTO, LSM6DS3_X_0, LSM6DS0_X_0
@@ -220,16 +228,6 @@ void IMU::InitializeAllSensors(void)
 	if (result != COMPONENT_OK)
 		Error_Handler();
 	
-	/* Force to use HTS221 */
-	result = BSP_HUMIDITY_Init(HTS221_H_0, &HUMIDITY_handle);
-	if (result != COMPONENT_OK)
-		Error_Handler();
-	
-	/* Force to use HTS221 */
-	result = BSP_TEMPERATURE_Init(HTS221_T_0, &TEMPERATURE_handle);
-	if (result != COMPONENT_OK)
-		Error_Handler();
-	
 	/* Try to use LPS22HB DIL24 or LPS25HB DIL24 if present, otherwise use LPS25HB on board */
 	result = BSP_PRESSURE_Init(PRESSURE_SENSORS_AUTO, &PRESSURE_handle);
 	if (result != COMPONENT_OK)
@@ -241,37 +239,12 @@ void IMU::InitializeAllSensors(void)
  * @param  None
  * @retval None
  */
-void IMU::EnableAllSensors(void)
+void EnableAllSensors(void)
 {
 	BSP_ACCELERO_Sensor_Enable(ACCELERO_handle);
 	BSP_GYRO_Sensor_Enable(GYRO_handle);
 	BSP_MAGNETO_Sensor_Enable(MAGNETO_handle);
-	BSP_HUMIDITY_Sensor_Enable(HUMIDITY_handle);
-	BSP_TEMPERATURE_Sensor_Enable(TEMPERATURE_handle);
 	BSP_PRESSURE_Sensor_Enable(PRESSURE_handle);
-}
-
-
-/**
- * @brief  Splits a float into two integer values.
- * @param  in the float value as input
- * @param  out_int the pointer to the integer part as output
- * @param  out_dec the pointer to the decimal part as output
- * @param  dec_prec the decimal precision to be used
- * @retval None
- */
-void IMU::FloatToInt(float in, int32_t *out_int, int32_t *out_dec, int32_t dec_prec)
-{
-	*out_int = (int32_t)in;
-	if (in >= 0.0f)
-	{
-		in = in - (float)(*out_int);
-	}
-	else
-	{
-		in = (float)(*out_int) - in;
-	}
-	*out_dec = (int32_t)trunc(in * pow(10, dec_prec));
 }
 
 /**
@@ -279,7 +252,7 @@ void IMU::FloatToInt(float in, int32_t *out_int, int32_t *out_dec, int32_t dec_p
  * @param  Msg ACCELERO part of the stream
  * @retval None
  */
-void IMU::Accelero_Sensor_Handler()
+void Accelero_Sensor_Handler()
 {
 	uint8_t status = 0;
   
@@ -295,7 +268,7 @@ void IMU::Accelero_Sensor_Handler()
  * @param  Msg GYRO part of the stream
  * @retval None
  */
-void IMU::Gyro_Sensor_Handler()
+void Gyro_Sensor_Handler()
 {
 	uint8_t status = 0;
   
@@ -311,7 +284,7 @@ void IMU::Gyro_Sensor_Handler()
  * @param  Msg MAGNETO part of the stream
  * @retval None
  */
-void IMU::Magneto_Sensor_Handler()
+void Magneto_Sensor_Handler()
 {
 	uint8_t status = 0;
   
@@ -327,7 +300,7 @@ void IMU::Magneto_Sensor_Handler()
  * @param  Msg PRESSURE part of the stream
  * @retval None
  */
-void IMU::Pressure_Sensor_Handler()
+void Pressure_Sensor_Handler()
 {
 	int32_t d1, d2;
 	uint8_t status = 0;
@@ -340,45 +313,11 @@ void IMU::Pressure_Sensor_Handler()
 }
 
 /**
- * @brief  Handles the HUMIDITY sensor data getting/sending
- * @param  Msg HUMIDITY part of the stream
- * @retval None
- */
-void IMU::Humidity_Sensor_Handler()
-{
-	int32_t d1, d2;
-	uint8_t status = 0;
-  
-	if (HUMIDITY_SENSOR && BSP_HUMIDITY_IsInitialized(HUMIDITY_handle, &status) == COMPONENT_OK && status == 1)
-	{
-		BSP_HUMIDITY_Get_Hum(HUMIDITY_handle, &HUMIDITY_Value);
-		PRINTF("Humidity: %f\n", HUMIDITY_Value);
-	}
-}
-
-/**
- * @brief  Handles the TEMPERATURE sensor data getting/sending
- * @param  Msg TEMPERATURE part of the stream
- * @retval None
- */
-void IMU::Temperature_Sensor_Handler()
-{
-	int32_t d3, d4;
-	uint8_t status = 0;
-  
-	if (TEMPERATURE_SENSOR && BSP_TEMPERATURE_IsInitialized(TEMPERATURE_handle, &status) == COMPONENT_OK && status == 1)
-	{
-		BSP_TEMPERATURE_Get_Temp(TEMPERATURE_handle, &TEMPERATURE_Value);
-		PRINTF("Temperature: %f\n", TEMPERATURE_Value);
-	}
-}
-
-/**
  * @brief  Initialize Sensor Fusion timer
  * @param  None
  * @retval None
  */
-void IMU::SFTimerInit()
+void SFTimerInit()
 {
 	uint16_t uhPrescalerValue;
 	//uint16_t uhCapturedValue = 0;
@@ -442,7 +381,7 @@ void IMU::SFTimerInit()
  * @param  None
  * @retval None
  */
-void IMU::InitSFTicker()
+void InitSFTicker()
 {
 	//m_sfTicker.attach(&SF_Handler, 1.0f);
 }
@@ -452,12 +391,12 @@ void IMU::InitSFTicker()
  * @param  Msg Sensor Fusion part of the stream
  * @retval None
  */
-void IMU::SF_Handler()
+void SF_Handler()
 {
-	IMU::Instance()->UpdateSensorFusion();
+	UpdateSensorFusion();
 }
 
-void IMU::CalibrateSensorFusion()
+void CalibrateSensorFusion()
 {
 	if (!SF_Active || isCal)
 		return;
@@ -494,7 +433,7 @@ void IMU::CalibrateSensorFusion()
 	}
 }
 
-void IMU::UpdateSensorFusion()
+void UpdateSensorFusion()
 {
 	if (!SF_Active)
 		return;
@@ -544,23 +483,15 @@ void IMU::UpdateSensorFusion()
 		osxMFX_output *MotionFX_Engine_Out = MotionFX_manager_getDataOUT();
 		if (SF_6x_enabled == 1)
 		{
-			//memcpy(&_eulerAngles, (uint8_t*)&MotionFX_Engine_Out->rotation_6X, 3 * sizeof(float));  // Euler rotation
-			//memcpy(&_quaternion, (uint8_t*)&MotionFX_Engine_Out->quaternion_6X, 4 * sizeof(float)); // Quaternion
-				
-			ControlManager::Instance()->GetController()->UpdateIMU(
-				MotionFX_Engine_Out->rotation_6X[0],
-				MotionFX_Engine_Out->rotation_6X[1],
-				MotionFX_Engine_Out->rotation_6X[2]);
+			sf_yaw = MotionFX_Engine_Out->rotation_6X[0];
+			sf_pitch = MotionFX_Engine_Out->rotation_6X[1];
+			sf_roll = MotionFX_Engine_Out->rotation_6X[2];
 		}
 		else
 		{
-			//memcpy(&_eulerAngles, (uint8_t*)&MotionFX_Engine_Out->rotation_9X, 3 * sizeof(float));  // Euler rotation
-			//memcpy(&_quaternion, (uint8_t*)&MotionFX_Engine_Out->quaternion_9X, 4 * sizeof(float)); // Quaternion
-				
-			ControlManager::Instance()->GetController()->UpdateIMU(
-				MotionFX_Engine_Out->rotation_9X[0],
-				MotionFX_Engine_Out->rotation_9X[1],
-				MotionFX_Engine_Out->rotation_9X[2]);
+			sf_yaw = MotionFX_Engine_Out->rotation_9X[0];
+			sf_pitch = MotionFX_Engine_Out->rotation_9X[1];
+			sf_roll = MotionFX_Engine_Out->rotation_9X[2];
 		}
 	}
 }
@@ -572,7 +503,7 @@ void IMU::UpdateSensorFusion()
 */
 void HAL_TIM_OC_DelayElapsedCallback(TIM_HandleTypeDef *htim)
 {
-	IMU::Instance()->SF_Handler();
+	SF_Handler();
 }
 
 /**
@@ -606,7 +537,7 @@ uint32_t user_currentTimeGetElapsedMS(uint32_t Tick1)
  * @param  None
  * @retval 1 in case of success, 0 otherwise
  */
-unsigned char IMU::SaveCalibrationToMemory(void)
+unsigned char SaveCalibrationToMemory(void)
 {
 	unsigned char Success = 1;
   
@@ -707,7 +638,7 @@ unsigned char IMU::SaveCalibrationToMemory(void)
  * @param  None
  * @retval 1 in case of success, 0 otherwise
  */
-unsigned char IMU::ResetCalibrationInMemory(void)
+unsigned char ResetCalibrationInMemory(void)
 #ifdef OSXMOTIONFX_STORE_CALIB_FLASH
 {
   /* Reset Calibration Values in FLASH */
@@ -773,7 +704,7 @@ unsigned char IMU::ResetCalibrationInMemory(void)
  * @param  None
  * @retval 1 in case of success, 0 otherwise
  */
-unsigned char IMU::RecallCalibrationFromMemory(void)
+unsigned char RecallCalibrationFromMemory(void)
 #ifdef OSXMOTIONFX_STORE_CALIB_FLASH
 {
   /* ReLoad the Calibration Values from FLASH */

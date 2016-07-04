@@ -73,6 +73,7 @@ private:
 	static tBleStatus AddAccService(void);
 	static tBleStatus AddLEDService(void);
 	static tBleStatus AddInputService(void);
+	static tBleStatus AddInstructionService(void);
 	static tBleStatus AddControlSensorService(void);
 	static void User_Process();
 	static void setBLEConnectable(void);
@@ -100,6 +101,8 @@ private:
 	static uint16_t ledButtonCharHandle;
 	static uint16_t inputServHandle;
 	static uint16_t inputButtonCharHandle;
+	static uint16_t instructionServHandle;
+	static uint16_t instructionButtonCharHandle;
 };
 
 /** @addtogroup SPROKYT_BLE_Exported_Functions

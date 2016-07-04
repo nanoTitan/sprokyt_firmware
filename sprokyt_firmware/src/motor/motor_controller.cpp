@@ -1,16 +1,16 @@
-#include "MotorController.h"
+#include "motor_controller.h"
 #include "mbed.h"
 #include "math_ext.h"
 
 /* Private Variables ------------------------------------------------------------------*/
-PwmOut _bldcArray[4] = { D3, D5, D6, D9 };
+PwmOut _bldcArray[4] = { D1, D3, D9, D10 };
 Timeout _motorArmTimeout;
-bool _motorsArmed = false;
+uint8_t _motorsArmed = 0;
 
 /* Private Functions ------------------------------------------------------------------*/
+static void ArmMotorsCallback();
 
-
-void MotorController::InitMotors()
+void MotorController_init()
 {	
 	for (int i = 0; i < MC_NUM_MOTORS; ++i)
 	{
@@ -21,7 +21,7 @@ void MotorController::InitMotors()
 	_motorArmTimeout.attach(ArmMotorsCallback, 3.0f);
 }
 
-void MotorController::SetMotor(uint8_t motorIndxMask, uint8_t power, uint8_t direction)
+void MotorController_setMotor(uint8_t motorIndxMask, uint8_t power, uint8_t direction)
 {
 	// 1000us - 2000us is 0% - 100% power respectively
 	float x = map(power, 0, 255, 0.0f, 1.0f);
@@ -36,7 +36,7 @@ void MotorController::SetMotor(uint8_t motorIndxMask, uint8_t power, uint8_t dir
 		_bldcArray[3].pulsewidth_us(1000 + (1000 * x));	
 }
 
-void MotorController::ArmMotorsCallback()
+void ArmMotorsCallback()
 {
-	_motorsArmed = true;
+	_motorsArmed = 1;
 }

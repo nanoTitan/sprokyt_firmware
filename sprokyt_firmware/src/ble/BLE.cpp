@@ -7,7 +7,7 @@
 #include "sm.h"
 #include "debug.h"
 #include "math.h"
-#include "ControlManager.h"
+#include "control_manager.h"
 
 extern "C" {
 #include "hci_const.h"
@@ -51,7 +51,11 @@ do {\
 	
 // Input Service
 #define COPY_INPUT_SERVICE_UUID(uuid_struct)  COPY_UUID_128_V2(uuid_struct,0x0d,0x36,0x6e,0x80, 0xcf,0x3a, 0x11,0xe1, 0x9a,0xb4, 0x00,0x02,0xa5,0xd5,0xd5,0x2b)
-#define COPY_INPUT_CHAR_UUID(uuid_struct)          COPY_UUID_128_V2(uuid_struct,0x0e,0x36,0x6e,0x80, 0xcf,0x3a, 0x11,0xe1, 0x9a,0xb4, 0x00,0x02,0xa5,0xd5,0xd5,0x2b)
+#define COPY_INPUT_CHAR_UUID(uuid_struct)     COPY_UUID_128_V2(uuid_struct,0x0e,0x36,0x6e,0x80, 0xcf,0x3a, 0x11,0xe1, 0x9a,0xb4, 0x00,0x02,0xa5,0xd5,0xd5,0x2b)
+	
+// Instruction Service
+#define COPY_INSTRUCTION_SERVICE_UUID(uuid_struct)  COPY_UUID_128_V2(uuid_struct,0x0d,0x36,0x6e,0x80, 0xcf,0x3a, 0x11,0xe1, 0x9a,0xb4, 0x00,0x02,0xa5,0xd5,0xe5,0x2b)
+#define COPY_INSTRUCTION_CHAR_UUID(uuid_struct)     COPY_UUID_128_V2(uuid_struct,0x0e,0x36,0x6e,0x80, 0xcf,0x3a, 0x11,0xe1, 0x9a,0xb4, 0x00,0x02,0xa5,0xd5,0xe5,0x2b)
 
 	
 uint8_t BLE::SERVER_BDADDR[] = { 0x12, 0x34, 0x00, 0xE1, 0x80, 0x03 };
@@ -75,6 +79,8 @@ uint16_t BLE::ledServHandle = 0;
 uint16_t BLE::ledButtonCharHandle = 0;
 uint16_t BLE::inputServHandle = 0;
 uint16_t BLE::inputButtonCharHandle = 0;
+uint16_t BLE::instructionServHandle = 0;
+uint16_t BLE::instructionButtonCharHandle = 0;
 
 void BLE::InitBLE()
 {
@@ -338,6 +344,49 @@ tBleStatus BLE::AddInputService(void)
 	if (ret != BLE_STATUS_SUCCESS) goto fail;  
   
 	PRINTF("Service Input BUTTON added. Handle 0x%04X, Input button Charac handle: 0x%04X\n", inputServHandle, inputButtonCharHandle);	
+	return BLE_STATUS_SUCCESS; 
+  
+fail:
+	PRINTF("Error while adding INPUT service.\n");
+	return BLE_STATUS_ERROR;
+}
+
+/*
+ * @brief  Add Input button service using a vendor specific profile.
+ * @param  None
+ * @retval Status
+ */
+tBleStatus BLE::AddInstructionService(void)
+{
+	tBleStatus ret;
+	uint8_t uuid[16];
+  
+	/* copy "Instruction service UUID" defined above to 'uuid' local variable */
+	COPY_INSTRUCTION_SERVICE_UUID(uuid);
+	
+	ret = aci_gatt_add_serv(UUID_TYPE_128,
+		uuid,
+		PRIMARY_SERVICE,
+		7,
+		&inputServHandle);
+	if (ret != BLE_STATUS_SUCCESS) goto fail;    
+
+	/* copy "Instructionn characteristic UUID" defined above to 'uuid' local variable */  
+	COPY_INSTRUCTION_CHAR_UUID(uuid);
+	
+	ret =  aci_gatt_add_char(instructionServHandle,
+		UUID_TYPE_128,
+		uuid,
+		4,
+		CHAR_PROP_WRITE | CHAR_PROP_WRITE_WITHOUT_RESP,
+		ATTR_PERMISSION_NONE,
+		GATT_NOTIFY_ATTRIBUTE_WRITE,
+		16,
+		1,
+		&instructionButtonCharHandle);
+	if (ret != BLE_STATUS_SUCCESS) goto fail;  
+  
+	PRINTF("Service Instruction added. Handle 0x%04X, Input button Charac handle: 0x%04X\n", instructionServHandle, instructionButtonCharHandle);	
 	return BLE_STATUS_SUCCESS; 
   
 fail:
@@ -670,12 +719,6 @@ void BLE::Attribute_Modified_CB(uint16_t handle, uint8_t data_length, uint8_t *a
   /* If GATT client has modified 'LED button characteristic' value, toggle LED2 */
 	if (handle == inputButtonCharHandle + 1)
 	{
-		/*
-		Format:
-			1st byte - Motor Index Mask (0x0 - 0xF)
-			2nd byte - value
-		*/
-		
 		if (data_length < 3)
 			return;
 		
@@ -684,7 +727,16 @@ void BLE::Attribute_Modified_CB(uint16_t handle, uint8_t data_length, uint8_t *a
 		uint8_t direction = att_data[2];
 		
 		//PRINTF("indx: %u, value: %u, dir: %u\n", motorIndex, value, direction);
-		ControlManager::Instance()->UpdateMotor(motorIndex, value, direction);
+		ControlMgr_setMotor(motorIndex, value, direction);
+	}
+	else if (handle == instructionButtonCharHandle + 1)
+	{
+		if (data_length < 2)
+			return;
+		
+		uint8_t instruction = att_data[0];
+		uint8_t value = att_data[1];
+		ControlMgr_setInstruction(instruction, value);
 	}
 }
 

@@ -1,11 +1,11 @@
 #include <mbed.h>
-#include "ControlManager.h"
+#include "control_manager.h"
 #include "BLE.h"
-#include "IMU.h"
-#include "MotorController.h"
+#include "imu.h"
+#include "motor_controller.h"
 #include "error.h"
 
-int main() 
+int main()
 {
 	if (HAL_Init() != HAL_OK)
 	{
@@ -13,23 +13,24 @@ int main()
 	}
 	
 	// Must initialize ControlManager before 
-	MotorController::InitMotors();
+	MotorController_init();
 	wait_ms(3000);
 	
-	ControlManager::Instance()->CreateController(CONTROLLER_FLIGHT);
+	ControlMgr_init();
+	ControlMgr_setType(CONTROLLER_FLIGHT);
 	BLE::InitBLE();
-	IMU::Instance()->InitIMU();
+	IMU_init();
 	
 	while (1)
 	{		
 		BLE::Update();
-		IMU::Instance()->UpdateIMU();
-		ControlManager::Instance()->Update();
+		IMU_update();
+		ControlMgr_update();
 	}
 }
 
 
-
+//
 //int main() 
 //{
 //	if (HAL_Init() != HAL_OK)
@@ -37,27 +38,25 @@ int main()
 //		Error_Handler(); 
 //	}
 //	
-//	MotorController::InitMotors();
+//	MotorController_init();
 //	wait_ms(3000);
 //	
-//	MotorController::SetMotor(0x01, 20, 0);	
+//	MotorController_setMotor(0x01, 20, 0);	
 //	wait_ms(3000);
 //	
-//	MotorController::SetMotor(0x01, 0, 0);
-//	MotorController::SetMotor(0x02, 20, 0);
+//	MotorController_setMotor(0x01, 0, 0);
+//	MotorController_setMotor(0x02, 20, 0);
 //	wait_ms(3000);
 //	
-//	MotorController::SetMotor(0x02, 0, 0);
-//	MotorController::SetMotor(0x04, 20, 0);
+//	MotorController_setMotor(0x02, 0, 0);
+//	MotorController_setMotor(0x04, 20, 0);
 //	wait_ms(3000);
 //	
-//	MotorController::SetMotor(0x04, 0, 0);
-//	MotorController::SetMotor(0x08, 20, 0);
+//	MotorController_setMotor(0x04, 0, 0);
+//	MotorController_setMotor(0x08, 20, 0);
 //	wait_ms(3000);
 //	
-//	MotorController::SetMotor(0x08, 20, 0);
-//	wait_ms(5000);
-//	MotorController::SetMotor(0x08, 0, 0);
+//	MotorController_setMotor(0x08, 0, 0);
 //	
 //	while (1)
 //	{		

@@ -2,9 +2,16 @@
 
 #pragma once
 
-
 #include <stdint.h>
 #include "math.h"
+
+#define PID_PITCH_RATE 0
+#define PID_ROLL_RATE 1
+#define PID_PITCH_STAB 2
+#define PID_ROLL_STAB 3
+#define PID_YAW_RATE 4
+#define PID_YAW_STAB 5
+#define PID_COUNT 6
 
 struct PIDInfo
 {
