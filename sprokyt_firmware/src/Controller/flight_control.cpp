@@ -126,14 +126,17 @@ void FlightControl_setInstruction(uint8_t instruction, uint8_t value)
 	}
 	else if (instruction == INSTRUCTION_YAW)
 	{
-		m_rcYaw = map(value, 0, 255, -150, 150);
+		int8_t adjValue = (int8_t)value;
+		m_rcYaw = map(adjValue, -127, 127, -150, 150);
 	}
 	else if (instruction == INSTRUCTION_PITCH)
 	{
-		m_rcPitch = map(value, 0, 255, -45, 45);
+		int8_t adjValue = (int8_t)value;
+		m_rcPitch = map(value, -127, 127, -45, 45);
 	}
 	else if (instruction == INSTRUCTION_ROLL)
 	{
-		m_rcRoll = map(value, 0, 255, -45, 45);
+		int8_t adjValue = (int8_t)value;
+		m_rcRoll = map(value, -127, 127, -45, 45);
 	}
 }
