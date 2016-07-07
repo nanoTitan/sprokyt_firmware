@@ -9,6 +9,10 @@ extern "C" {
 #include "MotionFX_Manager.h"
 }
 
+#define YAW_RATE 0.5f
+#define ROLL_RATE 0.5f
+#define PITCH_RATE 0.5f
+
 
 /* Private variables ---------------------------------------------------------*/
 PID m_pidArray[PID_COUNT];
@@ -93,16 +97,16 @@ void FlightControl_update()
 		PRINTF("%f, %f\n", pitch_stab_output, pitch_output);
 		
 		// Convert degress back to throttle values
-		yaw_output = map(yaw_output, -150, 150, -1, 1);
-		pitch_output = map(pitch_output, -45, 45, -1, 1);
-		roll_output = map(roll_output, -45, 45, -1, 1);
+		yaw_output = map(yaw_output, -150, 150, -YAW_RATE, YAW_RATE);
+		pitch_output = map(pitch_output, -45, 45, -PITCH_RATE, PITCH_RATE);
+		roll_output = map(roll_output, -45, 45, -ROLL_RATE, ROLL_RATE);
 		//PRINTF("%f, %f, %f\n", yaw_output, pitch_output, roll_output);
 		
 		// MEMS facing Forwards
-		MotorController_setMotor(MOTOR_A, m_rcThrottle /*- roll_output*/ - pitch_output /*- yaw_output*/, 0);
-		MotorController_setMotor(MOTOR_D, m_rcThrottle /*- roll_output*/ + pitch_output /*+ yaw_output*/, 0);
-		MotorController_setMotor(MOTOR_B, m_rcThrottle /*+ roll_output*/ - pitch_output /*+ yaw_output*/, 0);
-		MotorController_setMotor(MOTOR_C, m_rcThrottle /*+ roll_output*/ + pitch_output /*- yaw_output*/, 0);
+		MotorController_setMotor(MOTOR_A, m_rcThrottle - roll_output - pitch_output /*- yaw_output*/, 0);
+		MotorController_setMotor(MOTOR_D, m_rcThrottle - roll_output + pitch_output /*+ yaw_output*/, 0);
+		MotorController_setMotor(MOTOR_B, m_rcThrottle + roll_output - pitch_output /*+ yaw_output*/, 0);
+		MotorController_setMotor(MOTOR_C, m_rcThrottle + roll_output + pitch_output /*- yaw_output*/, 0);
 		
 //		// MEMS facing backwards
 //		MotorController_setMotor(MOTOR_C, m_rcThrottle - roll_output - pitch_output /*- yaw_output*/, 0);
@@ -159,9 +163,7 @@ void FlightControl_setInstruction(uint8_t instruction, uint8_t value)
 
 void FlightControl_connectionLost()
 {
-	if (m_rcThrottle > 0.2f)
-		m_rcThrottle = 0.2f;
-	
+	m_rcThrottle = 0.0f;	
 	MotorController_setMotor(MOTOR_ALL, m_rcThrottle, 0);
 	m_connectionLost = true;
 }
