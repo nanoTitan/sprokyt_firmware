@@ -651,6 +651,8 @@ void BLE::GAPDisconnectionCompleteCB(void)
 	/* Make the device connectable again. */
 	do_set_connectable = TRUE;
 	is_notification_enabled = FALSE;
+	
+	ControlMgr_connectionLost();
 }
 
 /**
