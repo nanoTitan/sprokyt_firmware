@@ -54,3 +54,17 @@ void ControlMgr_setInstruction(uint8_t instruction, uint8_t value)
 	{
 	}
 }
+
+void ControlMgr_connectionLost()
+{
+	if (m_currControllerType == CONTROLLER_FLIGHT)
+	{
+		FlightControl_connectionLost();
+	}
+	else if (m_currControllerType == CONTROLLER_ROVER)
+	{
+	}
+	else if (m_currControllerType == CONTROLLER_ROVER_BALANCE)
+	{
+	}
+}

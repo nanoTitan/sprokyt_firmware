@@ -17,8 +17,10 @@ float m_rcYaw = 0;
 float m_rcPitch = 0;
 float m_rcRoll = 0;
 float m_targetYaw = 0;
+bool m_connectionLost = 0;
 
 /* Private function prototypes -----------------------------------------------*/
+static void UpdateConnectionLost();
 
 /* Private functions ---------------------------------------------------------*/
 void FlightControl_init()
@@ -50,8 +52,14 @@ void FlightControl_update()
 		(D)--(C)
 	*/
 	
+	if (m_connectionLost)
+	{
+		UpdateConnectionLost();
+		return;
+	}
+	
 	// ACRO stabilization
-	if (m_rcThrottle > 0.1f)
+	if (m_rcThrottle > 0.02f)
 	{
 		// *** MINIMUM THROTTLE TO DO CORRECTIONS MAKE THIS 20pts ABOVE YOUR MIN THR STICK ***/
 		
@@ -61,7 +69,7 @@ void FlightControl_update()
 		float sfRoll = IMU_get_sf_roll();
 		float yaw_stab_output   = m_pidArray[PID_YAW_STAB].get_pid(m_targetYaw - sfYaw, 1);
 		float pitch_stab_output = m_pidArray[PID_PITCH_STAB].get_pid(m_rcPitch - sfPitch, 1);  
-		float roll_stab_output  = m_pidArray[PID_ROLL_STAB].get_pid(m_rcRoll - sfRoll, 1);  
+		float roll_stab_output  = m_pidArray[PID_ROLL_STAB].get_pid(m_rcRoll - sfRoll, 1);
 		
 		// is pilot asking for yaw change - if so feed directly to rate pid (overwriting yaw stab output)
 		if (fabs(m_rcYaw) > 5) 
@@ -80,19 +88,21 @@ void FlightControl_update()
 		
 		float yaw_output   = m_pidArray[PID_YAW_RATE].get_pid(yaw_stab_output - gx, 1);
 		float pitch_output = m_pidArray[PID_PITCH_RATE].get_pid(pitch_stab_output - gy, 1);  
-		float roll_output  = m_pidArray[PID_ROLL_RATE].get_pid(roll_stab_output - gz, 1);  
+		float roll_output  = m_pidArray[PID_ROLL_RATE].get_pid(roll_stab_output - gz, 1); 
+		
+		PRINTF("%f, %f\n", pitch_stab_output, pitch_output);
 		
 		// Convert degress back to throttle values
 		yaw_output = map(yaw_output, -150, 150, -1, 1);
 		pitch_output = map(pitch_output, -45, 45, -1, 1);
 		roll_output = map(roll_output, -45, 45, -1, 1);
-		PRINTF("%f, %f, %f\n", yaw_output, pitch_output, roll_output);
+		//PRINTF("%f, %f, %f\n", yaw_output, pitch_output, roll_output);
 		
 		// MEMS facing Forwards
-		MotorController_setMotor(MOTOR_A, m_rcThrottle - roll_output - pitch_output /*- yaw_output*/, 0);
-		MotorController_setMotor(MOTOR_D, m_rcThrottle - roll_output + pitch_output /*+ yaw_output*/, 0);
-		MotorController_setMotor(MOTOR_B, m_rcThrottle + roll_output - pitch_output /*+ yaw_output*/, 0);
-		MotorController_setMotor(MOTOR_C, m_rcThrottle + roll_output + pitch_output /*- yaw_output*/, 0);
+		MotorController_setMotor(MOTOR_A, m_rcThrottle /*- roll_output*/ - pitch_output /*- yaw_output*/, 0);
+		MotorController_setMotor(MOTOR_D, m_rcThrottle /*- roll_output*/ + pitch_output /*+ yaw_output*/, 0);
+		MotorController_setMotor(MOTOR_B, m_rcThrottle /*+ roll_output*/ - pitch_output /*+ yaw_output*/, 0);
+		MotorController_setMotor(MOTOR_C, m_rcThrottle /*+ roll_output*/ + pitch_output /*- yaw_output*/, 0);
 		
 //		// MEMS facing backwards
 //		MotorController_setMotor(MOTOR_C, m_rcThrottle - roll_output - pitch_output /*- yaw_output*/, 0);
@@ -113,6 +123,11 @@ void FlightControl_update()
 	}
 }
 
+void UpdateConnectionLost()
+{
+	// TODO: Show flashing LEDs if connection is lost
+}
+
 void FlightControl_setMotor(uint8_t motorIndex, uint8_t value, uint8_t direction)
 {
 	MotorController_setMotor(motorIndex, value, direction);
@@ -127,16 +142,26 @@ void FlightControl_setInstruction(uint8_t instruction, uint8_t value)
 	else if (instruction == INSTRUCTION_YAW)
 	{
 		int8_t adjValue = (int8_t)value;
-		m_rcYaw = map(adjValue, -127, 127, -150, 150);
+		m_rcYaw = map(adjValue, -128, 127, -150, 150);
 	}
 	else if (instruction == INSTRUCTION_PITCH)
 	{
 		int8_t adjValue = (int8_t)value;
-		m_rcPitch = map(value, -127, 127, -45, 45);
+		m_rcPitch = map(adjValue, -128, 127, -45, 45);
+		//PRINTF("%d, %f\n", (int32_t)adjValue, m_rcPitch);
 	}
 	else if (instruction == INSTRUCTION_ROLL)
 	{
 		int8_t adjValue = (int8_t)value;
-		m_rcRoll = map(value, -127, 127, -45, 45);
+		m_rcRoll = map(adjValue, -128, 127, -45, 45);
 	}
+}
+
+void FlightControl_connectionLost()
+{
+	if (m_rcThrottle > 0.2f)
+		m_rcThrottle = 0.2f;
+	
+	MotorController_setMotor(MOTOR_ALL, m_rcThrottle, 0);
+	m_connectionLost = true;
 }
