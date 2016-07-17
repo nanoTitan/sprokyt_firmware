@@ -13,11 +13,9 @@ int main()
 	}
 	
 	// Must initialize ControlManager before 
-	MotorController_init();
-	wait_ms(3000);
-	
+	//MotorController_init();	
 	ControlMgr_init();
-	ControlMgr_setType(CONTROLLER_FLIGHT);
+	ControlMgr_setType(CONTROLLER_FLIGHT);	//  CONTROLLER_ESC_PROGRAMMER CONTROLLER_FLIGHT
 	BLE::InitBLE();
 	IMU_init();
 	
@@ -30,7 +28,6 @@ int main()
 }
 
 
-//
 //int main() 
 //{
 //	if (HAL_Init() != HAL_OK)
@@ -39,33 +36,15 @@ int main()
 //	}
 //	
 //	MotorController_init();
+//	
+////	MotorController_setMotor(MOTOR_A, 1200, 0);	
+////	wait_ms(3000);
+//	MotorController_setMotor(MOTOR_A | MOTOR_B, 1500, 0);
 //	wait_ms(3000);
 //	
-//	MotorController_setMotor(0x01, 0.2f, 0);	
-//	wait_ms(3000);
-//	
-//	MotorController_setMotor(0x01, 0, 0);
-//	MotorController_setMotor(0x02, 0.2f, 0);
-//	wait_ms(3000);
-//	
-//	MotorController_setMotor(0x02, 0, 0);
-//	MotorController_setMotor(0x04, 0.2f, 0);
-//	wait_ms(3000);
-//	
-//	MotorController_setMotor(0x04, 0, 0);
-//	MotorController_setMotor(0x08, 0.2f, 0);
-//	wait_ms(3000);
-//	
-//	MotorController_setMotor(0x08, 0, 0);
+//	MotorController_setMotor(MOTOR_ALL, 1000, 0);
 //	
 //	while (1)
-//	{		
-//		/*
-//		for (uint8_t i = 25; i <= 255; i += 25)
-//		{
-//			MotorController::SetMotor(0x06, i, 0);
-//			wait_ms(500);
-//		}
-//		*/
+//	{
 //	}
 //}

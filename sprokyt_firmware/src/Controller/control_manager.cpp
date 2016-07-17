@@ -1,5 +1,6 @@
 #include "control_manager.h"
 #include "flight_control.h"
+#include "esc_programmer.h"
 
 enum CONTROLLER_TYPE m_currControllerType = CONTROLLER_FLIGHT;
 
@@ -25,6 +26,9 @@ void ControlMgr_update()
 	else if(m_currControllerType == CONTROLLER_ROVER_BALANCE)
 	{		
 	}
+	else if(m_currControllerType == CONTROLLER_ESC_PROGRAMMER)
+	{		
+	}	
 }
 
 void ControlMgr_setMotor(uint8_t motorIndex, uint8_t value, uint8_t direction)
@@ -38,6 +42,10 @@ void ControlMgr_setMotor(uint8_t motorIndex, uint8_t value, uint8_t direction)
 	}
 	else if (m_currControllerType == CONTROLLER_ROVER_BALANCE)
 	{
+	}
+	else if(m_currControllerType == CONTROLLER_ESC_PROGRAMMER)
+	{
+		EscProgrammer_setMotor(motorIndex, value, direction);
 	}
 }
 
@@ -53,6 +61,10 @@ void ControlMgr_setInstruction(uint8_t instruction, uint8_t value)
 	else if (m_currControllerType == CONTROLLER_ROVER_BALANCE)
 	{
 	}
+	else if(m_currControllerType == CONTROLLER_ESC_PROGRAMMER)
+	{		
+		EscProgrammer_setInstruction(instruction, value);
+	}
 }
 
 void ControlMgr_connectionLost()
@@ -66,5 +78,8 @@ void ControlMgr_connectionLost()
 	}
 	else if (m_currControllerType == CONTROLLER_ROVER_BALANCE)
 	{
+	}
+	else if(m_currControllerType == CONTROLLER_ESC_PROGRAMMER)
+	{		
 	}
 }

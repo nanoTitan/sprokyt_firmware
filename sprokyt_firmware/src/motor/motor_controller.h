@@ -24,13 +24,14 @@ D	0x8
 */
 
 #define MC_NUM_MOTORS 4
-#define MOTOR_A 0x01
-#define MOTOR_B 0x02
-#define MOTOR_C 0x04
-#define MOTOR_D 0x08
+#define MOTOR_A 0x04
+#define MOTOR_B 0x08
+#define MOTOR_C 0x01
+#define MOTOR_D 0x02
 #define MOTOR_ALL 0xFF
 
 void MotorController_init();
 void MotorController_setMotor(uint8_t motorIndxMask, float power, uint8_t direction);
 void MotorController_armMotors();
 bool MotorController_isArmed();
+void MotorController_callibrateESCs();
