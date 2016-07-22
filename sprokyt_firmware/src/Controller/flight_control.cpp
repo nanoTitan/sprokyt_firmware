@@ -1,6 +1,7 @@
 #include "imu.h"
 #include "flight_control.h"
 #include "motor_controller.h"
+#include "constants.h"
 #include "PID.h"
 #include "math_ext.h"
 #include "debug.h"
@@ -8,12 +9,6 @@
 extern "C" {
 #include "MotionFX_Manager.h"
 }
-
-#define YAW_RATE 0.5f
-#define ROLL_RATE 0.5f
-#define PITCH_RATE 0.5f
-#define MIN_THROTTLE 1000
-#define MAX_THROTTLE 1950
 
 /* Private variables ---------------------------------------------------------*/
 PID m_pidArray[PID_COUNT];
@@ -31,12 +26,13 @@ static void UpdateConnectionLost();
 void FlightControl_init()
 {	
 	m_pidArray[PID_PITCH_RATE].kP(0.7f);
+	//m_pidArray[PID_PITCH_RATE].kP(0.7f);
     //m_pidArray[PID_PITCH_RATE].kI(0.015);
 	//m_pidArray[PID_PITCH_RATE].kD(0.01);
 	m_pidArray[PID_PITCH_RATE].imax(50);
 
-	m_pidArray[PID_ROLL_RATE].kP(0.7f);
-	//m_pidArray[PID_ROLL_RATE].kI(0.04);	
+	m_pidArray[PID_ROLL_RATE].kP(0.3f);
+	m_pidArray[PID_ROLL_RATE].kI(0.05);	
 	//m_pidArray[PID_ROLL_RATE].kD(0.01);
 	m_pidArray[PID_ROLL_RATE].imax(50);
 
@@ -49,21 +45,14 @@ void FlightControl_init()
 	m_pidArray[PID_YAW_RATE].kD(0);
 	m_pidArray[PID_YAW_RATE].imax(50);
 
-	m_pidArray[PID_PITCH_STAB].kP(4.5f);
-	m_pidArray[PID_ROLL_STAB].kP(4.5f);
-	m_pidArray[PID_YAW_STAB].kP(10);
+	m_pidArray[PID_PITCH_STAB].kP(4.5f);	// 4.5f
+	m_pidArray[PID_ROLL_STAB].kP(4.5f);		// 4.5f
+	m_pidArray[PID_YAW_STAB].kP(10);		// 10
 }
 
 
 void FlightControl_update()
-{	
-	/*
-		(A)--(B)
-		   \/
-		   /\
-		(D)--(C)
-	*/
-	
+{		
 	if (m_connectionLost)
 	{
 		UpdateConnectionLost();
@@ -71,7 +60,7 @@ void FlightControl_update()
 	}
 	
 	// ACRO stabilization
-	if (m_rcThrottle > 1200)
+	if (m_rcThrottle > MIN_FLIGHT_THROTTLE)
 	{
 		// *** MINIMUM THROTTLE TO DO CORRECTIONS MAKE THIS 20pts ABOVE YOUR MIN THR STICK ***/
 		
@@ -98,20 +87,38 @@ void FlightControl_update()
 		float gy = pInput->gyro[1] - bias[1];
 		float gz = pInput->gyro[2] - bias[2];
 		
-		float yaw_output   = clampf(m_pidArray[PID_YAW_RATE].get_pid(yaw_stab_output - gz, 1), -500, 500);
-		float pitch_output = clampf(m_pidArray[PID_PITCH_RATE].get_pid(pitch_stab_output - gx, 1), -500, 500);
-		float roll_output  = clampf(m_pidArray[PID_ROLL_RATE].get_pid(roll_stab_output - gy, 1), -500, 500);
+		float yaw_output   = clampf(m_pidArray[PID_YAW_RATE].get_pid(yaw_stab_output + gz, 1), -500, 500);
+		float pitch_output = clampf(m_pidArray[PID_PITCH_RATE].get_pid(pitch_stab_output + gx, 1), -500, 500);
+		float roll_output  = clampf(m_pidArray[PID_ROLL_RATE].get_pid(roll_stab_output + gy, 1), -500, 500);
 		
-		float powerA =  m_rcThrottle + roll_output + pitch_output - yaw_output;
-		float powerB =  m_rcThrottle - roll_output + pitch_output + yaw_output;
-		float powerC =  m_rcThrottle - roll_output - pitch_output - yaw_output;
-		float powerD =  m_rcThrottle + roll_output - pitch_output + yaw_output;
+		/*
+		(A)--(B)
+		   \/
+		   /\
+		(D)--(C)
+		*/
+//		float powerA =  m_rcThrottle + roll_output + pitch_output - yaw_output;
+//		float powerB =  m_rcThrottle - roll_output + pitch_output + yaw_output;
+//		float powerC =  m_rcThrottle - roll_output - pitch_output - yaw_output;
+//		float powerD =  m_rcThrottle + roll_output - pitch_output + yaw_output;
+		
+		/*
+		   (A)
+		    |
+		(C)---(D)
+			|
+		   (B)		
+		*/
+		float powerA =  m_rcThrottle + pitch_output - yaw_output;
+		float powerB =  m_rcThrottle - pitch_output - yaw_output;
+		float powerC =  m_rcThrottle + roll_output + yaw_output;
+		float powerD =  m_rcThrottle - roll_output + yaw_output;
 		
 		// Prevent throttle from reaching 2000us which causes ESC to go into programming mode
-		powerA = clampf(powerA, powerA, MAX_THROTTLE);
-		powerB = clampf(powerB, powerB, MAX_THROTTLE);
-		powerC = clampf(powerC, powerC, MAX_THROTTLE);
-		powerD = clampf(powerD, powerD, MAX_THROTTLE);
+		powerA = clampf(powerA, MIN_FLIGHT_THROTTLE, MAX_THROTTLE);
+		powerB = clampf(powerB, MIN_FLIGHT_THROTTLE, MAX_THROTTLE);
+		powerC = clampf(powerC, MIN_FLIGHT_THROTTLE, MAX_THROTTLE);
+		powerD = clampf(powerD, MIN_FLIGHT_THROTTLE, MAX_THROTTLE);
 		
 		static int cnt = 0;
 		++cnt;
@@ -119,16 +126,16 @@ void FlightControl_update()
 		{
 			//PRINTF("%d, %d, %d, %d\n", (int)roll_stab_output, (int)roll_output, (int)(m_rcThrottle + roll_output), (int)(m_rcThrottle - roll_output));
 			//PRINTF("%d, %d, %d, %d\n", (int)yaw_stab_output, (int)yaw_output, (int)(m_rcThrottle + yaw_output), (int)(m_rcThrottle - yaw_output));
-			//PRINTF("%d, %d, %d\n", (int)sfRoll, (int)roll_stab_output, (int)roll_output);
+			PRINTF("%d, %d, %d, %d\n", (int)sfRoll, (int)roll_stab_output, (int)gy, (int)roll_output);
 			//PRINTF("%d, %d, %d\n", (int)sfYaw, (int)yaw_stab_output, (int)yaw_output);			
-			PRINTF("%d, %d, %d\n", (int)sfYaw, (int)sfPitch, (int)sfRoll);					// yaw, pitch, roll
+			//PRINTF("%d, %d, %d\n", (int)sfYaw, (int)sfPitch, (int)sfRoll);					// yaw, pitch, roll
 			//PRINTF("%d, %d, %d, %d\n", (int)powerA, (int)powerB, (int)powerC, (int)powerD);		// A, B, C, D
 			cnt = 0;
 		}
 		
 		// MEMS facing Forwards
-		MotorController_setMotor(MOTOR_A, powerA, 0);
-		MotorController_setMotor(MOTOR_B, powerB, 0);
+		//MotorController_setMotor(MOTOR_A, powerA, 0);
+		//MotorController_setMotor(MOTOR_B, powerB, 0);
 		MotorController_setMotor(MOTOR_C, powerC, 0);		
 		MotorController_setMotor(MOTOR_D, powerD, 0);
 	}

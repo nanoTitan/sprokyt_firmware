@@ -28,6 +28,7 @@ void ControlMgr_update()
 	}
 	else if(m_currControllerType == CONTROLLER_ESC_PROGRAMMER)
 	{		
+		EscProgrammer_update();
 	}	
 }
 

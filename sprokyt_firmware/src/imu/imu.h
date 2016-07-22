@@ -2,10 +2,6 @@
 
 #ifndef _IMU_H_
 #define _IMU_H_
-
-#include <stdint.h>
-
-
 	
 void IMU_init();
 void IMU_update(void);

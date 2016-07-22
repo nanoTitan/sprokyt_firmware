@@ -13,7 +13,7 @@ int main()
 	}
 	
 	// Must initialize ControlManager before 
-	//MotorController_init();	
+	MotorController_init();	
 	ControlMgr_init();
 	ControlMgr_setType(CONTROLLER_FLIGHT);	//  CONTROLLER_ESC_PROGRAMMER CONTROLLER_FLIGHT
 	BLE::InitBLE();
@@ -39,7 +39,7 @@ int main()
 //	
 ////	MotorController_setMotor(MOTOR_A, 1200, 0);	
 ////	wait_ms(3000);
-//	MotorController_setMotor(MOTOR_A | MOTOR_B, 1500, 0);
+//	MotorController_setMotor(MOTOR_ALL, 1200, 0);
 //	wait_ms(3000);
 //	
 //	MotorController_setMotor(MOTOR_ALL, 1000, 0);

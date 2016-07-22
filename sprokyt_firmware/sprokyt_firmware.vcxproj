@@ -467,6 +467,7 @@
     <ClInclude Include="..\..\..\..\..\..\..\STM32\X-CUBE-BLE1\Middlewares\ST\TimerServer\STM32xx_HAL_TimerServer_Drivers\inc\stm32xx_hal_timerserver_rtc.h" />
     <ClInclude Include="src\ble\BLE.h" />
     <ClInclude Include="src\ble\bluenrg_interface.h" />
+    <ClInclude Include="src\constants.h" />
     <ClInclude Include="src\Controller\control_manager.h" />
     <ClInclude Include="src\Controller\esc_programmer.h" />
     <ClInclude Include="src\Controller\flight_control.h" />

@@ -1,5 +1,6 @@
 #include "motor_controller.h"
 #include "mbed.h"
+#include "constants.h"
 #include "math_ext.h"
 
 /* Private Variables ------------------------------------------------------------------*/
@@ -18,6 +19,8 @@ void MotorController_init()
 	_bldcArray[2].period_us(2040);
 	_bldcArray[3].period_us(2040);
 	
+	//MotorController_setMotor(MOTOR_ALL, 2000, 0);
+	//wait_ms(3000);
 	MotorController_setMotor(MOTOR_ALL, 1000, 0);
 }
 

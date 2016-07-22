@@ -6,6 +6,7 @@
 
 #define M_1_255  0.003921568627451
 #define M_180_PI 57.29577951308233
+#define ONE_OVER_SQRT2 0.7071067811865
 
 typedef struct 
 {
