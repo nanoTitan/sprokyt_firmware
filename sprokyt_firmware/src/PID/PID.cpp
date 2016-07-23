@@ -27,7 +27,7 @@ float PID::get_pid(float error, float scaler)
 	m_pidInfo.P = error * m_kp;
 	output += m_pidInfo.P;
 
-	    // Compute derivative component if time has elapsed
+	// Compute derivative component if time has elapsed
 	if ((fabsf(m_kd) > 0) && (dT > 0))
 	{
 		float derivative;
@@ -61,7 +61,7 @@ float PID::get_pid(float error, float scaler)
 	m_pidInfo.D *= scaler;
 	m_pidInfo.P *= scaler;
 
-	    // Compute integral component if time has elapsed
+	// Compute integral component if time has elapsed
 	if ((fabsf(m_ki) > 0) && (dT > 0))
 	{
 		m_integrator += (error * m_ki) * scaler * fDT;
@@ -79,12 +79,6 @@ float PID::get_pid(float error, float scaler)
 
 	m_pidInfo.desired = output;
 	return output;
-}
-
-int16_t PID::get_pid_4500(float error, float scaler)
-{
-	float v = get_pid(error, scaler);
-	return clampf(v, -4500, 4500);
 }
 
 void PID::reset_I()

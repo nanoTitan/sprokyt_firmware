@@ -10,6 +10,12 @@ extern "C" {
 #include "MotionFX_Manager.h"
 }
 
+enum FLIGHT_MODE
+{
+	RATE_MODE = 0,
+	STABILITY_MODE = 1
+};
+
 /* Private variables ---------------------------------------------------------*/
 PID m_pidArray[PID_COUNT];
 float m_rcThrottle = 0;
@@ -18,30 +24,28 @@ float m_rcPitch = 0;
 float m_rcRoll = 0;
 float m_targetYaw = 0;
 bool m_connectionLost = 0;
+FLIGHT_MODE m_flightMode = STABILITY_MODE;
 
 /* Private function prototypes -----------------------------------------------*/
+static void FlightControl_updateRateMode();
+static void FlightControl_updateStabilityMode();
 static void UpdateConnectionLost();
 
 /* Private functions ---------------------------------------------------------*/
 void FlightControl_init()
 {	
 	m_pidArray[PID_PITCH_RATE].kP(0.7f);
-	//m_pidArray[PID_PITCH_RATE].kP(0.7f);
-    //m_pidArray[PID_PITCH_RATE].kI(0.015);
-	//m_pidArray[PID_PITCH_RATE].kD(0.01);
+	m_pidArray[PID_PITCH_RATE].kI(1.0f);
+	m_pidArray[PID_PITCH_RATE].kD(0);
 	m_pidArray[PID_PITCH_RATE].imax(50);
 
-	m_pidArray[PID_ROLL_RATE].kP(0.3f);
-	m_pidArray[PID_ROLL_RATE].kI(0.05);	
-	//m_pidArray[PID_ROLL_RATE].kD(0.01);
+	m_pidArray[PID_ROLL_RATE].kP(0.7f);
+	m_pidArray[PID_ROLL_RATE].kI(1.0f);	
+	m_pidArray[PID_ROLL_RATE].kD(0);
 	m_pidArray[PID_ROLL_RATE].imax(50);
 
-//	m_pidArray[PID_YAW_RATE].kP(0.02f);
-//	m_pidArray[PID_YAW_RATE].kI(0.01f);
-//	m_pidArray[PID_YAW_RATE].kD(0.01);
-//	m_pidArray[PID_YAW_RATE].imax(50);	
-	m_pidArray[PID_YAW_RATE].kP(0);
-	m_pidArray[PID_YAW_RATE].kI(0);
+	m_pidArray[PID_YAW_RATE].kP(2.7f);
+	m_pidArray[PID_YAW_RATE].kI(1);
 	m_pidArray[PID_YAW_RATE].kD(0);
 	m_pidArray[PID_YAW_RATE].imax(50);
 
@@ -62,21 +66,34 @@ void FlightControl_update()
 	// ACRO stabilization
 	if (m_rcThrottle > MIN_FLIGHT_THROTTLE)
 	{
-		// *** MINIMUM THROTTLE TO DO CORRECTIONS MAKE THIS 20pts ABOVE YOUR MIN THR STICK ***/
-		
-		// RC Stability 
+		float yaw_stab_output   = 0;
+		float pitch_stab_output = 0;
+		float roll_stab_output  = 0;
 		float sfYaw = IMU_get_sf_yaw();
 		float sfPitch = IMU_get_sf_pitch();
 		float sfRoll = IMU_get_sf_roll();
-		float yaw_stab_output   = clampf(m_pidArray[PID_YAW_STAB].get_pid(m_targetYaw - sfYaw, 1), -360, 360);
-		float pitch_stab_output = clampf(m_pidArray[PID_PITCH_STAB].get_pid(m_rcPitch - sfPitch, 1), -250, 250);
-		float roll_stab_output  = clampf(m_pidArray[PID_ROLL_STAB].get_pid(m_rcRoll - sfRoll, 1), -250, 250);
 		
-		// is pilot asking for yaw change - if so feed directly to rate pid (overwriting yaw stab output)
-		if (fabs(m_rcYaw) > 5) 
+		if (m_flightMode == STABILITY_MODE)
+		{			
+			// RC Stability 
+			yaw_stab_output   = clampf(m_pidArray[PID_YAW_STAB].get_pid(m_targetYaw - sfYaw, 1), -360, 360);
+			pitch_stab_output = clampf(m_pidArray[PID_PITCH_STAB].get_pid(m_rcPitch - sfPitch, 1), -250, 250);
+			roll_stab_output  = clampf(m_pidArray[PID_ROLL_STAB].get_pid(m_rcRoll - sfRoll, 1), -250, 250);
+		
+			// is pilot asking for yaw change - if so feed directly to rate pid (overwriting yaw stab output)
+			if (fabs(m_rcYaw) > 5) 
+			{
+				yaw_stab_output = m_rcYaw;
+				m_targetYaw = sfYaw;			// remember this yaw for when pilot stops
+			}
+		}
+		else
 		{
 			yaw_stab_output = m_rcYaw;
 			m_targetYaw = sfYaw;			// remember this yaw for when pilot stops
+			
+			pitch_stab_output = m_rcPitch;
+			roll_stab_output = m_rcRoll;
 		}
 		
 		// Rate PIDs
@@ -122,20 +139,20 @@ void FlightControl_update()
 		
 		static int cnt = 0;
 		++cnt;
-		if (cnt == 50)
+		if (cnt == 100)
 		{
 			//PRINTF("%d, %d, %d, %d\n", (int)roll_stab_output, (int)roll_output, (int)(m_rcThrottle + roll_output), (int)(m_rcThrottle - roll_output));
 			//PRINTF("%d, %d, %d, %d\n", (int)yaw_stab_output, (int)yaw_output, (int)(m_rcThrottle + yaw_output), (int)(m_rcThrottle - yaw_output));
-			PRINTF("%d, %d, %d, %d\n", (int)sfRoll, (int)roll_stab_output, (int)gy, (int)roll_output);
+			//PRINTF("%d, %d, %d, %d\n", (int)sfRoll, (int)roll_stab_output, (int)gy, (int)roll_output);
 			//PRINTF("%d, %d, %d\n", (int)sfYaw, (int)yaw_stab_output, (int)yaw_output);			
-			//PRINTF("%d, %d, %d\n", (int)sfYaw, (int)sfPitch, (int)sfRoll);					// yaw, pitch, roll
+			//PRINTF("%d, %d, %d\n", (int)sfYaw, (int)sfPitch, (int)sfRoll);							// yaw, pitch, roll
 			//PRINTF("%d, %d, %d, %d\n", (int)powerA, (int)powerB, (int)powerC, (int)powerD);		// A, B, C, D
 			cnt = 0;
 		}
 		
 		// MEMS facing Forwards
-		//MotorController_setMotor(MOTOR_A, powerA, 0);
-		//MotorController_setMotor(MOTOR_B, powerB, 0);
+		MotorController_setMotor(MOTOR_A, powerA, 0);
+		MotorController_setMotor(MOTOR_B, powerB, 0);
 		MotorController_setMotor(MOTOR_C, powerC, 0);		
 		MotorController_setMotor(MOTOR_D, powerD, 0);
 	}
@@ -146,10 +163,20 @@ void FlightControl_update()
 		
 		// Reset target yaw for next takeoff
 		m_targetYaw = IMU_get_sf_yaw();			
-	
-		for (int i = 0; i < PID_COUNT; ++i) // reset PID integrals whilst on the ground
+		
+		for (int i = 0; i < PID_COUNT; ++i) // reset PID integrals if on the ground
 			m_pidArray[i].reset_I();
 	}
+}
+
+void FlightControl_updateRateMode()
+{
+	
+}
+
+void FlightControl_updateStabilityMode()
+{
+	
 }
 
 void UpdateConnectionLost()
