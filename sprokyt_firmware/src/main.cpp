@@ -13,7 +13,7 @@ int main()
 	}
 	
 	// Must initialize ControlManager before 
-	MotorController_init();	
+	//MotorController_init();	
 	ControlMgr_init();
 	ControlMgr_setType(CONTROLLER_FLIGHT);	//  CONTROLLER_ESC_PROGRAMMER CONTROLLER_FLIGHT
 	BLE::InitBLE();

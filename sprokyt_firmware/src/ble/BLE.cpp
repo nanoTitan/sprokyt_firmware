@@ -212,6 +212,11 @@ void BLE::Update()
 	User_Process();
 }
 
+bool BLE::IsConnected()
+{
+	return connected;
+}
+
 tBleStatus BLE::AddAccService(void)
 {
 	tBleStatus ret;

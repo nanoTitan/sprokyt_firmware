@@ -63,11 +63,13 @@ class BLE
 public:
 	static void InitBLE();
 	static void Update();
+	static bool IsConnected();
 	static uint8_t GetExpansionBoard() { return bnrg_expansion_board; }
 	static void Read_Request_CB(uint16_t handle);
 	static void GAPDisconnectionCompleteCB(void);
 	static void GAPConnectionCompleteCB(uint8_t addr[6], uint16_t handle);
 	static void Attribute_Modified_CB(uint16_t handle, uint8_t data_length, uint8_t *att_data);
+	
 	
 private:
 	static tBleStatus AddAccService(void);

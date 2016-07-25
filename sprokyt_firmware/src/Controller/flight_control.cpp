@@ -3,6 +3,7 @@
 #include "motor_controller.h"
 #include "constants.h"
 #include "PID.h"
+#include "BLE.h"
 #include "math_ext.h"
 #include "debug.h"
 
@@ -23,47 +24,55 @@ float m_rcYaw = 0;
 float m_rcPitch = 0;
 float m_rcRoll = 0;
 float m_targetYaw = 0;
-bool m_connectionLost = 0;
 FLIGHT_MODE m_flightMode = STABILITY_MODE;
 
 /* Private function prototypes -----------------------------------------------*/
 static void FlightControl_updateRateMode();
 static void FlightControl_updateStabilityMode();
 static void UpdateConnectionLost();
+static void Disarm();
 
 /* Private functions ---------------------------------------------------------*/
 void FlightControl_init()
 {	
 	m_pidArray[PID_PITCH_RATE].kP(0.7f);
-	m_pidArray[PID_PITCH_RATE].kI(1.0f);
+	m_pidArray[PID_PITCH_RATE].kI(0.0f);
 	m_pidArray[PID_PITCH_RATE].kD(0);
 	m_pidArray[PID_PITCH_RATE].imax(50);
 
-	m_pidArray[PID_ROLL_RATE].kP(0.7f);
-	m_pidArray[PID_ROLL_RATE].kI(1.0f);	
+	m_pidArray[PID_ROLL_RATE].kP(0.7f);	//	Rate only - 1.7f
+	m_pidArray[PID_ROLL_RATE].kI(0.0f);	
 	m_pidArray[PID_ROLL_RATE].kD(0);
 	m_pidArray[PID_ROLL_RATE].imax(50);
 
-	m_pidArray[PID_YAW_RATE].kP(2.7f);
-	m_pidArray[PID_YAW_RATE].kI(1);
+	m_pidArray[PID_YAW_RATE].kP(0);
+	m_pidArray[PID_YAW_RATE].kI(0);
 	m_pidArray[PID_YAW_RATE].kD(0);
 	m_pidArray[PID_YAW_RATE].imax(50);
 
-	m_pidArray[PID_PITCH_STAB].kP(4.5f);	// 4.5f
-	m_pidArray[PID_ROLL_STAB].kP(4.5f);		// 4.5f
+	m_pidArray[PID_PITCH_STAB].kP(2.0f);	// 4.5f
+	m_pidArray[PID_ROLL_STAB].kP(3.5f);		// 4.5f
 	m_pidArray[PID_YAW_STAB].kP(10);		// 10
 }
 
 
 void FlightControl_update()
 {		
-	if (m_connectionLost)
+	// Don't update motors if we aren't in a connection lost state and without valid throttle values
+	if (m_rcThrottle == 0)
+		return;
+	
+	if (!BLE::IsConnected())
 	{
-		UpdateConnectionLost();
+		if (m_rcThrottle > MIN_FLIGHT_THROTTLE)
+			UpdateConnectionLost();
+		
+		if (m_rcThrottle <= MIN_FLIGHT_THROTTLE)
+			Disarm();
+		
 		return;
 	}
 	
-	// ACRO stabilization
 	if (m_rcThrottle > MIN_FLIGHT_THROTTLE)
 	{
 		float yaw_stab_output   = 0;
@@ -114,10 +123,10 @@ void FlightControl_update()
 		   /\
 		(D)--(C)
 		*/
-//		float powerA =  m_rcThrottle + roll_output + pitch_output - yaw_output;
-//		float powerB =  m_rcThrottle - roll_output + pitch_output + yaw_output;
-//		float powerC =  m_rcThrottle - roll_output - pitch_output - yaw_output;
-//		float powerD =  m_rcThrottle + roll_output - pitch_output + yaw_output;
+		float powerA =  m_rcThrottle + roll_output + pitch_output - yaw_output;
+		float powerB =  m_rcThrottle - roll_output + pitch_output + yaw_output;
+		float powerC =  m_rcThrottle - roll_output - pitch_output - yaw_output;
+		float powerD =  m_rcThrottle + roll_output - pitch_output + yaw_output;
 		
 		/*
 		   (A)
@@ -126,31 +135,30 @@ void FlightControl_update()
 			|
 		   (B)		
 		*/
-		float powerA =  m_rcThrottle + pitch_output - yaw_output;
-		float powerB =  m_rcThrottle - pitch_output - yaw_output;
-		float powerC =  m_rcThrottle + roll_output + yaw_output;
-		float powerD =  m_rcThrottle - roll_output + yaw_output;
+//		float powerA =  m_rcThrottle + pitch_output - yaw_output;
+//		float powerB =  m_rcThrottle - pitch_output - yaw_output;
+//		float powerC =  m_rcThrottle + roll_output + yaw_output;
+//		float powerD =  m_rcThrottle - roll_output + yaw_output;
 		
 		// Prevent throttle from reaching 2000us which causes ESC to go into programming mode
-		powerA = clampf(powerA, MIN_FLIGHT_THROTTLE, MAX_THROTTLE);
-		powerB = clampf(powerB, MIN_FLIGHT_THROTTLE, MAX_THROTTLE);
-		powerC = clampf(powerC, MIN_FLIGHT_THROTTLE, MAX_THROTTLE);
-		powerD = clampf(powerD, MIN_FLIGHT_THROTTLE, MAX_THROTTLE);
+		powerA = clampf(powerA, MIN_FLIGHT_THROTTLE, MAX_FLIGHT_THROTTLE);
+		powerB = clampf(powerB, MIN_FLIGHT_THROTTLE, MAX_FLIGHT_THROTTLE);
+		powerC = clampf(powerC, MIN_FLIGHT_THROTTLE, MAX_FLIGHT_THROTTLE);
+		powerD = clampf(powerD, MIN_FLIGHT_THROTTLE, MAX_FLIGHT_THROTTLE);
 		
 		static int cnt = 0;
 		++cnt;
-		if (cnt == 100)
+		if (cnt == 50)
 		{
-			//PRINTF("%d, %d, %d, %d\n", (int)roll_stab_output, (int)roll_output, (int)(m_rcThrottle + roll_output), (int)(m_rcThrottle - roll_output));
-			//PRINTF("%d, %d, %d, %d\n", (int)yaw_stab_output, (int)yaw_output, (int)(m_rcThrottle + yaw_output), (int)(m_rcThrottle - yaw_output));
 			//PRINTF("%d, %d, %d, %d\n", (int)sfRoll, (int)roll_stab_output, (int)gy, (int)roll_output);
-			//PRINTF("%d, %d, %d\n", (int)sfYaw, (int)yaw_stab_output, (int)yaw_output);			
-			//PRINTF("%d, %d, %d\n", (int)sfYaw, (int)sfPitch, (int)sfRoll);							// yaw, pitch, roll
+			//PRINTF("%d, %d, %d, %d\n", (int)sfPitch, (int)pitch_stab_output, (int)gx, (int)pitch_output);
+			//PRINTF("%d, %d, %d\n", (int)sfYaw, (int)yaw_stab_output, (int)gz, (int)yaw_output);
+			PRINTF("%d, %d, %d\n", (int)sfYaw, (int)sfPitch, (int)sfRoll);					// yaw, pitch, roll
 			//PRINTF("%d, %d, %d, %d\n", (int)powerA, (int)powerB, (int)powerC, (int)powerD);		// A, B, C, D
 			cnt = 0;
 		}
 		
-		// MEMS facing Forwards
+		// Set motor speed
 		MotorController_setMotor(MOTOR_A, powerA, 0);
 		MotorController_setMotor(MOTOR_B, powerB, 0);
 		MotorController_setMotor(MOTOR_C, powerC, 0);		
@@ -158,8 +166,8 @@ void FlightControl_update()
 	}
 	else
 	{
-		// Turn motors off
-		MotorController_setMotor(MOTOR_ALL, 1000, 0);
+		// Allow ESCs to be armed or turn motors on/off
+		MotorController_setMotor(MOTOR_ALL, m_rcThrottle, 0);
 		
 		// Reset target yaw for next takeoff
 		m_targetYaw = IMU_get_sf_yaw();			
@@ -182,6 +190,24 @@ void FlightControl_updateStabilityMode()
 void UpdateConnectionLost()
 {
 	// TODO: Show flashing LEDs if connection is lost
+	
+	// Power down motors slowly
+	
+	m_rcThrottle -= 0.5f;
+	if (m_rcThrottle < MIN_FLIGHT_THROTTLE)
+	{
+		m_rcThrottle = MIN_FLIGHT_THROTTLE;
+	}
+	
+	MotorController_setMotor(MOTOR_ALL, m_rcThrottle, 0);	
+	//PRINTF("power down %d\n", (int)m_rcThrottle);	
+}
+
+void Disarm()
+{	
+	// Turn motors off
+	MotorController_setMotor(MOTOR_ALL, MIN_THROTTLE, 0);
+	m_rcThrottle = 0;
 }
 
 void FlightControl_setMotor(uint8_t motorIndex, uint8_t value, uint8_t direction)
@@ -216,7 +242,4 @@ void FlightControl_setInstruction(uint8_t instruction, uint8_t value)
 
 void FlightControl_connectionLost()
 {
-	m_rcThrottle = 0.0f;	
-	MotorController_setMotor(MOTOR_ALL, m_rcThrottle, 0);
-	m_connectionLost = true;
 }

@@ -19,6 +19,7 @@ void EscProgrammer_update()
 
 void EscProgrammer_setMotor(uint8_t motorIndex, uint8_t value, uint8_t direction)
 {
+	PRINTF("%d, %d\n", (int)motorIndex, (int)value);			
 	MotorController_setMotor(motorIndex, value, direction);
 }
 
