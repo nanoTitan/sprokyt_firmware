@@ -27,14 +27,17 @@ float m_targetYaw = 0;
 FLIGHT_MODE m_flightMode = STABILITY_MODE;
 
 /* Private function prototypes -----------------------------------------------*/
-static void FlightControl_updateRateMode();
-static void FlightControl_updateStabilityMode();
 static void UpdateConnectionLost();
 static void Disarm();
 
 /* Private functions ---------------------------------------------------------*/
 void FlightControl_init()
 {	
+	m_pidArray[PID_YAW_RATE].kP(0);
+	m_pidArray[PID_YAW_RATE].kI(0);
+	m_pidArray[PID_YAW_RATE].kD(0);
+	m_pidArray[PID_YAW_RATE].imax(50);
+	
 	m_pidArray[PID_PITCH_RATE].kP(0.7f);
 	m_pidArray[PID_PITCH_RATE].kI(0.0f);
 	m_pidArray[PID_PITCH_RATE].kD(0);
@@ -45,14 +48,9 @@ void FlightControl_init()
 	m_pidArray[PID_ROLL_RATE].kD(0);
 	m_pidArray[PID_ROLL_RATE].imax(50);
 
-	m_pidArray[PID_YAW_RATE].kP(0);
-	m_pidArray[PID_YAW_RATE].kI(0);
-	m_pidArray[PID_YAW_RATE].kD(0);
-	m_pidArray[PID_YAW_RATE].imax(50);
-
-	m_pidArray[PID_PITCH_STAB].kP(2.0f);	// 4.5f
+	m_pidArray[PID_YAW_STAB].kP(0);			// 10
+	m_pidArray[PID_PITCH_STAB].kP(3.0f);	// 4.5f
 	m_pidArray[PID_ROLL_STAB].kP(3.5f);		// 4.5f
-	m_pidArray[PID_YAW_STAB].kP(10);		// 10
 }
 
 
@@ -113,6 +111,9 @@ void FlightControl_update()
 		float gy = pInput->gyro[1] - bias[1];
 		float gz = pInput->gyro[2] - bias[2];
 		
+		osxMFX_output* pOutput = MotionFX_manager_getDataOUT();
+		float heading = pOutput->heading_9X;
+		
 		float yaw_output   = clampf(m_pidArray[PID_YAW_RATE].get_pid(yaw_stab_output + gz, 1), -500, 500);
 		float pitch_output = clampf(m_pidArray[PID_PITCH_RATE].get_pid(pitch_stab_output + gx, 1), -500, 500);
 		float roll_output  = clampf(m_pidArray[PID_ROLL_RATE].get_pid(roll_stab_output + gy, 1), -500, 500);
@@ -153,21 +154,23 @@ void FlightControl_update()
 			//PRINTF("%d, %d, %d, %d\n", (int)sfRoll, (int)roll_stab_output, (int)gy, (int)roll_output);
 			//PRINTF("%d, %d, %d, %d\n", (int)sfPitch, (int)pitch_stab_output, (int)gx, (int)pitch_output);
 			//PRINTF("%d, %d, %d\n", (int)sfYaw, (int)yaw_stab_output, (int)gz, (int)yaw_output);
-			PRINTF("%d, %d, %d\n", (int)sfYaw, (int)sfPitch, (int)sfRoll);					// yaw, pitch, roll
+			PRINTF("%.2f, %.2f\n", sfYaw, heading);					// yaw, pitch, roll
+			//PRINTF("%.2f, %d, %d\n", heading, (int)sfPitch, (int)sfRoll);					// yaw, pitch, roll
+			//PRINTF("%.2f, %.2f, %.2f\n", pInput->mag[0], pInput->mag[1], pInput->mag[2]);
 			//PRINTF("%d, %d, %d, %d\n", (int)powerA, (int)powerB, (int)powerC, (int)powerD);		// A, B, C, D
 			cnt = 0;
 		}
 		
 		// Set motor speed
-		MotorController_setMotor(MOTOR_A, powerA, 0);
-		MotorController_setMotor(MOTOR_B, powerB, 0);
-		MotorController_setMotor(MOTOR_C, powerC, 0);		
-		MotorController_setMotor(MOTOR_D, powerD, 0);
+//		MotorController_setMotor(MOTOR_A, powerA, 0);
+//		MotorController_setMotor(MOTOR_B, powerB, 0);
+//		MotorController_setMotor(MOTOR_C, powerC, 0);		
+//		MotorController_setMotor(MOTOR_D, powerD, 0);
 	}
 	else
 	{
 		// Allow ESCs to be armed or turn motors on/off
-		MotorController_setMotor(MOTOR_ALL, m_rcThrottle, 0);
+		//MotorController_setMotor(MOTOR_ALL, m_rcThrottle, 0);
 		
 		// Reset target yaw for next takeoff
 		m_targetYaw = IMU_get_sf_yaw();			
@@ -175,16 +178,6 @@ void FlightControl_update()
 		for (int i = 0; i < PID_COUNT; ++i) // reset PID integrals if on the ground
 			m_pidArray[i].reset_I();
 	}
-}
-
-void FlightControl_updateRateMode()
-{
-	
-}
-
-void FlightControl_updateStabilityMode()
-{
-	
 }
 
 void UpdateConnectionLost()
@@ -208,6 +201,21 @@ void Disarm()
 	// Turn motors off
 	MotorController_setMotor(MOTOR_ALL, MIN_THROTTLE, 0);
 	m_rcThrottle = 0;
+}
+
+void FlightControl_setPIDValues(const PIDInfo& yawInfo, const PIDInfo& pitchInfo, const PIDInfo& rollInfo)
+{
+	m_pidArray[PID_YAW_RATE].kP(yawInfo.P);
+	m_pidArray[PID_YAW_RATE].kI(yawInfo.I);
+	m_pidArray[PID_YAW_RATE].kD(yawInfo.D);
+
+	m_pidArray[PID_PITCH_RATE].kP(pitchInfo.P);
+	m_pidArray[PID_PITCH_RATE].kI(pitchInfo.I);	
+	m_pidArray[PID_PITCH_RATE].kD(pitchInfo.D);
+
+	m_pidArray[PID_ROLL_RATE].kP(rollInfo.P);
+	m_pidArray[PID_ROLL_RATE].kI(rollInfo.I);
+	m_pidArray[PID_ROLL_RATE].kD(rollInfo.D);
 }
 
 void FlightControl_setMotor(uint8_t motorIndex, uint8_t value, uint8_t direction)

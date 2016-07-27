@@ -693,7 +693,6 @@ void BLE::Read_Request_CB(uint16_t handle)
  */
 void BLE::Attribute_Modified_CB(uint16_t handle, uint8_t data_length, uint8_t *att_data)
 {
-  /* If GATT client has modified 'LED button characteristic' value, toggle LED2 */
 	if (handle == inputButtonCharHandle + 1)
 	{
 		if (data_length < 3)
@@ -708,12 +707,7 @@ void BLE::Attribute_Modified_CB(uint16_t handle, uint8_t data_length, uint8_t *a
 	}
 	else if (handle == instructionButtonCharHandle + 1)
 	{
-		if (data_length < 2)
-			return;
-		
-		uint8_t instruction = att_data[0];
-		uint8_t value = att_data[1];
-		ControlMgr_setInstruction(instruction, value);
+		ControlMgr_parseInstruction(data_length, att_data);		
 	}
 }
 

@@ -86,8 +86,6 @@ float PRESSURE_Value = 0;
 uint8_t SF_Active = 0;
 uint8_t SF_6x_enabled = 0;
 uint8_t SF_change = 0;
-EulerAngle_t _eulerAngles;
-Quaternion_t _quaternion;
 uint32_t sysclk = 0;
 uint32_t hclk = 0;
 uint32_t pclk1 = 0;
@@ -114,9 +112,6 @@ static unsigned char RecallCalibrationFromMemory();
 /* Private functions ---------------------------------------------------------*/
 void IMU_init()
 {	
-	_eulerAngles.x = _eulerAngles.y = _eulerAngles.z = 0;
-	_quaternion.w = _quaternion.x = _quaternion.y = _quaternion.z = 0;
-	
 	BSP_LED_Init(LED_2);
 	BSP_LED_Off(LED_2);
 	
@@ -125,7 +120,12 @@ void IMU_init()
   
 	MotionFX_manager_init();
   
-	MotionFX_manager_start_9X();
+	if (SF_6x_enabled)
+		MotionFX_manager_start_6X();
+	else
+		MotionFX_manager_start_9X();
+	
+	SF_Active = 1;
   
 	sysclk = HAL_RCC_GetSysClockFreq();
 	hclk = HAL_RCC_GetHCLKFreq();
@@ -756,14 +756,12 @@ unsigned char RecallCalibrationFromMemory(void)
 		if (isCal == 0x01)
 		{
 		  /* Switch on the Led */
-			BSP_LED_On(LED_2);
-			SF_Active = 1;
+			BSP_LED_On(LED_2);			
 		}
 		else
 		{
 		  /* Switch off the Led */
 			BSP_LED_Off(LED_2);
-			SF_Active = 0;
 		}
 	}
 	else
