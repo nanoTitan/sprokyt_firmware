@@ -53,4 +53,14 @@ static float map(float x, float in_min, float in_max, float out_min, float out_m
 	return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
 
+static float wrap_180(float x)
+{
+	if (x < -180)
+		return x + 360;
+	if (x > 180)
+		return x - 360;
+	
+	return x;
+}
+
 #endif // _MATH_EXT_H_
