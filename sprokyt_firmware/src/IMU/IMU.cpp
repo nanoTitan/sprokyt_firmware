@@ -11,6 +11,7 @@
 #include "debug.h"
 
 extern "C" {
+#include "stm32f4xx_hal_tim.h"
 #include "stm32f4xx_nucleo.h"
 #include "MotionFX_Manager.h"
 #include "x_nucleo_iks01a1.h"
@@ -73,7 +74,6 @@ SensorAxes_t GYR_Value;
 SensorAxes_t MAG_Value;
 osxMFX_calibFactor magOffset;
 TIM_HandleTypeDef    SFTimHandle;
-TIM_OC_InitTypeDef   sConfig;
 void *ACCELERO_handle = NULL;
 void *GYRO_handle = NULL;
 void *MAGNETO_handle = NULL;
@@ -94,13 +94,11 @@ uint8_t calibIndex = 0;         // run calibration @ 25Hz
 uint8_t isCal = 0;
 
 /* Private function prototypes -----------------------------------------------*/
+static void SFTimerInit();
 static void CalibrateSensorFusion();
-static void UpdateSensorFusion();
 static void InitializeAllSensors();
 static void EnableAllSensors();
 static void SF_Handler();
-static void InitSFTicker();
-static void SFTimerInit();
 static void Accelero_Sensor_Handler();
 static void Gyro_Sensor_Handler();
 static void Magneto_Sensor_Handler();
@@ -131,13 +129,76 @@ void IMU_init()
 	hclk = HAL_RCC_GetHCLKFreq();
 	pclk1 = HAL_RCC_GetPCLK1Freq();
 	pclk2 = HAL_RCC_GetPCLK2Freq();
+	
+	SFTimerInit();
   
 	/* Check if the calibration is already available in memory */
 	RecallCalibrationFromMemory();
-	
-	/*Initialize the sensor fusion*/ 
-	InitSFTicker();
-	//SFTimerInit();
+}
+
+/**
+ * @brief  Initialize Sensor Fusion timer
+ * @param  None
+ * @retval None
+ */
+void SFTimerInit()
+{
+	TIM_OC_InitTypeDef sConfig;
+	uint16_t uhPrescalerValue;
+	//uint16_t uhCapturedValue = 0;
+  
+	/* Compute the prescaler value to have TIM counter clock equal to 10 KHz */
+	uhPrescalerValue = (uint16_t)((SystemCoreClock) / SF_TIM_COUNTER_CLK) - 1;
+  
+	/*##-1- Configure the TIM peripheral #######################################*/
+	/* Set TIMx instance */
+	SFTimHandle.Instance = TIM_SF;
+  
+	/* Initialize TIM3 peripheral as follow:
+	+ Period = 65535
+	+ Prescaler = (SystemCoreClock/2)/60000
+	+ ClockDivision = 0
+	+ Counter direction = Up
+	*/
+  
+	uint32_t timer_period = (SF_TIM_COUNTER_CLK / (1000 / SF_TIM_PERIOD)) - 1;
+	SFTimHandle.Init.Period = timer_period;
+	SFTimHandle.Init.Prescaler = uhPrescalerValue;
+	SFTimHandle.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+	SFTimHandle.Init.CounterMode = TIM_COUNTERMODE_UP;
+	SFTimHandle.Init.RepetitionCounter = 0;
+	if (HAL_TIM_OC_Init(&SFTimHandle) != HAL_OK)
+	{
+	  /* Initialization Error */
+		Error_Handler();
+	}
+  
+	/*##-2- Configure the PWM channels #########################################*/
+	/* Common configuration */
+	sConfig.OCMode = TIM_OCMODE_TIMING;
+	sConfig.OCPolarity = TIM_OCPOLARITY_HIGH;
+	sConfig.OCNPolarity = TIM_OCNPOLARITY_HIGH;
+	sConfig.OCFastMode = TIM_OCFAST_DISABLE;
+	sConfig.OCIdleState = TIM_OCIDLESTATE_SET;
+	sConfig.OCNIdleState = TIM_OCNIDLESTATE_SET;
+  
+	/* Set the pulse value for channel 1 */
+	sConfig.Pulse = timer_period / 2;
+  
+	if (HAL_TIM_OC_ConfigChannel(&SFTimHandle, &sConfig, TIM_CHANNEL_1) != HAL_OK)
+	{
+	  /* Initialization Error */
+		Error_Handler();
+	}
+  
+  
+	/*##-4- Start the Output Compare mode in interrupt mode ####################*/
+	/* Start Channel1 */
+	if (HAL_TIM_OC_Start_IT(&SFTimHandle, TIM_CHANNEL_1) != HAL_OK)
+	{
+	  /* Initialization Error */
+		Error_Handler();
+	}
 }
 
 void IMU_update(void)
@@ -169,10 +230,6 @@ void IMU_update(void)
 		Accelero_Sensor_Handler();
 		Gyro_Sensor_Handler();
 		Magneto_Sensor_Handler();
-	}
-	else
-	{
-		UpdateSensorFusion();
 	}
 }
 
@@ -312,90 +369,6 @@ void Pressure_Sensor_Handler()
 	}
 }
 
-/**
- * @brief  Initialize Sensor Fusion timer
- * @param  None
- * @retval None
- */
-void SFTimerInit()
-{
-	uint16_t uhPrescalerValue;
-	//uint16_t uhCapturedValue = 0;
-  
-	/* Compute the prescaler value to have TIM counter clock equal to 10 KHz */
-	uhPrescalerValue = (uint16_t)((SystemCoreClock) / SF_TIM_COUNTER_CLK) - 1;
-  
-	/*##-1- Configure the TIM peripheral #######################################*/
-	/* Set TIMx instance */
-	SFTimHandle.Instance = TIM_SF;
-  
-	/* Initialize TIM3 peripheral as follow:
-	+ Period = 65535
-	+ Prescaler = (SystemCoreClock/2)/60000
-	+ ClockDivision = 0
-	+ Counter direction = Up
-	*/
-  
-	uint32_t timer_period = (SF_TIM_COUNTER_CLK / (1000 / SF_TIM_PERIOD)) - 1;
-	SFTimHandle.Init.Period = timer_period;
-	SFTimHandle.Init.Prescaler = uhPrescalerValue;
-	SFTimHandle.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-	SFTimHandle.Init.CounterMode = TIM_COUNTERMODE_UP;
-	SFTimHandle.Init.RepetitionCounter = 0;
-	if (HAL_TIM_OC_Init(&SFTimHandle) != HAL_OK)
-	{
-	  /* Initialization Error */
-		Error_Handler();
-	}
-  
-	/*##-2- Configure the PWM channels #########################################*/
-	/* Common configuration */
-	sConfig.OCMode = TIM_OCMODE_TIMING;
-	sConfig.OCPolarity = TIM_OCPOLARITY_HIGH;
-	sConfig.OCNPolarity = TIM_OCNPOLARITY_HIGH;
-	sConfig.OCFastMode = TIM_OCFAST_DISABLE;
-	sConfig.OCIdleState = TIM_OCIDLESTATE_SET;
-	sConfig.OCNIdleState = TIM_OCNIDLESTATE_SET;
-  
-	/* Set the pulse value for channel 1 */
-	sConfig.Pulse = timer_period / 2;
-  
-	if (HAL_TIM_OC_ConfigChannel(&SFTimHandle, &sConfig, TIM_CHANNEL_1) != HAL_OK)
-	{
-	  /* Initialization Error */
-		Error_Handler();
-	}
-  
-  
-	/*##-4- Start the Output Compare mode in interrupt mode ####################*/
-	/* Start Channel1 */
-	if (HAL_TIM_OC_Start_IT(&SFTimHandle, TIM_CHANNEL_1) != HAL_OK)
-	{
-	  /* Initialization Error */
-		Error_Handler();
-	}
-}
-
-/**
- * @brief  Initialize Sensor Fusion timer for mbed
- * @param  None
- * @retval None
- */
-void InitSFTicker()
-{
-	//m_sfTicker.attach(&SF_Handler, 1.0f);
-}
-
-/**
- * @brief  Handles the Sensor Fusion
- * @param  Msg Sensor Fusion part of the stream
- * @retval None
- */
-void SF_Handler()
-{
-	UpdateSensorFusion();
-}
-
 void CalibrateSensorFusion()
 {
 	if (!SF_Active || isCal)
@@ -433,7 +406,12 @@ void CalibrateSensorFusion()
 	}
 }
 
-void UpdateSensorFusion()
+/**
+ * @brief  Handles the Sensor Fusion
+ * @param  Msg Sensor Fusion part of the stream
+ * @retval None
+ */
+void SF_Handler()
 {
 	if (!SF_Active)
 		return;

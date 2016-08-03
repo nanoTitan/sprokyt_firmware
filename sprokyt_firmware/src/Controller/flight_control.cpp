@@ -33,7 +33,7 @@ static void Disarm();
 /* Private functions ---------------------------------------------------------*/
 void FlightControl_init()
 {	
-	m_pidArray[PID_YAW_RATE].kP(0);
+	m_pidArray[PID_YAW_RATE].kP(2.5);
 	m_pidArray[PID_YAW_RATE].kI(0);
 	m_pidArray[PID_YAW_RATE].kD(0);
 	m_pidArray[PID_YAW_RATE].imax(50);
@@ -43,12 +43,12 @@ void FlightControl_init()
 	m_pidArray[PID_PITCH_RATE].kD(0);
 	m_pidArray[PID_PITCH_RATE].imax(50);
 
-	m_pidArray[PID_ROLL_RATE].kP(0.7f);	//	Rate only - 1.7f
+	m_pidArray[PID_ROLL_RATE].kP(0.7f);		//	Rate only - 1.7f
 	m_pidArray[PID_ROLL_RATE].kI(0.0f);	
 	m_pidArray[PID_ROLL_RATE].kD(0);
 	m_pidArray[PID_ROLL_RATE].imax(50);
 
-	m_pidArray[PID_YAW_STAB].kP(0);			// 10
+	m_pidArray[PID_YAW_STAB].kP(10.0f);		// 10
 	m_pidArray[PID_PITCH_STAB].kP(3.0f);	// 4.5f
 	m_pidArray[PID_ROLL_STAB].kP(3.5f);		// 4.5f
 }
@@ -83,7 +83,7 @@ void FlightControl_update()
 		if (m_flightMode == STABILITY_MODE)
 		{			
 			// RC Stability 
-			yaw_stab_output   = clampf(m_pidArray[PID_YAW_STAB].get_pid(m_targetYaw - sfYaw, 1), -360, 360);
+			yaw_stab_output   = clampf(m_pidArray[PID_YAW_STAB].get_pid(wrap_180(m_targetYaw - sfYaw), 1), -360, 360);
 			pitch_stab_output = clampf(m_pidArray[PID_PITCH_STAB].get_pid(m_rcPitch - sfPitch, 1), -250, 250);
 			roll_stab_output  = clampf(m_pidArray[PID_ROLL_STAB].get_pid(m_rcRoll - sfRoll, 1), -250, 250);
 		
@@ -153,8 +153,8 @@ void FlightControl_update()
 		{
 			//PRINTF("%d, %d, %d, %d\n", (int)sfRoll, (int)roll_stab_output, (int)gy, (int)roll_output);
 			//PRINTF("%d, %d, %d, %d\n", (int)sfPitch, (int)pitch_stab_output, (int)gx, (int)pitch_output);
-			//PRINTF("%d, %d, %d\n", (int)sfYaw, (int)yaw_stab_output, (int)gz, (int)yaw_output);
-			PRINTF("%.2f, %.2f\n", sfYaw, heading);					// yaw, pitch, roll
+			PRINTF("%d, %d, %d, %d\n", (int)sfYaw, (int)yaw_stab_output, (int)gz, (int)yaw_output);
+			//PRINTF("%.2f, %.2f\n", sfYaw, heading);					// yaw, pitch, roll
 			//PRINTF("%.2f, %d, %d\n", heading, (int)sfPitch, (int)sfRoll);					// yaw, pitch, roll
 			//PRINTF("%.2f, %.2f, %.2f\n", pInput->mag[0], pInput->mag[1], pInput->mag[2]);
 			//PRINTF("%d, %d, %d, %d\n", (int)powerA, (int)powerB, (int)powerC, (int)powerD);		// A, B, C, D
@@ -203,19 +203,26 @@ void Disarm()
 	m_rcThrottle = 0;
 }
 
-void FlightControl_setPIDValues(const PIDInfo& yawInfo, const PIDInfo& pitchInfo, const PIDInfo& rollInfo)
+void FlightControl_setPIDValue(int index, const PIDInfo& info)
 {
-	m_pidArray[PID_YAW_RATE].kP(yawInfo.P);
-	m_pidArray[PID_YAW_RATE].kI(yawInfo.I);
-	m_pidArray[PID_YAW_RATE].kD(yawInfo.D);
-
-	m_pidArray[PID_PITCH_RATE].kP(pitchInfo.P);
-	m_pidArray[PID_PITCH_RATE].kI(pitchInfo.I);	
-	m_pidArray[PID_PITCH_RATE].kD(pitchInfo.D);
-
-	m_pidArray[PID_ROLL_RATE].kP(rollInfo.P);
-	m_pidArray[PID_ROLL_RATE].kI(rollInfo.I);
-	m_pidArray[PID_ROLL_RATE].kD(rollInfo.D);
+	if (index == PID_YAW_RATE)
+	{
+		m_pidArray[PID_YAW_RATE].kP(info.P);
+		m_pidArray[PID_YAW_RATE].kI(info.I);
+		m_pidArray[PID_YAW_RATE].kD(info.D);
+	}
+	else if (index == PID_PITCH_RATE)
+	{
+		m_pidArray[PID_PITCH_RATE].kP(info.P);
+		m_pidArray[PID_PITCH_RATE].kI(info.I);	
+		m_pidArray[PID_PITCH_RATE].kD(info.D);
+	}
+	else if (index == PID_ROLL_RATE)
+	{
+		m_pidArray[PID_ROLL_RATE].kP(info.P);
+		m_pidArray[PID_ROLL_RATE].kI(info.I);
+		m_pidArray[PID_ROLL_RATE].kD(info.D);
+	}
 }
 
 void FlightControl_setMotor(uint8_t motorIndex, uint8_t value, uint8_t direction)

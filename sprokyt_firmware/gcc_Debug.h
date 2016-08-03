@@ -1131,7 +1131,6 @@
 #endif
 
 // --- Include directories begin --- //
-//../../../../../../../STM32/X-CUBE-BLE1/Drivers/BSP/STM32F4xx-Nucleo
 //../../../../../../../STM32/X-CUBE-BLE1/Drivers/BSP/X-NUCLEO-IDB04A1
 //../../../../../../../STM32/X-CUBE-BLE1/Middlewares/ST/LowPowerManager/Inc
 //../../../../../../../STM32/X-CUBE-BLE1/Middlewares/ST/STM32_BlueNRG/Interface
@@ -1150,6 +1149,7 @@
 //../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/Components/lsm6ds0
 //../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/Components/lsm6ds3
 //../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/X_NUCLEO_IKS01A1
+//../../../../../../../STM32/X-CUBE-BLE1/Drivers/BSP/STM32F4xx-Nucleo
 //../../../../../../../STM32/X-CUBE-MEMS1/Middlewares/ST/STM32_OSX_MotionFX_Library
 //../../../../../../../STM32/X-CUBE-MEMS1/Middlewares/ST/STM32_OSX_MotionFX_Library/Inc
 //$(LOCALAPPDATA)/VisualGDB/EmbeddedBSPs/arm-eabi/com.sysprogs.arm.mbed/libraries/mbed/targets/cmsis/TOOLCHAIN_GCC

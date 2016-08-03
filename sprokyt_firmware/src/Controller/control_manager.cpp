@@ -63,24 +63,17 @@ void ControlMgr_parseInstruction(uint8_t data_length, uint8_t *att_data)
 		uint8_t value = att_data[1];
 		ControlMgr_setInstruction(instruction, value);
 	}
-	else if (data_length == 10)
+	else if (data_length == 4)
 	{
 		uint8_t instruction = att_data[0];
-		PIDInfo yawInfo;
-		PIDInfo pitchInfo;
-		PIDInfo rollInfo;
+		PIDInfo info;
+		float pidScale = 0.1f;
 		
-		yawInfo.P = att_data[1];
-		yawInfo.I = att_data[2];
-		yawInfo.D = att_data[3];
-		pitchInfo.P = att_data[4];
-		pitchInfo.I = att_data[5];
-		pitchInfo.D = att_data[6];
-		rollInfo.P = att_data[7];
-		rollInfo.I = att_data[8];
-		rollInfo.D = att_data[9];
+		info.P	= (float)att_data[1] * pidScale;
+		info.I	= (float)att_data[2] * pidScale;
+		info.D	= (float)att_data[3] * pidScale;
 		
-		FlightControl_setPIDValues(yawInfo, pitchInfo, rollInfo);
+		FlightControl_setPIDValue(instruction, info);
 		ControlMgr_setType(CONTROLLER_FLIGHT);
 	}
 }
