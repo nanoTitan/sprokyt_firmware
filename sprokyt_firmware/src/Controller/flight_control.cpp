@@ -33,7 +33,7 @@ static void Disarm();
 /* Private functions ---------------------------------------------------------*/
 void FlightControl_init()
 {	
-	m_pidArray[PID_YAW_RATE].kP(2.5);
+	m_pidArray[PID_YAW_RATE].kP(1.0);
 	m_pidArray[PID_YAW_RATE].kI(0);
 	m_pidArray[PID_YAW_RATE].kD(0);
 	m_pidArray[PID_YAW_RATE].imax(50);
@@ -48,7 +48,7 @@ void FlightControl_init()
 	m_pidArray[PID_ROLL_RATE].kD(0);
 	m_pidArray[PID_ROLL_RATE].imax(50);
 
-	m_pidArray[PID_YAW_STAB].kP(10.0f);		// 10
+	m_pidArray[PID_YAW_STAB].kP(5.0f);		// 10
 	m_pidArray[PID_PITCH_STAB].kP(3.0f);	// 4.5f
 	m_pidArray[PID_ROLL_STAB].kP(3.5f);		// 4.5f
 }
@@ -58,7 +58,11 @@ void FlightControl_update()
 {		
 	// Don't update motors if we aren't in a connection lost state and without valid throttle values
 	if (m_rcThrottle == 0)
+	{
+		// Reset target yaw for next takeoff
+		m_targetYaw = IMU_get_sf_yaw();	
 		return;
+	}
 	
 	if (!BLE::IsConnected())
 	{
@@ -124,10 +128,10 @@ void FlightControl_update()
 		   /\
 		(D)--(C)
 		*/
-		float powerA =  m_rcThrottle + roll_output + pitch_output - yaw_output;
-		float powerB =  m_rcThrottle - roll_output + pitch_output + yaw_output;
-		float powerC =  m_rcThrottle - roll_output - pitch_output - yaw_output;
-		float powerD =  m_rcThrottle + roll_output - pitch_output + yaw_output;
+		float powerA =  m_rcThrottle + roll_output + pitch_output + yaw_output;
+		float powerB =  m_rcThrottle - roll_output + pitch_output - yaw_output;
+		float powerC =  m_rcThrottle - roll_output - pitch_output + yaw_output;
+		float powerD =  m_rcThrottle + roll_output - pitch_output - yaw_output;
 		
 		/*
 		   (A)
@@ -223,6 +227,9 @@ void FlightControl_setPIDValue(int index, const PIDInfo& info)
 		m_pidArray[PID_ROLL_RATE].kI(info.I);
 		m_pidArray[PID_ROLL_RATE].kD(info.D);
 	}
+	
+	// Reset target yaw for next takeoff
+	m_targetYaw = IMU_get_sf_yaw();	
 }
 
 void FlightControl_setMotor(uint8_t motorIndex, uint8_t value, uint8_t direction)
