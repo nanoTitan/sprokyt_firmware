@@ -6,6 +6,7 @@
 #include "BLE.h"
 #include "math_ext.h"
 #include "debug.h"
+#include <mbed.h>
 
 extern "C" {
 #include "MotionFX_Manager.h"
@@ -13,8 +14,8 @@ extern "C" {
 
 enum FLIGHT_MODE
 {
-	RATE_MODE = 0,
-	STABILITY_MODE = 1
+	RATE_MODE = 1,
+	STABILITY_MODE = 0
 };
 
 /* Private variables ---------------------------------------------------------*/
@@ -23,27 +24,35 @@ float m_rcThrottle = 0;
 float m_rcYaw = 0;
 float m_rcPitch = 0;
 float m_rcRoll = 0;
+float m_trimThrottle = 0;
+float m_trimYaw = 0;
+float m_trimPitch = 0;
+float m_trimRoll = 0;
 float m_targetYaw = 0;
+float m_trimScale = 10.0f;
 FLIGHT_MODE m_flightMode = STABILITY_MODE;
+
+Timer fcTimer;
 
 /* Private function prototypes -----------------------------------------------*/
 static void UpdateConnectionLost();
 static void Disarm();
+void FlightControl_setPIDValue(int index, const PIDInfo& info);
 
 /* Private functions ---------------------------------------------------------*/
 void FlightControl_init()
 {	
-	m_pidArray[PID_YAW_RATE].kP(1.0);
+	m_pidArray[PID_YAW_RATE].kP(0.0);
 	m_pidArray[PID_YAW_RATE].kI(0);
 	m_pidArray[PID_YAW_RATE].kD(0);
 	m_pidArray[PID_YAW_RATE].imax(50);
 	
-	m_pidArray[PID_PITCH_RATE].kP(0.7f);
+	m_pidArray[PID_PITCH_RATE].kP(1.4f);
 	m_pidArray[PID_PITCH_RATE].kI(0.0f);
 	m_pidArray[PID_PITCH_RATE].kD(0);
 	m_pidArray[PID_PITCH_RATE].imax(50);
 
-	m_pidArray[PID_ROLL_RATE].kP(0.7f);		//	Rate only - 1.7f
+	m_pidArray[PID_ROLL_RATE].kP(1.4f);		//	Rate only - 1.7f
 	m_pidArray[PID_ROLL_RATE].kI(0.0f);	
 	m_pidArray[PID_ROLL_RATE].kD(0);
 	m_pidArray[PID_ROLL_RATE].imax(50);
@@ -51,6 +60,8 @@ void FlightControl_init()
 	m_pidArray[PID_YAW_STAB].kP(5.0f);		// 10
 	m_pidArray[PID_PITCH_STAB].kP(3.0f);	// 4.5f
 	m_pidArray[PID_ROLL_STAB].kP(3.5f);		// 4.5f
+	
+	fcTimer.start();
 }
 
 
@@ -77,6 +88,12 @@ void FlightControl_update()
 	
 	if (m_rcThrottle > MIN_FLIGHT_THROTTLE)
 	{
+		// Prevent the controller from updating the ESCs too often
+		if (fcTimer.read_us() < CTRL_UPDATE_TIME)
+			return;
+		
+		fcTimer.reset();
+		
 		float yaw_stab_output   = 0;
 		float pitch_stab_output = 0;
 		float roll_stab_output  = 0;
@@ -122,16 +139,22 @@ void FlightControl_update()
 		float pitch_output = clampf(m_pidArray[PID_PITCH_RATE].get_pid(pitch_stab_output + gx, 1), -500, 500);
 		float roll_output  = clampf(m_pidArray[PID_ROLL_RATE].get_pid(roll_stab_output + gy, 1), -500, 500);
 		
+		// Trim
+		float trimA = m_trimThrottle + m_trimRoll - m_trimPitch + m_trimYaw;
+		float trimB = m_trimThrottle - m_trimRoll - m_trimPitch - m_trimYaw;
+		float trimC = m_trimThrottle - m_trimRoll + m_trimPitch + m_trimYaw;
+		float trimD = m_trimThrottle + m_trimRoll + m_trimPitch - m_trimYaw;
+		
 		/*
 		(A)--(B)
 		   \/
 		   /\
 		(D)--(C)
 		*/
-		float powerA =  m_rcThrottle + roll_output + pitch_output + yaw_output;
-		float powerB =  m_rcThrottle - roll_output + pitch_output - yaw_output;
-		float powerC =  m_rcThrottle - roll_output - pitch_output + yaw_output;
-		float powerD =  m_rcThrottle + roll_output - pitch_output - yaw_output;
+		float powerA =  m_rcThrottle + roll_output + pitch_output + yaw_output + trimA;
+		float powerB =  m_rcThrottle - roll_output + pitch_output - yaw_output + trimB;
+		float powerC =  m_rcThrottle - roll_output - pitch_output + yaw_output + trimC;
+		float powerD =  m_rcThrottle + roll_output - pitch_output - yaw_output + trimD;
 		
 		/*
 		   (A)
@@ -156,8 +179,8 @@ void FlightControl_update()
 		if (cnt == 50)
 		{
 			//PRINTF("%d, %d, %d, %d\n", (int)sfRoll, (int)roll_stab_output, (int)gy, (int)roll_output);
-			//PRINTF("%d, %d, %d, %d\n", (int)sfPitch, (int)pitch_stab_output, (int)gx, (int)pitch_output);
-			PRINTF("%d, %d, %d, %d\n", (int)sfYaw, (int)yaw_stab_output, (int)gz, (int)yaw_output);
+			PRINTF("%d, %d, %d, %d\n", (int)sfPitch, (int)pitch_stab_output, (int)gx, (int)pitch_output);
+			//PRINTF("%d, %d, %d, %d\n", (int)sfYaw, (int)yaw_stab_output, (int)gz, (int)yaw_output);
 			//PRINTF("%.2f, %.2f\n", sfYaw, heading);					// yaw, pitch, roll
 			//PRINTF("%.2f, %d, %d\n", heading, (int)sfPitch, (int)sfRoll);					// yaw, pitch, roll
 			//PRINTF("%.2f, %.2f, %.2f\n", pInput->mag[0], pInput->mag[1], pInput->mag[2]);
@@ -166,15 +189,19 @@ void FlightControl_update()
 		}
 		
 		// Set motor speed
-//		MotorController_setMotor(MOTOR_A, powerA, 0);
-//		MotorController_setMotor(MOTOR_B, powerB, 0);
-//		MotorController_setMotor(MOTOR_C, powerC, 0);		
-//		MotorController_setMotor(MOTOR_D, powerD, 0);
+#if defined(MOTORS_ENABLED)
+		MotorController_setMotor(MOTOR_A, powerA, 0);
+		MotorController_setMotor(MOTOR_B, powerB, 0);
+		MotorController_setMotor(MOTOR_C, powerC, 0);		
+		MotorController_setMotor(MOTOR_D, powerD, 0);
+#endif // MOTORS_ENABLED
 	}
 	else
 	{
+#if defined(MOTORS_ENABLED)
 		// Allow ESCs to be armed or turn motors on/off
-		//MotorController_setMotor(MOTOR_ALL, m_rcThrottle, 0);
+		MotorController_setMotor(MOTOR_ALL, m_rcThrottle, 0);
+#endif // MOTORS_ENABLED
 		
 		// Reset target yaw for next takeoff
 		m_targetYaw = IMU_get_sf_yaw();			
@@ -205,6 +232,29 @@ void Disarm()
 	// Turn motors off
 	MotorController_setMotor(MOTOR_ALL, MIN_THROTTLE, 0);
 	m_rcThrottle = 0;
+}
+
+void FlightControl_parseInstruction(uint8_t data_length, uint8_t *att_data)
+{
+	if (data_length == 2)
+	{
+		uint8_t instruction = att_data[0];
+		uint8_t value = att_data[1];
+		
+		FlightControl_setInstruction(instruction, value);
+	}
+	else if (data_length == 4)
+	{
+		uint8_t instruction = att_data[0];
+		PIDInfo info;
+		float pidScale = 0.1f;
+		
+		info.P	= (float)att_data[1] * pidScale;
+		info.I	= (float)att_data[2] * pidScale;
+		info.D	= (float)att_data[3] * pidScale;
+		
+		FlightControl_setPIDValue(instruction, info);
+	}
 }
 
 void FlightControl_setPIDValue(int index, const PIDInfo& info)
@@ -258,7 +308,26 @@ void FlightControl_setInstruction(uint8_t instruction, uint8_t value)
 	{
 		int8_t adjValue = (int8_t)value;
 		m_rcRoll = map(adjValue, -128, 127, -45, 45);
-		//m_rcRoll *= -1;
+	}
+	else if (instruction == INSTRUCTION_TRIM_THROTTLE)
+	{
+		int8_t adjValue = (int8_t)value;
+		m_trimThrottle = (float)adjValue * m_trimScale;
+	}
+	else if (instruction == INSTRUCTION_TRIM_YAW)
+	{
+		int8_t adjValue = (int8_t)value;
+		m_trimYaw = (float)adjValue * m_trimScale;
+	}
+	else if (instruction == INSTRUCTION_TRIM_PITCH)
+	{
+		int8_t adjValue = (int8_t)value;
+		m_trimPitch = (float)adjValue * m_trimScale;
+	}
+	else if (instruction == INSTRUCTION_TRIM_ROLL)
+	{
+		int8_t adjValue = (int8_t)value;
+		m_trimRoll = (float)adjValue * m_trimScale;
 	}
 }
 

@@ -4,6 +4,7 @@
 #include "imu.h"
 #include "motor_controller.h"
 #include "error.h"
+#include "debug.h"
 
 int main()
 {

@@ -14,10 +14,10 @@ static void MotorController_armESCs();
 
 void MotorController_init()
 {	
-	_bldcArray[0].period_us(2040);				// 20000 us = 50 Hz, 2040.8us = 490 Hz, 83.3 us = 12 Khz	
-	_bldcArray[1].period_us(2040);
-	_bldcArray[2].period_us(2040);
-	_bldcArray[3].period_us(2040);
+	_bldcArray[0].period_us(20000);				// 20000 us = 50 Hz, 2040.8us = 490 Hz, 83.3 us = 12 Khz	
+	_bldcArray[1].period_us(20000);
+	_bldcArray[2].period_us(20000);
+	_bldcArray[3].period_us(20000);
 	
 	//MotorController_setMotor(MOTOR_ALL, 2000, 0);
 	//wait_ms(3000);
