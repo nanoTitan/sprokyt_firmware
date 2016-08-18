@@ -1141,6 +1141,7 @@
 //../../../../../../../STM32/X-CUBE-BLE1/Middlewares/ST/STM32_BlueNRG/SimpleBlueNRG_HCI/hci
 //../../../../../../../STM32/X-CUBE-BLE1/Middlewares/ST/STM32_BlueNRG/SimpleBlueNRG_HCI/hci/controller
 //../../../../../../../STM32/X-CUBE-BLE1/Middlewares/ST/STM32_BlueNRG/SimpleBlueNRG_HCI/utils
+//../../../../../../../STM32/X-CUBE-BLE1/Drivers/BSP/STM32F4xx-Nucleo
 //../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/Components/Common
 //../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/Components/hts221
 //../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/Components/lis3mdl
@@ -1149,9 +1150,12 @@
 //../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/Components/lsm6ds0
 //../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/Components/lsm6ds3
 //../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/X_NUCLEO_IKS01A1
-//../../../../../../../STM32/X-CUBE-BLE1/Drivers/BSP/STM32F4xx-Nucleo
 //../../../../../../../STM32/X-CUBE-MEMS1/Middlewares/ST/STM32_OSX_MotionFX_Library
 //../../../../../../../STM32/X-CUBE-MEMS1/Middlewares/ST/STM32_OSX_MotionFX_Library/Inc
+//../../../../../../../STM32/X-CUBE-WIFI1/Middlewares/ST/STM32_SPWF01SA
+//../../../../../../../STM32/X-CUBE-WIFI1/Middlewares/ST/STM32_SPWF01SA/Inc
+//../../../../../../../STM32/X-CUBE-WIFI1/Middlewares/ST/STM32_SPWF01SA/Utils
+//../../../../../../../STM32/X-CUBE-WIFI1/Drivers/BSP/X-NUCLEO-IDW01M1
 //$(LOCALAPPDATA)/VisualGDB/EmbeddedBSPs/arm-eabi/com.sysprogs.arm.mbed/libraries/mbed/targets/cmsis/TOOLCHAIN_GCC
 //$(LOCALAPPDATA)/VisualGDB/EmbeddedBSPs/arm-eabi/com.sysprogs.arm.mbed/libraries/mbed/hal
 //$(LOCALAPPDATA)/VisualGDB/EmbeddedBSPs/arm-eabi/com.sysprogs.arm.mbed/libraries/mbed/targets/cmsis
@@ -1181,6 +1185,7 @@
 //src/math
 //src/Controller
 //src/PID
+//src/wifi
 // --- Include directories end --- //
 
 
