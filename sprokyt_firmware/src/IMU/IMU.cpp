@@ -170,7 +170,7 @@ void SFTimerInit()
 	if (HAL_TIM_OC_Init(&SFTimHandle) != HAL_OK)
 	{
 	  /* Initialization Error */
-		Error_Handler();
+		CError_Handler();
 	}
   
 	/*##-2- Configure the PWM channels #########################################*/
@@ -188,7 +188,7 @@ void SFTimerInit()
 	if (HAL_TIM_OC_ConfigChannel(&SFTimHandle, &sConfig, TIM_CHANNEL_1) != HAL_OK)
 	{
 	  /* Initialization Error */
-		Error_Handler();
+		CError_Handler();
 	}
   
   
@@ -197,7 +197,7 @@ void SFTimerInit()
 	if (HAL_TIM_OC_Start_IT(&SFTimHandle, TIM_CHANNEL_1) != HAL_OK)
 	{
 	  /* Initialization Error */
-		Error_Handler();
+		CError_Handler();
 	}
 }
 
@@ -273,22 +273,22 @@ void InitializeAllSensors(void)
   /* Try to use LSM6DS3 DIL24 if present, otherwise use LSM6DS0 on board */
 	DrvStatusTypeDef result = BSP_ACCELERO_Init(ACCELERO_SENSORS_AUTO, &ACCELERO_handle);		// ACCELERO_SENSORS_AUTO, LSM6DS3_X_0, LSM6DS0_X_0
 	if (result != COMPONENT_OK)
-		Error_Handler();
+		CError_Handler();
 	
 	/* Try to use LSM6DS3 if present, otherwise use LSM6DS0 */
 	result = BSP_GYRO_Init(GYRO_SENSORS_AUTO, &GYRO_handle);
 	if (result != COMPONENT_OK)
-		Error_Handler();
+		CError_Handler();
 	
 	/* Force to use LIS3MDL */
 	result = BSP_MAGNETO_Init(LIS3MDL_0, &MAGNETO_handle);
 	if (result != COMPONENT_OK)
-		Error_Handler();
+		CError_Handler();
 	
 	/* Try to use LPS22HB DIL24 or LPS25HB DIL24 if present, otherwise use LPS25HB on board */
 	result = BSP_PRESSURE_Init(PRESSURE_SENSORS_AUTO, &PRESSURE_handle);
 	if (result != COMPONENT_OK)
-		Error_Handler();
+		CError_Handler();
 }
 
 /**
@@ -585,7 +585,7 @@ unsigned char SaveCalibrationToMemory(void)
 				  /*
 				     FLASH_ErrorTypeDef errorcode = HAL_FLASH_GetError();
 				  */
-					Error_Handler();
+					CError_Handler();
 				}
 			}
       
@@ -654,7 +654,7 @@ unsigned char ResetCalibrationInMemory(void)
 	/*
 	  FLASH_ErrorTypeDef errorcode = HAL_FLASH_GetError();
 	*/
-		Error_Handler();
+		CError_Handler();
 		Success = 0;
 	}
   

@@ -39,6 +39,9 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32xx_it.h"
+#include "wifi_module.h"
+#include "stm32_spwf_wifi.h" 
+#include "wifi_globals.h"
 #include "debug.h"
 
 /** @addtogroup X-CUBE-BLE1_Applications
@@ -59,11 +62,16 @@
 /* Private variables ---------------------------------------------------------*/
 volatile uint32_t ms_counter = 0;
 volatile uint8_t button_event = 0;
-extern TIM_HandleTypeDef    SFTimHandle;
+extern TIM_HandleTypeDef SFTimHandle;
+extern SPI_HandleTypeDef SpiHandle;			/* SPI handler declared in "main.c" file */
 
-/* SPI handler declared in "main.c" file */
-extern SPI_HandleTypeDef SpiHandle;
 /* Private function prototypes -----------------------------------------------*/
+void USART1_IRQHandler(void);    
+void USART1_PRINT_IRQHandler(void);
+void USART1_EXTI_IRQHandler(void);
+void TIM3_IRQHandler(void);
+void TIM2_IRQHandler(void);
+
 /* Private functions ---------------------------------------------------------*/
 
 /******************************************************************************/
@@ -71,79 +79,115 @@ extern SPI_HandleTypeDef SpiHandle;
 /******************************************************************************/
 
 /**
-  * @brief  NMI_Handler This function handles NMI exception.
-  * @param  None
-  * @retval None
-  */
+* @brief  NMI_Handler This function handles NMI exception.
+* @param  None
+* @retval None
+*/
 void NMI_Handler(void)
 {
 }
 
 /**
-  * @brief  HardFault_Handler This function handles Hard Fault exception.
-  * @param  None
-  * @retval None
-  */
+* @brief  HardFault_Handler This function handles Hard Fault exception.
+* @param  None
+* @retval None
+*/
 void HardFault_Handler(void)
 {
-  /* Go to infinite loop when Hard Fault exception occurs */
-  while (1)
-  {
-  }
+	/* Go to infinite loop when Hard Fault exception occurs */
+	while (1)
+	{
+	}
 }
 
 /**
-  * @brief  SVC_Handler This function handles SVCall exception.
-  * @param  None
-  * @retval None
-  */
+* @brief  This function handles Memory Manage exception.
+* @param  None
+* @retval None
+*/
+void MemManage_Handler(void)
+{
+	/* Go to infinite loop when Memory Manage exception occurs */
+	while (1)
+	{ 
+	}
+}
+
+/**
+* @brief  This function handles Bus Fault exception.
+* @param  None
+* @retval None
+*/
+void BusFault_Handler(void)
+{
+	/* Go to infinite loop when Bus Fault exception occurs */
+	while (1)
+	{
+	}
+}
+
+/**
+* @brief  SVC_Handler This function handles SVCall exception.
+* @param  None
+* @retval None
+*/
 void SVC_Handler(void)
 {
 }
 
 /**
-  * @brief  DebugMon_Handler This function handles Debug Monitor exception.
-  * @param  None
-  * @retval None
-  */
+* @brief  DebugMon_Handler This function handles Debug Monitor exception.
+* @param  None
+* @retval None
+*/
 void DebugMon_Handler(void)
 {
 }
 
 /**
-  * @brief  PendSV_Handler This function handles PendSVC exception.
-  * @param  None
-  * @retval None
-  */
-//void PendSV_Handler(void)
-//{
-//}
-
-/**
-  * @brief  SysTick_Handler This function handles SysTick Handler.
-  * @param  None
-  * @retval None
-  */
-void SysTick_Handler(void)
+* @brief  PendSV_Handler This function handles PendSVC exception.
+* @param  None
+* @retval None
+*/
+void PendSV_Handler(void)
 {
-  HAL_IncTick();
-  
-  ms_counter++;
 }
 
 
 /******************************************************************************/
-/*                 STM32L0xx Peripherals Interrupt Handlers                   */
+/*                 STM32F1xx Peripherals Interrupt Handlers                   */
 /*  Add here the Interrupt Handler for the used peripheral(s) (PPP), for the  */
 /*  available peripheral interrupt handler's name please refer to the startup */
-/*  file (startup_stm32l0xx.s).                                               */
+/*  file (startup_stm32f1xx.s).                                               */
 /******************************************************************************/
 
 /**
-  * @brief  This function handles External line interrupt request for BlueNRG.
-  * @param  None
+* @brief  SysTick_Handler This function handles SysTick Handler.
+* @param  None
+* @retval None
+*/
+void SysTick_Handler(void)
+{
+	HAL_IncTick();
+	Wifi_SysTick_Isr();
+	ms_counter++;
+}
+
+/**
+  * @brief  This function GPIO EXTI Callback.
+  * @param  Pin number of the GPIO generating the EXTI IRQ
   * @retval None
   */
+//void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+//{
+  //RX_EXTI_Isr(GPIO_Pin);
+//}
+
+/**
+* @brief  This function handles External line interrupt request for BlueNRG.
+* @param  None
+* @retval None
+*/
 void BNRG_SPI_EXTI_IRQHandler(void)
 {
   HAL_GPIO_EXTI_IRQHandler(BNRG_SPI_EXTI_PIN);
@@ -151,10 +195,10 @@ void BNRG_SPI_EXTI_IRQHandler(void)
 
 
 /**
-  * @brief  This function handles the Push Button interrupt request.
-  * @param  None
-  * @retval None
-  */
+* @brief  This function handles the Push Button interrupt request.
+* @param  None
+* @retval None
+*/
 void PUSH_BUTTON_EXTI_IRQHandler(void)
 {
   HAL_GPIO_EXTI_IRQHandler(KEY_BUTTON_PIN);
@@ -162,28 +206,43 @@ void PUSH_BUTTON_EXTI_IRQHandler(void)
   button_event = 1;
 }
 
-/******************************************************************************/
-/*                 STM32L0xx Peripherals Interrupt Handlers                   */
-/*  Add here the Interrupt Handler for the used peripheral(s) (PPP), for the  */
-/*  available peripheral interrupt handler's name please refer to the startup */
-/*  file (startup_stm32l0xx.s).                                               */
-/******************************************************************************/
-
 /**
-  * @brief  This function handles TIM interrupt request.
-  * @param  None
-  * @retval None
-  */
+* @brief  This function handles TIM interrupt request.
+* @param  None
+* @retval None
+*/
 void TIM_SF_IRQHandler(void)
 {
 	HAL_TIM_IRQHandler(&SFTimHandle);
 }
 
 /**
-  * @brief  This function handles PPP interrupt request.
+  * @brief  This function handles TIM interrupt request.
   * @param  None
   * @retval None
   */
+void TIM_WIFI_IRQHandler(void)
+{
+	HAL_TIM_IRQHandler(&TimHandle);
+  
+}
+
+/**
+  * @brief  This function handles TIM interrupt request.
+  * @param  None
+  * @retval None
+  */
+void TIM_WIFI_P_IRQHandler(void)
+{
+	HAL_TIM_IRQHandler(&PushTimHandle);
+  
+}
+
+/**
+* @brief  This function handles PPP interrupt request.
+* @param  None
+* @retval None
+*/
 /*
 void PPP_IRQHandler(void)
 {
@@ -191,15 +250,78 @@ void PPP_IRQHandler(void)
 */
 
 /**
- * @}
- */ 
+* @brief  Period elapsed callback in non blocking mode
+*         This timer is used for calling back User registered functions with information
+* @param  htim : TIM handle
+* @retval None
+*/
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{ 
+	Wifi_TIM_Handler(htim);
+}
 
 /**
- * @}
- */ 
+* @brief  HAL_UART_RxCpltCallback
+*         Rx Transfer completed callback
+* @param  UsartHandle: UART handle 
+* @retval None
+*/
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandleArg)
+{
+	WiFi_HAL_UART_RxCpltCallback(UartHandleArg);
+}
 
 /**
- * @}
- */
+* @brief  HAL_UART_TxCpltCallback
+*         Tx Transfer completed callback
+* @param  UsartHandle: UART handle 
+* @retval None
+*/
+void HAL_UART_TxCpltCallback(UART_HandleTypeDef *UartHandleArg)
+{
+	WiFi_HAL_UART_TxCpltCallback(UartHandleArg);
+}
+
+/**
+  * @brief  UART error callbacks
+  * @param  UsartHandle: UART handle
+  * @note   This example shows a simple way to report transfer error, and you can
+  *         add your own implementation.
+  * @retval None
+  */
+void HAL_UART_ErrorCallback(UART_HandleTypeDef *UartHandle)
+{
+	WiFi_HAL_UART_ErrorCallback(UartHandle);
+}
+
+/******************************************************************************/
+/*                 STM32 Peripherals Interrupt Handlers						  */
+/*  Add here the Interrupt Handler for the used peripheral(s) (PPP), for the  */
+/*  available peripheral interrupt handler's name please refer to the startup */
+/*  file (startup_stm32xxx.s).												  */
+/******************************************************************************/
+
+/**
+  * @brief  This function handles USARTx Handler.
+  * @param  None
+  * @retval None
+  */
+void USARTx_IRQHandler(void)
+{
+	HAL_UART_IRQHandler(&UartWiFiHandle);
+}
+
+/**
+  * @brief  This function handles USARTx vcom Handler.
+  * @param  None
+  * @retval None
+  */
+#ifdef USART_PRINT_MSG
+void USARTx_PRINT_IRQHandler(void)
+{
+	HAL_UART_IRQHandler(&UartMsgHandle);
+}
+#endif
+
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

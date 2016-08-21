@@ -11,7 +11,7 @@ int main()
 {
 	if (HAL_Init() != HAL_OK)
 	{
-		Error_Handler(); 
+		CError_Handler(); 
 	}
 	
 	// Must initialize ControlManager before 
@@ -20,13 +20,13 @@ int main()
 	ControlMgr_setType(CONTROLLER_FLIGHT);	//  CONTROLLER_ESC_PROGRAMMER CONTROLLER_FLIGHT
 	//BLE::InitBLE();
 	SWPF01SA::Instance()->InitWifi();
-	IMU_init();
+	//IMU_init();
 	
 	while (1)
 	{
 		//BLE::Update();
 		SWPF01SA::Instance()->Update();
-		IMU_update();
+		//IMU_update();
 		ControlMgr_update();
 	}
 }

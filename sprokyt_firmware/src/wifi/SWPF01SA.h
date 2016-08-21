@@ -11,14 +11,14 @@ extern "C" {
 
 typedef enum {
 	wifi_state_reset        = 0,
-	wifi_state_ready,
-	wifi_state_idle,
-	wifi_state_connected,
-	wifi_state_connecting,
-	wifi_state_disconnected,
-	wifi_state_socket,
-	wifi_state_write,
-	wifi_state_error,
+	wifi_state_ready		= 1,
+	wifi_state_idle			= 2,
+	wifi_state_connected	= 3,
+	wifi_state_connecting	= 4,
+	wifi_state_disconnected	= 5,
+	wifi_state_socket		= 6,
+	wifi_state_write		= 7,
+	wifi_state_error		= 8,
 	wifi_undefine_state     = 0xFF,  
 } wifi_state_t;
 
@@ -34,6 +34,9 @@ public:
 private:
 	SWPF01SA();
 	~SWPF01SA();
+	
+	void WiFiTimerInit();
+	void WiFiPushTimerInit();
 	WiFi_Status_t wifi_get_AP_settings(void);
 	
 	static SWPF01SA* m_pInstance;
@@ -53,7 +56,7 @@ private:
 	uint16_t m_len;
 	
 	WiFi_Status_t m_status = WiFi_MODULE_SUCCESS;
-	char m_protocol;
+	uint8_t m_protocol;
 	uint32_t m_portnumber = 32000;
 };
 

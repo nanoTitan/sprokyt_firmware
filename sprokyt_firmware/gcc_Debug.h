@@ -1152,9 +1152,9 @@
 //../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/X_NUCLEO_IKS01A1
 //../../../../../../../STM32/X-CUBE-MEMS1/Middlewares/ST/STM32_OSX_MotionFX_Library
 //../../../../../../../STM32/X-CUBE-MEMS1/Middlewares/ST/STM32_OSX_MotionFX_Library/Inc
-//../../../../../../../STM32/X-CUBE-WIFI1/Middlewares/ST/STM32_SPWF01SA
 //../../../../../../../STM32/X-CUBE-WIFI1/Middlewares/ST/STM32_SPWF01SA/Inc
 //../../../../../../../STM32/X-CUBE-WIFI1/Middlewares/ST/STM32_SPWF01SA/Utils
+//../../../../../../../STM32/X-CUBE-WIFI1/Middlewares/ST/STM32_SPWF01SA
 //../../../../../../../STM32/X-CUBE-WIFI1/Drivers/BSP/X-NUCLEO-IDW01M1
 //$(LOCALAPPDATA)/VisualGDB/EmbeddedBSPs/arm-eabi/com.sysprogs.arm.mbed/libraries/mbed/targets/cmsis/TOOLCHAIN_GCC
 //$(LOCALAPPDATA)/VisualGDB/EmbeddedBSPs/arm-eabi/com.sysprogs.arm.mbed/libraries/mbed/hal

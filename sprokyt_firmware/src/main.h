@@ -45,12 +45,12 @@
 /* Exported constants --------------------------------------------------------*/
 /* Exported macro ------------------------------------------------------------*/
 
-/* Definition for TIMx clock resources */
+/* Definition for TIM_SF clock resources */
 #define TIM_SF			                     TIM2
 #define TIM_SF_CLK_ENABLE                    __TIM2_CLK_ENABLE
 #define TIM_SF_CLK_DISABLE                   __TIM2_CLK_DISABLE
 
-/* Definition for TIMx's NVIC */
+/* Definition for TIM_SF's NVIC */
 #define TIM_SF_IRQn							 TIM2_IRQn
 #define TIM_SF_IRQHandler					 TIM2_IRQHandler
 
