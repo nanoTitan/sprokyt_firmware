@@ -21,7 +21,7 @@ void MotorController_init()
 	
 	//MotorController_setMotor(MOTOR_ALL, 2000, 0);
 	//wait_ms(3000);
-	MotorController_setMotor(MOTOR_ALL, 1000, 0);
+	//MotorController_setMotor(MOTOR_ALL, 1000, 0);
 }
 
 void MotorController_armESCs()

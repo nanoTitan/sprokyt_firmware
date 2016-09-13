@@ -301,26 +301,26 @@ void HAL_TIM_Base_MspInit(TIM_HandleTypeDef *htim)
 	if (htim == &PushTimHandle)
 	{
 	  /* TIMx Peripheral clock enable */
-		TIM_WIFI_P_CLK_ENABLE();
+		__TIM3_CLK_ENABLE();
     
 		/*##-2- Configure the NVIC for TIMx ########################################*/
 		/* Set the TIMx priority */
-		HAL_NVIC_SetPriority(TIM_WIFI_P_IRQn, 3, 0);
+		HAL_NVIC_SetPriority(TIM3_IRQn, 3, 0);
     
 		/* Enable the TIMx global Interrupt */
-		HAL_NVIC_EnableIRQ(TIM_WIFI_P_IRQn);
+		HAL_NVIC_EnableIRQ(TIM3_IRQn);
 	}
 	else
 	{    
 	  /* TIMx Peripheral clock enable */
-		TIM_WIFI_CLK_ENABLE();
+		__TIM4_CLK_ENABLE();
     
 		/*##-2- Configure the NVIC for TIMx ########################################*/
 		/* Set the TIMx priority */
-		HAL_NVIC_SetPriority(TIM_WIFI_IRQn, 3, 0);
+		HAL_NVIC_SetPriority(TIM4_IRQn, 3, 0);
     
 		/* Enable the TIMx global Interrupt */
-		HAL_NVIC_EnableIRQ(TIM_WIFI_IRQn);
+		HAL_NVIC_EnableIRQ(TIM4_IRQn);
 	}
 }
 

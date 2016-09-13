@@ -1186,6 +1186,10 @@
 //src/Controller
 //src/PID
 //src/wifi
+//src/wifi/ESP8266Interface
+//src/wifi/ESP8266Interface/ESP8266
+//src/wifi/ESP8266Interface/Helper
+//src/wifi/ESP8266Interface/Socket
 // --- Include directories end --- //
 
 

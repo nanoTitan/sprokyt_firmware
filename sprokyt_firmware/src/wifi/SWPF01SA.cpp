@@ -63,14 +63,7 @@ bool SWPF01SA::InitWifi()
 
 	SetState(wifi_state_idle);
 
-	m_status = wifi_get_AP_settings();
-	if (m_status != WiFi_MODULE_SUCCESS)
-	{
-		PRINTF("Error in AP Settings");
-		return false;
-	}
-
-	PRINTF("\nInitializing the wifi module...");
+	PRINTF("\nInitializing WiFi module...");
 
 	  /* Init the wi-fi module */  
 	m_status = wifi_init(&m_config);
@@ -91,7 +84,6 @@ void SWPF01SA::Update()
 		break;
 
 	case wifi_state_ready:
-
 		PRINTF(" >>setting up miniAP mode...\n");
         
 		if (m_set_AP_config)
@@ -117,7 +109,7 @@ void SWPF01SA::Update()
 	case wifi_state_socket:
 		PRINTF(" >>WiFi_RW_Data\n");
 
-		      /* Read Write Socket data */        
+		/* Read Write Socket data */        
 		m_status = wifi_socket_server_open(m_portnumber, &m_protocol);
 
 		if (m_status == WiFi_MODULE_SUCCESS)
@@ -168,7 +160,7 @@ void SWPF01SA::WiFiTimerInit()
 	uint32_t uwPrescalerValue = (uint32_t)(SystemCoreClock / 10000) - 1;
   
 	/* Set TIMx instance */
-	TimHandle.Instance = TIM_WIFI;
+	TimHandle.Instance = TIM3;
 
 	/* Initialize TIMx peripheral as follows:
 	+ Period = 10000 - 1
@@ -202,7 +194,7 @@ void SWPF01SA::WiFiPushTimerInit()
 	uint32_t uwPrescalerValue = (uint32_t)(SystemCoreClock / 10000) - 1;
   
 	/* Set TIMx instance */
-	PushTimHandle.Instance = TIM_WIFI_P;
+	PushTimHandle.Instance = TIM4;
 
 	  /* Initialize TIMx peripheral as follows:
 	       + Period = 10000 - 1
@@ -229,7 +221,6 @@ WiFi_Status_t SWPF01SA::wifi_get_AP_settings(void)
 {
 	WiFi_Status_t status = WiFi_MODULE_SUCCESS;
 	
-	/*
 	PRINTF("*******************************************************\n");
 	PRINTF("                                                      *\n");
 	PRINTF(" X-CUBE-WIFI1 Expansion Software V2.1.0               *\n");
@@ -270,7 +261,6 @@ WiFi_Status_t SWPF01SA::wifi_get_AP_settings(void)
 	PRINTF("* Please make sure a server is listening at given hostname   \n");
 	PRINTF("*************************************************************\n");
 
-	*/
 	return status;	
 }
 

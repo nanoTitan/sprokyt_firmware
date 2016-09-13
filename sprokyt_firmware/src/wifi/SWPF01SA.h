@@ -41,23 +41,23 @@ private:
 	
 	static SWPF01SA* m_pInstance;
 	char m_print_msg_buff[512];
+	char m_console_ssid[40];
 	
 	wifi_state_t m_wifi_state;
 	wifi_config m_config;
 	uint8_t m_console_input[1];
-	uint8_t m_console_count = 0;
-	char m_console_ssid[40];
-	wifi_bool m_set_AP_config = WIFI_FALSE;
+	uint8_t m_console_count;	
+	wifi_bool m_set_AP_config;
 
 	char* m_ssid;
 	char* m_seckey;
-	uint8_t m_channel_num = 6;
-	WiFi_Priv_Mode m_mode = WPA_Personal;    
+	uint8_t m_channel_num;
+	WiFi_Priv_Mode m_mode;    
 	uint16_t m_len;
 	
-	WiFi_Status_t m_status = WiFi_MODULE_SUCCESS;
+	WiFi_Status_t m_status;
 	uint8_t m_protocol;
-	uint32_t m_portnumber = 32000;
+	uint32_t m_portnumber;
 };
 
 /** @addtogroup SPROKYT_BLE_Exported_Functions
