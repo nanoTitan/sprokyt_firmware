@@ -10,6 +10,7 @@ Wifi* Wifi::m_pInstance = NULL;
 Timeout timer_buffer_debug;
 CircBuffer<char> buffer_ESP8266_recv(1024);
 RawSerial pc(USBTX, USBRX);
+ESP8266 esp(D8, D2, D9, "NETGEAR35", "yellowquail877", 115200);		// tx, rx - D1, D0, D2   - 115200
 
 void print_buffer_ESP8266()
 {
@@ -30,6 +31,7 @@ Wifi::Wifi()
 
 Wifi::~Wifi()
 {
+	esp.close();
 }
 
 Wifi* Wifi::Instance()
@@ -45,7 +47,6 @@ Wifi* Wifi::Instance()
 
 void Wifi::Init()
 {
-	ESP8266 esp(D8, D2, D9, "NETGEAR35", "yellowquail877", 115200);		// tx, rx - D1, D0, D2   - 115200
 	esp.reset();	
 	//esp.startServerWithAP(DEFAULT_WIFI_SSID, DEFAULT_WIFI_PWRD, 7, 4, 700);
 	
