@@ -169,9 +169,9 @@ bool ESP8266::startUDP(char* ip, int port, int id, int length)
     return true;
 }
 
-bool ESP8266::startSoftAP(char* ssid, char* pwd, int chl, int enc)
+bool ESP8266::startServerWithAP(char* ssid, char* pwd, int chl, int ecn, int port)
 {
-    bool command_results[3];
+    bool command_results[4];
     command_results[0]=sendCommand("AT+CWMODE=2", "OK", NULL, 1000);
     command_results[1]=sendCommand("AT+CIPMUX=1", "OK", NULL, 1000);
     
@@ -180,16 +180,30 @@ bool ESP8266::startSoftAP(char* ssid, char* pwd, int chl, int enc)
     char chlstr[4];
     char encstr[4];
     sprintf(chlstr, "%d", chl);
-    sprintf(encstr, "%d", enc);
+	sprintf(encstr, "%d", ecn);
     
     command_results[2] = sendCommand(( "AT+CWSAP=\"" + (string)ssid + "\",\"" + (string)pwd + "\"," + (string)chlstr + "," + (string)encstr).c_str(), "OK", NULL, 10000);
+	if (port == 333) 
+	{
+		command_results[3] = sendCommand("AT+CIPSERVER=1", "OK", NULL, 1000);
+	}
+	else 
+	{
+		char portstr[5];
+		sprintf(portstr, "%d", port);
+		command_results[3] = sendCommand(("AT+CIPSERVER=1," + (string)portstr).c_str(), "OK", NULL, 1000);
+	}
+	
+	sendCommand("AT+CIFSR", "OK", NULL, 1000);
     
     DBG("Data Mode\r\n");
     state.cmdMode = false;
-    if (command_results[0] and command_results[1] and command_results[2]){
+	if (command_results[0] and command_results[1] and command_results[2] and command_results[3]) 
+	{
         return true;
     }
-    else{
+    else
+    {
         return false;
     }
 }
@@ -197,23 +211,29 @@ bool ESP8266::startSoftAP(char* ssid, char* pwd, int chl, int enc)
 bool ESP8266::startTCPServer(int port)
 {
     bool command_results[3];
-    command_results[0]=sendCommand("AT+CWMODE=3", "OK", NULL, 1000);
+    command_results[0]=sendCommand("AT+CWMODE=1", "OK", NULL, 1000);
     command_results[1]=sendCommand("AT+CIPMUX=1", "OK", NULL, 1000);
-    if(port == 333){
+    if(port == 333)
+    {
         command_results[2]=sendCommand("AT+CIPSERVER=1", "OK", NULL, 1000);
     }
-    else{
+    else
+    {
         char portstr[5];
         sprintf(portstr, "%d", port);
         command_results[2]=sendCommand(("AT+CIPSERVER=1," + (string)portstr).c_str(), "OK", NULL, 1000);
     }
-    //sendCommand("AT+CIFSR", "OK", NULL, 1000);
+	
+	sendCommand("AT+CIFSR", "OK", NULL, 1000);
+	
     DBG("Data Mode\r\n");
     state.cmdMode = false;
-    if (command_results[0] and command_results[1] and command_results[2]){
+    if (command_results[0] and command_results[1] and command_results[2])
+    {
         return true;
     }
-    else{
+    else
+    {
         return false;
     }
 }
@@ -347,10 +367,12 @@ void ESP8266::handler_rx(void)
 
 void ESP8266::attach_rx(bool callback)
 {
-    if (!callback) {
+    if (!callback)
+    {
         wifi.attach(NULL);
     }
-    else {
+    else
+	{
         wifi.attach(this, &ESP8266::handler_rx);
     }    
 }

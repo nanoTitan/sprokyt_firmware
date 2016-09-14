@@ -112,13 +112,14 @@ public:
     bool startUDP(char* ip, int port, int id, int length);
     
     /*
-    *Starts the ESP chip as an Access Point
+    *Starts the ESP chip as an Access Point and also starts a server
     *@param String the ssid for the Access Point to display
     *@param pwd The password for the AP
     *@param chl The channel number to be used, default 7
     *@param ecn The encryption type to be used
+    *@param port The port for server connection
     */
-    bool startSoftAP(char* ssid, char* pwd, int chl = 7, int enc = ESP8266_ENC_WAP_WAP2_PSK);
+	bool startServerWithAP(char* ssid, char* pwd, int chl = 7, int ecn = ESP8266_ENC_WAP_WAP2_PSK, int port = 333);
 
     /*
     *Starts the ESP chip as a TCP Server

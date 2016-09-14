@@ -2,6 +2,7 @@
 #include "control_manager.h"
 #include "BLE.h"
 #include "SWPF01SA.h"
+#include "Wifi.h"
 #include "imu.h"
 #include "motor_controller.h"
 #include "error.h"
@@ -18,15 +19,17 @@ int main()
 	MotorController_init();	
 	ControlMgr_init();
 	ControlMgr_setType(CONTROLLER_FLIGHT);	//  CONTROLLER_ESC_PROGRAMMER CONTROLLER_FLIGHT
-	BLE::InitBLE();
+	//BLE::InitBLE();
 	//SWPF01SA::Instance()->InitWifi();
-	IMU_init();
+	Wifi::Instance()->Init();
+	//IMU_init();
 	
 	while (1)
 	{
-		BLE::Update();
+		//BLE::Update();
 		//SWPF01SA::Instance()->Update();
-		IMU_update();
+		Wifi::Instance()->Update();
+		//IMU_update();
 		ControlMgr_update();
 	}
 }
