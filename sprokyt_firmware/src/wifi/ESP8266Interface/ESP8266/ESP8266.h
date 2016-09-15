@@ -47,6 +47,8 @@ typedef enum {
     ESP8266_ENC_WAP_WAP2_PSK  = 4, /**< WAP_WAP2_PSK */
 } ESP8266Encrypstion;
 
+typedef void(*EspReceiveCallback)(const char*);
+
 /**
  * The ESP8266 class
  */
@@ -155,6 +157,11 @@ public:
     * Reboot the wifi module
     */
     bool reboot();
+	
+	/**
+    * Set a callback when the receive handler processes a message
+    */
+	bool setReceiveCallback(EspReceiveCallback func);
 
     /**
     * Check if characters are available
@@ -225,6 +232,7 @@ protected:
     char ssid[30];
     char ipString[20];
     CircBuffer<char> buf_ESP8266;
+	EspReceiveCallback rxCallback;
 
     static ESP8266 * inst;
 

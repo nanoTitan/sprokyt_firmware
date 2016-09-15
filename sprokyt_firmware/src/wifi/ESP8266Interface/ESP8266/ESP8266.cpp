@@ -45,8 +45,11 @@
 ESP8266 * ESP8266::inst;
 char* ip = NULL;
 
-ESP8266::ESP8266(PinName tx, PinName rx, PinName reset, const char *ssid, const char *phrase, uint32_t baud) :
-    wifi(tx, rx), reset_pin(reset), buf_ESP8266(ESP_MBUFFE_MAX)
+ESP8266::ESP8266(PinName tx, PinName rx, PinName reset, const char *ssid, const char *phrase, uint32_t baud) 
+:wifi(tx, rx),
+ reset_pin(reset),
+ buf_ESP8266(ESP_MBUFFE_MAX), 
+ rxCallback(NULL)
 {
     INFO("Initializing ESP8266 object");
     memset(&state, 0, sizeof(state));
@@ -172,6 +175,8 @@ bool ESP8266::startUDP(char* ip, int port, int id, int length)
 bool ESP8266::startServerWithAP(char* ssid, char* pwd, int chl, int ecn, int port)
 {
     bool command_results[4];
+	
+	//sendCommand("AT+CWDHCP=1,1", "OK", NULL, 1000); // DHCP Enabled in Station Mode
     command_results[0]=sendCommand("AT+CWMODE=2", "OK", NULL, 1000);
     command_results[1]=sendCommand("AT+CIPMUX=1", "OK", NULL, 1000);
     
@@ -339,7 +344,6 @@ void ESP8266::reset()
     sendCommand("AT", "OK", NULL, 1000);
     sendCommand("AT+RST", "ready", NULL, 10000);
     state.associated = false;
-
 }
 
 bool ESP8266::reboot()
@@ -348,20 +352,26 @@ bool ESP8266::reboot()
     return true;
 }
 
+bool ESP8266::setReceiveCallback(EspReceiveCallback func)
+{
+	if (func)
+		rxCallback = func;
+}
+
 // sekim XXXX
 extern CircBuffer<char> buffer_ESP8266_recv;
 
 void ESP8266::handler_rx(void)
-{
+{	
     //read characters
     char c;
-    while (wifi.readable()) {
-        c=wifi.getc();
+    while (wifi.readable()) 
+    {
+        c = wifi.getc();
         buf_ESP8266.queue(c);
         //if (state.cmdMode) pc.printf("%c",c); //debug echo, needs fast serial console to prevent UART overruns
         
-        // sekim XXXX
-        buffer_ESP8266_recv.queue(c);
+	    buffer_ESP8266_recv.queue(c);
     }
 }
 
