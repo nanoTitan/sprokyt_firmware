@@ -29,6 +29,7 @@ public:
         read = 0;
         size = length + 1;
         buf = (T *)malloc(size * sizeof(T));
+		memset(buf, 0, size * sizeof(T));
     };
 	
 	bool getWrite() 
@@ -50,12 +51,28 @@ public:
 	{
         if (isFull()) 
         {
-            read++;
-            read %= size;
+	        if (read < size - 1)
+		        read++;
+	        else
+		        read = 0;
         }
+		
         buf[write++] = k;
-        write %= size;
+		if (write == size)
+			write = 0;
     }
+	
+	bool dequeue(T * c) 
+	{
+		bool empty = isEmpty();
+		if (!empty)
+		{
+			*c = buf[read++];
+			if(read == size)
+				read = 0;
+		}
+		return (!empty);
+	};
     
     void flush() 
     {
@@ -70,39 +87,40 @@ public:
 	
 	uint32_t getLength(uint32_t indx) 
 	{
-		return (indx >= read) ? indx - read + 1 : size - read + indx + 1;
+		if (indx >= read)
+			return indx - read + 1;
+		else
+			return size - read + indx + 1;
 	};
 	
-	T getAt(uint32_t i)
-	{
-		uint32_t curr = read + i;
-		curr %= size;		
-		return buf[curr];
+	T* getAt(uint32_t i)
+	{		
+		uint32_t curr;
+		if (isValid(i, &curr))
+		{
+			return &buf[curr];
+		}
+		
+		return NULL;
 	};
 	
-	bool isValid(uint32_t i)
+	bool isValid(uint32_t i, uint32_t* i_out = NULL)
 	{
 		if (isEmpty())
 			return false;
 		
-		uint32_t curr = read + i;
-		curr %= size;	
+		bool valid = false;
+		uint32_t curr = (read + i) % size;		
 		if (write < read)
-			return curr >= read || curr < write;
+			valid = (curr >= read) || (curr < write);
+		else if(curr < write)
+			valid = true;
+			
+		if (i_out && valid)
+			*i_out = curr;
 		
-		return curr < write;
+		return valid;
 	};
-
-    bool dequeue(T * c) 
-    {
-        bool empty = isEmpty();
-        if (!empty)
-        {
-            *c = buf[read++];
-            read %= size;
-        }
-        return(!empty);
-    };
 	
 	uint32_t find(T& c)
     {

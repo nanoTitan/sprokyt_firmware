@@ -87,6 +87,51 @@ void NMI_Handler(void)
 {
 }
 
+void prvGetRegistersFromStack(uint32_t *pulFaultStackAddress)
+{
+/* These are volatile to try and prevent the compiler/linker optimising them
+away as the variables never actually get used.  If the debugger won't show the
+values of the variables, make them global my moving their declaration outside
+of this function. */
+	volatile uint32_t r0;
+	volatile uint32_t r1;
+	volatile uint32_t r2;
+	volatile uint32_t r3;
+	volatile uint32_t r12;
+	volatile uint32_t lr; /* Link register. */
+	volatile uint32_t pc; /* Program counter. */
+	volatile uint32_t psr;/* Program status register. */
+
+	r0 = pulFaultStackAddress[0];
+	r1 = pulFaultStackAddress[1];
+	r2 = pulFaultStackAddress[2];
+	r3 = pulFaultStackAddress[3];
+
+	r12 = pulFaultStackAddress[4];
+	lr = pulFaultStackAddress[5];
+	pc = pulFaultStackAddress[6];
+	psr = pulFaultStackAddress[7];
+	
+	PRINTF("\n\n[Hard fault handler - all numbers in hex]\n");
+	PRINTF("R0 = %x\r\n", r0);
+	PRINTF("R1 = %x\r\n", r1);
+	PRINTF("R2 = %x\r\n", r2);
+	PRINTF("R3 = %x\r\n", r3);
+	PRINTF("R12 = %xv\n", r12);
+	PRINTF("LR [R14] = %x  subroutine call return addressv\n", lr);
+	PRINTF("PC [R15] = %x  program counter\r\n", pc);
+	PRINTF("PSR = %x\r\n", psr);
+	PRINTF("BFAR = %x\r\n", (*((volatile unsigned long *)(0xE000ED38))));
+	PRINTF("CFSR = %x\r\n", (*((volatile unsigned long *)(0xE000ED28))));
+	PRINTF("HFSR = %x\r\n", (*((volatile unsigned long *)(0xE000ED2C))));
+	PRINTF("DFSR = %x\r\n", (*((volatile unsigned long *)(0xE000ED30))));
+	PRINTF("AFSR = %x\r\n", (*((volatile unsigned long *)(0xE000ED3C))));
+	PRINTF("SCB_SHCSR = %x\r\n", SCB->SHCSR);
+
+	    /* When the following line is hit, the variables contain the register values. */
+	for (;;);
+}
+
 /**
 * @brief  HardFault_Handler This function handles Hard Fault exception.
 * @param  None
@@ -94,10 +139,20 @@ void NMI_Handler(void)
 */
 void HardFault_Handler(void)
 {
+	PRINTF("Hard Fault Exception\r\n");
+	
 	/* Go to infinite loop when Hard Fault exception occurs */
-	while (1)
-	{
-	}
+	__asm volatile
+    (
+        " tst lr, #4                                                \n"
+        " ite eq                                                    \n"
+        " mrseq r0, msp                                             \n"
+        " mrsne r0, psp                                             \n"
+        " ldr r1, [r0, #24]                                         \n"
+        " ldr r2, handler2_address_const                            \n"
+        " bx r2                                                     \n"
+        " handler2_address_const: .word prvGetRegistersFromStack    \n"
+    );
 }
 
 /**
@@ -107,6 +162,8 @@ void HardFault_Handler(void)
 */
 void MemManage_Handler(void)
 {
+	PRINTF("Memory Manage Exception\r\n");
+	
 	/* Go to infinite loop when Memory Manage exception occurs */
 	while (1)
 	{ 
@@ -120,6 +177,8 @@ void MemManage_Handler(void)
 */
 void BusFault_Handler(void)
 {
+	PRINTF("Bus Fault Exception\r\n");
+	
 	/* Go to infinite loop when Bus Fault exception occurs */
 	while (1)
 	{
@@ -133,6 +192,11 @@ void BusFault_Handler(void)
 */
 void SVC_Handler(void)
 {
+	PRINTF("SVC Fault Exception\r\n");
+	
+	while (1)
+	{
+	}
 }
 
 /**
@@ -142,6 +206,11 @@ void SVC_Handler(void)
 */
 void DebugMon_Handler(void)
 {
+	PRINTF("Debug Monitor Exception\r\n");
+	
+	while (1)
+	{
+	}
 }
 
 /**
@@ -151,6 +220,11 @@ void DebugMon_Handler(void)
 */
 void PendSV_Handler(void)
 {
+	PRINTF("PendSVC Exception\r\n");
+	
+	while (1)
+	{
+	}
 }
 
 

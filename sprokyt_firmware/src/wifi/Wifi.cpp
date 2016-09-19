@@ -76,9 +76,9 @@ void Wifi::Reset()
 }
 
 bool Wifi::ParseIPD()
-{
+{	
 	// Remove "+IPD,x,
-	char c;
+	char* c = NULL;
 	char szBuff[4] = {0, 0, 0, 0};
 	int msgSz = 0;
 	int bytesRead = 7;
@@ -91,7 +91,10 @@ bool Wifi::ParseIPD()
 	for(int i = 4; i > 0; --i)
 	{
 		c = buffer_ESP8266_recv.getAt(bytesRead);
-		if (c == ':')
+		if (!c)
+			return false;
+		
+		if (*c == ':')
 		{
 			msgSz = strtol(szBuff, NULL, 0);
 			++bytesRead;
@@ -99,7 +102,7 @@ bool Wifi::ParseIPD()
 		}
 		else
 		{
-			szBuff[indx] = c;
+			szBuff[indx] = *c;
 			++indx;
 			++bytesRead;
 		}
@@ -108,32 +111,51 @@ bool Wifi::ParseIPD()
 	if ( !buffer_ESP8266_recv.isValid(bytesRead + msgSz - 1) )
 		return false;
 	
+	bool plus = false;
 	for (int i = msgSz; i > 0; --i)
 	{
 		c = buffer_ESP8266_recv.getAt(bytesRead++);
-		m_rxData.push_back(c);
+		m_rxData.push_back(*c);
+		if (*c == '+')
+			plus = true;
+		else if (plus && *c == 'I')
+		{
+			PRINTF("Parsing too much!!!");
+		}
+		else
+			plus = false;
 	}
 	
 	for (int i = bytesRead; i > 0; --i)
 		DequeueRxBuff();
 	
+	ParseInstructions();
 	return true;
 }
 
 void Wifi::ParseInstructions()
 {
+	//PRINTF("ParseInstructions\r\n");
+	
 	int indx = 0;
 	uint8_t data[16];
 	bool parsedInstr = false;
 	while (indx < m_rxData.size())
 	{
 		int instrSz = m_rxData[indx++];
+		if (instrSz != 2)
+		{
+			PRINTF("Instr not size 3!!!\r\n");
+		}
+		
 		if (m_rxData.size() - 1 < instrSz)
 			break;
 		
 		for (int i = 0; i < instrSz; ++i)
 		{
 			data[i] = m_rxData[indx++];
+			if(i > 15)
+				PRINTF("data is too small!!!\r\n");
 		}
 		
 		ControlMgr_parseInstruction(instrSz, data);
@@ -141,7 +163,17 @@ void Wifi::ParseInstructions()
 	}
 	
 	if (parsedInstr)
+	{		
+		if (indx > m_rxData.size())
+		{
+			PRINTF("indx > size\r\n");
+			indx = m_rxData.size();
+		}
+		
+		//PRINTF("m_rxData erase: %d %d\r\n", m_rxData.size(), indx);
 		m_rxData.erase(m_rxData.begin(), m_rxData.begin() + indx);
+	}
+		
 }
 
 void Wifi::RxCallback()
@@ -173,15 +205,10 @@ void Wifi::HandleRx()
 		{
 			++m_numConnections;
 			
-			uint32_t length = buffer_ESP8266_recv.getLength(indx + strlen(term)) ;
-			string s;
+			uint32_t length = buffer_ESP8266_recv.getLength(indx + strlen(term));
 			for (uint32_t i = 0; i < length; ++i)
-			{
-				buffer_ESP8266_recv.dequeue(&c);
-				s.push_back(c);
-			}
-			
-			PRINTF(s.c_str()); PRINTF("\r\n");			
+				DequeueRxBuff();
+					
 			continue;
 		}
 		
@@ -201,14 +228,9 @@ void Wifi::HandleRx()
 				m_numConnections = 0;
 			
 			uint32_t length = buffer_ESP8266_recv.getLength(indx + 7);
-			string s;
 			for (uint32_t i = 0; i < length; ++i)
-			{
-				buffer_ESP8266_recv.dequeue(&c);
-				s.push_back(c);
-			}
+				DequeueRxBuff();		
 			
-			PRINTF(s.c_str()); PRINTF("\r\n");			
 			continue;
 		}
 		
@@ -225,7 +247,7 @@ void Wifi::HandleRx()
 				
 				if (ParseIPD())
 				{
-					ParseInstructions();
+					//ParseInstructions();
 					continue;
 				}
 				
@@ -279,7 +301,7 @@ void Wifi::PrintBufferESP8266()
 	while (buffer_ESP8266_recv.available())
 	{		
 		buffer_ESP8266_recv.dequeue(&c);
-		pc.putc(c);
+		//pc.putc(c);
 	}
 	
 	//timer_buffer_debug.attach(this, &Wifi::PrintBufferESP8266, 0.1);

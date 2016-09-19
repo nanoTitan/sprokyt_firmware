@@ -9,7 +9,7 @@
 #include "debug.h"
 
 int main()
-{
+{	
 	if (HAL_Init() != HAL_OK)
 	{
 		CError_Handler(); 
