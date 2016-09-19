@@ -190,6 +190,7 @@ void BusFault_Handler(void)
 * @param  None
 * @retval None
 */
+/*
 void SVC_Handler(void)
 {
 	PRINTF("SVC Fault Exception\r\n");
@@ -198,6 +199,7 @@ void SVC_Handler(void)
 	{
 	}
 }
+*/
 
 /**
 * @brief  DebugMon_Handler This function handles Debug Monitor exception.
@@ -218,6 +220,7 @@ void DebugMon_Handler(void)
 * @param  None
 * @retval None
 */
+/*
 void PendSV_Handler(void)
 {
 	PRINTF("PendSVC Exception\r\n");
@@ -226,7 +229,7 @@ void PendSV_Handler(void)
 	{
 	}
 }
-
+*/
 
 /******************************************************************************/
 /*                 STM32F1xx Peripherals Interrupt Handlers                   */
@@ -240,12 +243,14 @@ void PendSV_Handler(void)
 * @param  None
 * @retval None
 */
+/*
 void SysTick_Handler(void)
 {
 	HAL_IncTick();
 	Wifi_SysTick_Isr();
 	ms_counter++;
 }
+*/
 
 /**
   * @brief  This function GPIO EXTI Callback.
