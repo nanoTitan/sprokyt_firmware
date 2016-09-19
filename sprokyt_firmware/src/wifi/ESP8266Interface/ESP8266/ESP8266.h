@@ -157,11 +157,6 @@ public:
     * Reboot the wifi module
     */
     bool reboot();
-	
-	/**
-    * Set a callback when the receive handler processes a message
-    */
-	bool setReceiveCallback(EspReceiveCallback func);
 
     /**
     * Check if characters are available
@@ -232,7 +227,6 @@ protected:
     char ssid[30];
     char ipString[20];
     CircBuffer<char> buf_ESP8266;
-	EspReceiveCallback rxCallback;
 
     static ESP8266 * inst;
 

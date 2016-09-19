@@ -4,6 +4,7 @@
 #include "ESP8266.h"
 #include "Endpoint.h"
 #include "TCPSocketServer.h"
+#include "rtos.h"
 #include <string>
 #include <vector>
 
@@ -18,7 +19,7 @@ public:
 	void Reset();
 	bool IsConnected() { return m_numConnections != 0; }
 	
-	static void RxCallback();
+	static void RxCallback(void const *args);
 	
 private:
 	Wifi();
@@ -36,6 +37,7 @@ private:
 	Timeout m_rxTimer;
 	string m_rxStr;	
 	std::vector<uint8_t> m_rxData;
+	Thread m_thread;
 	int m_numConnections;	
 	bool m_rxTimerAttached;
 	bool m_isInitialized;

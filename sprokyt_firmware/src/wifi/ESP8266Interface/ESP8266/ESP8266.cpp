@@ -49,8 +49,7 @@ char* ip = NULL;
 ESP8266::ESP8266(PinName tx, PinName rx, PinName reset, const char *ssid, const char *phrase, uint32_t baud) 
 :wifi(tx, rx),
  reset_pin(reset),
- buf_ESP8266(ESP_MBUFFE_MAX), 
- rxCallback(NULL)
+ buf_ESP8266(ESP_MBUFFE_MAX)
 {
     INFO("Initializing ESP8266 object");
     memset(&state, 0, sizeof(state));
@@ -351,12 +350,6 @@ bool ESP8266::reboot()
 {
     reset();
     return true;
-}
-
-bool ESP8266::setReceiveCallback(EspReceiveCallback func)
-{
-	if (func)
-		rxCallback = func;
 }
 
 // sekim XXXX

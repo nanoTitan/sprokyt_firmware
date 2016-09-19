@@ -180,6 +180,7 @@ void FlightControl_update()
 		++cnt;
 		if (cnt == 50)
 		{
+			PRINTF("%d, %d, %d, %d\r\n", (int)m_rcThrottle, (int)m_rcYaw, (int)m_rcPitch, (int)m_rcRoll);
 			//PRINTF("%d, %d, %d, %d\r\n", (int)sfRoll, (int)roll_stab_output, (int)gy, (int)roll_output);
 			//PRINTF("%d, %d, %d, %d\r\n", (int)sfPitch, (int)pitch_stab_output, (int)gx, (int)pitch_output);
 			//PRINTF("%d, %d, %d, %d\r\n", (int)sfYaw, (int)yaw_stab_output, (int)gz, (int)yaw_output);

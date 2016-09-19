@@ -1,5 +1,6 @@
 #include "Wifi.h"
 #include "control_manager.h"
+#include "rtos.h"
 #include <algorithm>
 #include "debug.h"
 
@@ -17,11 +18,11 @@ ESP8266 esp(D8, D2, D9, "NETGEAR35", "yellowquail877", 115200);		// tx, rx - D1,
 Wifi::Wifi()
 :m_numConnections(0),
  m_rxTimerAttached(false),
- m_isInitialized(false)
+ m_isInitialized(false),
+ m_thread(Wifi::RxCallback)
 {
 	pc.baud(9600);	
-	HandleRx();
-	esp.setReceiveCallback(RxCallback);
+	//HandleRx();
 }
 
 Wifi::~Wifi()
@@ -176,123 +177,105 @@ void Wifi::ParseInstructions()
 		
 }
 
-void Wifi::RxCallback()
+void Wifi::RxCallback(void const *args)
 {
-	//Instance()->m_rxTimer.attach(Instance(), &Wifi::HandleRx, 0.1);
+	while (m_pInstance == NULL)
+		Thread::wait(1000);
+	
+	Instance()->HandleRx();
 }
 
 void Wifi::HandleRx()
 {	
-	float resetTime = 0.1f;
-	if (!m_isInitialized || buffer_ESP8266_recv.isEmpty())
-	{
-		PrintBufferESP8266();
-		timer_buffer_debug.attach(this, &Wifi::HandleRx, resetTime);
-		return;
-	}
-	
-	char c;
-	const char* term = NULL;
-	uint32_t indx = 0;
-	bool partialInstrFound = false;
-	
+	float resetTime = 100;
 	while (true)
 	{		
-		// "Connect"
-		term = "CONNECT";
-		indx = buffer_ESP8266_recv.find(term, strlen(term));
-		if (indx != -1)
+		if (!m_isInitialized || buffer_ESP8266_recv.isEmpty())
 		{
-			++m_numConnections;
-			
-			uint32_t length = buffer_ESP8266_recv.getLength(indx + strlen(term));
-			for (uint32_t i = 0; i < length; ++i)
-				DequeueRxBuff();
-					
+			PrintBufferESP8266();
+			//timer_buffer_debug.attach(this, &Wifi::HandleRx, resetTime);
+			Thread::wait(resetTime);
 			continue;
 		}
-		
-		// "Disconnect"
-		term = "CLOSED";
-		indx = buffer_ESP8266_recv.find(term, strlen(term));
-		if (indx != -1)
-		{
-			--m_numConnections;
-			if (m_numConnections == 0)
-			{
-				m_rxData.erase(m_rxData.begin(), m_rxData.end());
-				ControlMgr_connectionLost();
-			}
-			
-			if (m_numConnections < 0)
-				m_numConnections = 0;
-			
-			uint32_t length = buffer_ESP8266_recv.getLength(indx + 7);
-			for (uint32_t i = 0; i < length; ++i)
-				DequeueRxBuff();		
-			
-			continue;
-		}
-		
-		// "+IPD"
-		if (m_numConnections > 0)
-		{			
-			term = "+IPD";
+	
+		char c;
+		const char* term = NULL;
+		uint32_t indx = 0;
+		bool partialInstrFound = false;
+	
+		while (true)
+		{		
+			// "Connect"
+			term = "CONNECT";
 			indx = buffer_ESP8266_recv.find(term, strlen(term));
 			if (indx != -1)
 			{
-				uint32_t length = buffer_ESP8266_recv.getLength(indx);
-				for (uint32_t i = length - 1; i > 0; --i)
+				++m_numConnections;
+			
+				uint32_t length = buffer_ESP8266_recv.getLength(indx + strlen(term));
+				for (uint32_t i = 0; i < length; ++i)
 					DequeueRxBuff();
-				
-				if (ParseIPD())
-				{
-					//ParseInstructions();
-					continue;
-				}
-				
-				partialInstrFound = true;
+					
+				continue;
 			}
+		
+			// "Disconnect"
+			term = "CLOSED";
+			indx = buffer_ESP8266_recv.find(term, strlen(term));
+			if (indx != -1)
+			{
+				--m_numConnections;
+				if (m_numConnections == 0)
+				{
+					m_rxData.erase(m_rxData.begin(), m_rxData.end());
+					ControlMgr_connectionLost();
+				}
+			
+				if (m_numConnections < 0)
+					m_numConnections = 0;
+			
+				uint32_t length = buffer_ESP8266_recv.getLength(indx + 7);
+				for (uint32_t i = 0; i < length; ++i)
+					DequeueRxBuff();		
+			
+				continue;
+			}
+		
+			// "+IPD"
+			if (m_numConnections > 0)
+			{			
+				term = "+IPD";
+				indx = buffer_ESP8266_recv.find(term, strlen(term));
+				if (indx != -1)
+				{
+					uint32_t length = buffer_ESP8266_recv.getLength(indx);
+					for (uint32_t i = length - 1; i > 0; --i)
+						DequeueRxBuff();
+				
+					if (ParseIPD())
+					{
+						//ParseInstructions();
+						continue;
+					}
+				
+					partialInstrFound = true;
+				}
+			}
+		
+			if (partialInstrFound)
+			{	
+				PRINTF("Partial Instr Found. Clearing rxData buffer!\r\n");
+				m_rxData.erase(m_rxData.begin(), m_rxData.end());
+			}
+			
+			PrintBufferESP8266();
+			break;
 		}
 		
-		if (!partialInstrFound)
-		{			
-			PrintBufferESP8266();			
-		}
-		
-		break;
-		
-		// "Carriage Return"
-//		while (true)
-//		{
-//			c = '\r';
-//			uint32_t indx = buffer_ESP8266_recv.find(c);
-//			if (indx == -1)
-//				break;
-//			
-//			uint32_t length = buffer_ESP8266_recv.getLength(indx);
-//			for (uint32_t i = length; i > 0; --i)
-//				DequeueRxBuff();
-//		}
-//		
-//		// Newline
-//		while (true)
-//		{
-//			c = '\n';
-//			uint32_t indx = buffer_ESP8266_recv.find(c);
-//			if (indx == -1)
-//				break;
-//			
-//			uint32_t length = buffer_ESP8266_recv.getLength(indx);
-//			for (uint32_t i = length; i > 0; --i)
-//				DequeueRxBuff();
-//		}
-//		
-//		// We got to the end, so leave
-//		break;
+		Thread::wait(resetTime);
 	}
 	
-	timer_buffer_debug.attach(this, &Wifi::HandleRx, resetTime);
+	//timer_buffer_debug.attach(this, &Wifi::HandleRx, resetTime);
 }
 
 void Wifi::PrintBufferESP8266()
@@ -313,6 +296,6 @@ void Wifi::DequeueRxBuff()
 	{
 		char c;
 		buffer_ESP8266_recv.dequeue(&c);
-		pc.putc(c);
+		//pc.putc(c);
 	}
 }
