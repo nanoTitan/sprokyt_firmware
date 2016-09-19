@@ -20,25 +20,36 @@
 #define CIRCBUFFER_H_
 
 template <class T>
-class CircBuffer {
+class CircBuffer 
+{
 public:
-    CircBuffer(int length) {
+    CircBuffer(int length)
+	{
         write = 0;
         read = 0;
         size = length + 1;
         buf = (T *)malloc(size * sizeof(T));
     };
+	
+	bool getWrite() 
+	{
+		return write;
+	};
 
-    bool isFull() {
+    bool isFull() 
+	{
         return (((write + 1) % size) == read);
     };
 
-    bool isEmpty() {
+    bool isEmpty()
+	{
         return (read == write);
     };
 
-    void queue(T k) {
-        if (isFull()) {
+    void queue(T k) 
+	{
+        if (isFull()) 
+        {
             read++;
             read %= size;
         }
@@ -46,24 +57,109 @@ public:
         write %= size;
     }
     
-    void flush() {
+    void flush() 
+    {
         read = 0;
         write = 0;
     }
     
-
-    uint32_t available() {
+    uint32_t available() 
+    {
         return (write >= read) ? write - read : size - read + write;
     };
+	
+	uint32_t getLength(uint32_t indx) 
+	{
+		return (indx >= read) ? indx - read + 1 : size - read + indx + 1;
+	};
+	
+	T getAt(uint32_t i)
+	{
+		uint32_t curr = read + i;
+		curr %= size;		
+		return buf[curr];
+	};
+	
+	bool isValid(uint32_t i)
+	{
+		if (isEmpty())
+			return false;
+		
+		uint32_t curr = read + i;
+		curr %= size;	
+		if (write < read)
+			return curr >= read || curr < write;
+		
+		return curr < write;
+	};
 
-    bool dequeue(T * c) {
+    bool dequeue(T * c) 
+    {
         bool empty = isEmpty();
-        if (!empty) {
+        if (!empty)
+        {
             *c = buf[read++];
             read %= size;
         }
         return(!empty);
     };
+	
+	uint32_t find(T& c)
+    {
+		if (isEmpty())
+			return -1;
+		
+	    uint32_t end = write;	// Gaurd against volatile write
+	    uint32_t curr = read;
+	    T x;
+	    
+	    while (curr != end)
+	    {
+		    x = buf[curr];
+		    if (c == x)
+			    return curr;
+		    
+		    ++curr;
+		    if (curr == size)
+			    curr = 0;
+		}
+		
+		return -1;
+	};
+	
+	uint32_t find(const T* s, size_t arraySz)
+	{
+		if (isEmpty() || arraySz == 0 || available() < arraySz)
+			return -1;
+		
+		uint32_t end = write;	// Gaurd against volatile write
+		uint32_t curr = read;
+		uint32_t last = 0;
+		uint32_t indx = 0;
+	    
+		while (curr != end)
+		{
+			bool found = true;
+			for (size_t i = 0; i < arraySz; ++i)
+			{
+				if (s[i] != buf[curr + i])
+				{
+					found = false;
+					break;
+				}
+			}
+			
+			if (found)
+				return curr;
+			
+			if (curr < size - 1)
+				++curr;
+			else
+				curr = 0;
+		}
+		
+		return -1;
+	};
 
 private:
     volatile uint32_t write;

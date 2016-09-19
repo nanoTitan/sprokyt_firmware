@@ -20,6 +20,7 @@
 #include "ESP8266.h"
 #include "Endpoint.h"
 #include <string>
+#include <vector>
 #include <algorithm>
 
 //Debug is disabled by default
@@ -359,7 +360,7 @@ bool ESP8266::setReceiveCallback(EspReceiveCallback func)
 }
 
 // sekim XXXX
-extern CircBuffer<char> buffer_ESP8266_recv;
+extern CircBuffer<char> buffer_ESP8266_recv;	// buffer for printing
 
 void ESP8266::handler_rx(void)
 {	
@@ -370,7 +371,6 @@ void ESP8266::handler_rx(void)
         c = wifi.getc();
         buf_ESP8266.queue(c);
         //if (state.cmdMode) pc.printf("%c",c); //debug echo, needs fast serial console to prevent UART overruns
-        
 	    buffer_ESP8266_recv.queue(c);
     }
 }

@@ -47,7 +47,7 @@ typedef enum {
     ESP8266_ENC_WAP_WAP2_PSK  = 4, /**< WAP_WAP2_PSK */
 } ESP8266Encrypstion;
 
-typedef void(*EspReceiveCallback)(const char*);
+typedef void(*EspReceiveCallback)();
 
 /**
  * The ESP8266 class

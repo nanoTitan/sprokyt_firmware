@@ -4,6 +4,7 @@
 #include "constants.h"
 #include "PID.h"
 #include "BLE.h"
+#include "Wifi.h"
 #include "math_ext.h"
 #include "debug.h"
 #include <mbed.h>
@@ -75,7 +76,8 @@ void FlightControl_update()
 		return;
 	}
 	
-	if (!BLE::IsConnected())
+	//if (!BLE::IsConnected())
+	if(!Wifi::Instance()->IsConnected())
 	{
 		if (m_rcThrottle > MIN_FLIGHT_THROTTLE)
 			UpdateConnectionLost();
