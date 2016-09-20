@@ -193,7 +193,6 @@ void Wifi::HandleRx()
 		if (!m_isInitialized || buffer_ESP8266_recv.isEmpty())
 		{
 			PrintBufferESP8266();
-			//timer_buffer_debug.attach(this, &Wifi::HandleRx, resetTime);
 			Thread::wait(resetTime);
 			continue;
 		}
@@ -253,10 +252,7 @@ void Wifi::HandleRx()
 						DequeueRxBuff();
 				
 					if (ParseIPD())
-					{
-						//ParseInstructions();
 						continue;
-					}
 				
 					partialInstrFound = true;
 				}
@@ -274,8 +270,6 @@ void Wifi::HandleRx()
 		
 		Thread::wait(resetTime);
 	}
-	
-	//timer_buffer_debug.attach(this, &Wifi::HandleRx, resetTime);
 }
 
 void Wifi::PrintBufferESP8266()
@@ -284,10 +278,11 @@ void Wifi::PrintBufferESP8266()
 	while (buffer_ESP8266_recv.available())
 	{		
 		buffer_ESP8266_recv.dequeue(&c);
-		//pc.putc(c);
+		
+#ifdef PRINT_WIFI
+		pc.putc(c);
+#endif // PRINT_WIFI
 	}
-	
-	//timer_buffer_debug.attach(this, &Wifi::PrintBufferESP8266, 0.1);
 }
 
 void Wifi::DequeueRxBuff()
@@ -296,6 +291,9 @@ void Wifi::DequeueRxBuff()
 	{
 		char c;
 		buffer_ESP8266_recv.dequeue(&c);
-		//pc.putc(c);
+
+#ifdef PRINT_WIFI
+		pc.putc(c);
+#endif // PRINT_WIFI
 	}
 }

@@ -8,7 +8,7 @@
 #include <string>
 #include <vector>
 
-#define MAX_RX_DATA_SIZE 1024
+#define PRINT_WIFI
 
 class Wifi
 {
