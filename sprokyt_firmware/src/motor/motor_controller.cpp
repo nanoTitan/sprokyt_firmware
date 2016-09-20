@@ -1,10 +1,13 @@
 #include "motor_controller.h"
 #include "mbed.h"
+#include "TB6612FNG.h"
 #include "constants.h"
 #include "math_ext.h"
 
 /* Private Variables ------------------------------------------------------------------*/
-PwmOut _bldcArray[4] = { D9, D10, PC_9, PC_8  };
+//PwmOut _bldcArray[4] = { D9, D10, PC_9, PC_8  };
+TB6612FNG motorDriver1(D6, A1, A0, D9, D13, D12, A2);
+TB6612FNG motorDriver2(D10, PA_15, D7, D11, PC_3, PC_4, PC_2);
 Timeout _motorArmTimeout;
 bool _motorsArmed = false;
 
@@ -14,14 +17,17 @@ static void MotorController_armESCs();
 
 void MotorController_init()
 {	
-	_bldcArray[0].period_us(20000);				// 20000 us = 50 Hz, 2040.8us = 490 Hz, 83.3 us = 12 Khz	
-	_bldcArray[1].period_us(20000);
-	_bldcArray[2].period_us(20000);
-	_bldcArray[3].period_us(20000);
+//	_bldcArray[0].period_us(20000);				// 20000 us = 50 Hz, 2040.8us = 490 Hz, 83.3 us = 12 Khz	
+//	_bldcArray[1].period_us(20000);
+//	_bldcArray[2].period_us(20000);
+//	_bldcArray[3].period_us(20000);
 	
-	//MotorController_setMotor(MOTOR_ALL, 2000, 0);
-	//wait_ms(3000);
-	//MotorController_setMotor(MOTOR_ALL, 1000, 0);
+	float fPwmPeriod = 0.00002f;      // 50KHz
+	motorDriver1.setPwmAperiod(fPwmPeriod);
+	motorDriver1.setPwmBperiod(fPwmPeriod);
+	motorDriver2.setPwmAperiod(fPwmPeriod);
+	motorDriver2.setPwmBperiod(fPwmPeriod);
+	MotorController_setMotor(MOTOR_ALL, 0, DIR_CW);
 }
 
 void MotorController_armESCs()
@@ -64,24 +70,59 @@ void MotorController_callibrateESCs()
 void MotorController_setMotor(uint8_t motorIndxMask, float power, uint8_t direction)
 {
 	// 1000us - 2000us is 0% - 100% power respectively
-//	float x = clampf(power, 0, 1.0f);
+	float pwm = clampf(power, 0, 1.0f);		// Clamp between 0-1.0 where 0.5 is a 50% duty cycle
+	
+//	if (motorIndxMask & 0x01)
+//		_bldcArray[0].pulsewidth_us(power);	
+//	if (motorIndxMask & 0x02)
+//		_bldcArray[1].pulsewidth_us(power);	
+//	if (motorIndxMask & 0x04)
+//		_bldcArray[2].pulsewidth_us(power);	
+//	if (motorIndxMask & 0x08)
+//		_bldcArray[3].pulsewidth_us(power);	
+	
+	motorDriver1.setPwmBpulsewidth(pwm);
 	
 	if (motorIndxMask & 0x01)
-		_bldcArray[0].pulsewidth_us(power);	
+	{
+		motorDriver1.setPwmApulsewidth(pwm);
+		if (direction == DIR_CW)
+			motorDriver1.motorA_cw();
+		else
+			motorDriver1.motorA_ccw();
+	}
 	if (motorIndxMask & 0x02)
-		_bldcArray[1].pulsewidth_us(power);	
+	{
+		motorDriver1.setPwmBpulsewidth(pwm);	
+		if (direction == DIR_CW)
+			motorDriver1.motorB_cw();
+		else
+			motorDriver1.motorB_ccw();
+	}
 	if (motorIndxMask & 0x04)
-		_bldcArray[2].pulsewidth_us(power);	
+	{
+		motorDriver2.setPwmApulsewidth(pwm);	
+		if (direction == DIR_CW)
+			motorDriver2.motorA_cw();
+		else
+			motorDriver2.motorA_ccw();
+	}
 	if (motorIndxMask & 0x08)
-		_bldcArray[3].pulsewidth_us(power);	
+	{
+		motorDriver2.setPwmBpulsewidth(pwm);	
+		if (direction == DIR_CW)
+			motorDriver2.motorB_cw();
+		else
+			motorDriver2.motorB_ccw();
+	}
 }
 
 void MotorController_armMotors()
 {
-	for (int i = 0; i < MC_NUM_MOTORS; ++i)
-	{
-		_bldcArray[i].pulsewidth_us(1000);			// 1000us - 2000us equals 0% - 100% power respectively
-	}
+//	for (int i = 0; i < MC_NUM_MOTORS; ++i)
+//	{
+//		_bldcArray[i].pulsewidth_us(1000);			// 1000us - 2000us equals 0% - 100% power respectively
+//	}
 	
 	_motorsArmed = true;
 }

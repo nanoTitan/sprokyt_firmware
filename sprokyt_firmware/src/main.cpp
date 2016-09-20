@@ -24,6 +24,7 @@ int main()
 	Wifi::Instance()->Init();
 	//IMU_init();
 	
+	
 	while (1)
 	{
 		//BLE::Update();

@@ -27,7 +27,11 @@
 #define MOTOR_D 0x08
 #define MOTOR_ALL 0xFF
 
+#define DIR_CW  0
+#define DIR_CCW 1
+
 #define CTRL_UPDATE_TIME 1000
+
 
 // 150 Quad X Setup
 //#define MOTOR_D 0x04
