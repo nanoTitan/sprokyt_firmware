@@ -6,8 +6,8 @@
 
 /* Private Variables ------------------------------------------------------------------*/
 //PwmOut _bldcArray[4] = { D9, D10, PC_9, PC_8  };
-TB6612FNG motorDriver1(D6, A1, A0, D9, D13, D12, A2);
-TB6612FNG motorDriver2(D10, PA_15, D7, D11, PC_3, PC_4, PC_2);
+TB6612FNG motorDriver1(PB_10, PA_1, PA_0, PA_7, PA_5, PA_6, PA_4);
+TB6612FNG motorDriver2(PB_6, PA_15, PA_8, PC_7, PC_3, PC_4, PC_2);
 Timeout _motorArmTimeout;
 bool _motorsArmed = false;
 
@@ -70,7 +70,9 @@ void MotorController_callibrateESCs()
 void MotorController_setMotor(uint8_t motorIndxMask, float power, uint8_t direction)
 {
 	// 1000us - 2000us is 0% - 100% power respectively
-	float pwm = clampf(power, 0, 1.0f);		// Clamp between 0-1.0 where 0.5 is a 50% duty cycle
+	//float pwm = clampf(power, 0, 1.0f);		
+	
+	float pwm = map(power, 1000, 2000, 0, 1);		// Map between 0-1.0 where 0.5 is a 50% duty cycle
 	
 //	if (motorIndxMask & 0x01)
 //		_bldcArray[0].pulsewidth_us(power);	
@@ -81,39 +83,62 @@ void MotorController_setMotor(uint8_t motorIndxMask, float power, uint8_t direct
 //	if (motorIndxMask & 0x08)
 //		_bldcArray[3].pulsewidth_us(power);	
 	
-	motorDriver1.setPwmBpulsewidth(pwm);
+	
 	
 	if (motorIndxMask & 0x01)
 	{
-		motorDriver1.setPwmApulsewidth(pwm);
-		if (direction == DIR_CW)
-			motorDriver1.motorA_cw();
+		if (pwm == 0)
+			motorDriver1.motorA_stop();
 		else
-			motorDriver1.motorA_ccw();
+		{
+			motorDriver1.setPwmApulsewidth(pwm);
+			if (direction == DIR_CW)
+				motorDriver1.motorA_cw();
+			else
+				motorDriver1.motorA_ccw();
+		}		
 	}
+	
 	if (motorIndxMask & 0x02)
 	{
-		motorDriver1.setPwmBpulsewidth(pwm);	
-		if (direction == DIR_CW)
-			motorDriver1.motorB_cw();
+		if (pwm == 0)
+			motorDriver1.motorB_stop();
 		else
-			motorDriver1.motorB_ccw();
+		{
+			motorDriver1.setPwmBpulsewidth(pwm);	
+			if (direction == DIR_CW)
+				motorDriver1.motorB_cw();
+			else
+				motorDriver1.motorB_ccw();
+		}
 	}
+	
 	if (motorIndxMask & 0x04)
 	{
-		motorDriver2.setPwmApulsewidth(pwm);	
-		if (direction == DIR_CW)
-			motorDriver2.motorA_cw();
+		if (pwm == 0)
+			motorDriver2.motorA_stop();
 		else
-			motorDriver2.motorA_ccw();
+		{
+			motorDriver2.setPwmApulsewidth(pwm);	
+			if (direction == DIR_CW)
+				motorDriver2.motorA_cw();
+			else
+				motorDriver2.motorA_ccw();
+		}
 	}
+	
 	if (motorIndxMask & 0x08)
 	{
-		motorDriver2.setPwmBpulsewidth(pwm);	
-		if (direction == DIR_CW)
-			motorDriver2.motorB_cw();
+		if (pwm == 0)
+			motorDriver2.motorB_stop();
 		else
-			motorDriver2.motorB_ccw();
+		{
+			motorDriver2.setPwmBpulsewidth(pwm);	
+			if (direction == DIR_CW)
+				motorDriver2.motorB_cw();
+			else
+				motorDriver2.motorB_ccw();
+		}
 	}
 }
 

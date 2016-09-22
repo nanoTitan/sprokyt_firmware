@@ -8,7 +8,7 @@
 #include <string>
 #include <vector>
 
-#define PRINT_WIFI
+#define PRINT_WIFI	1
 
 class Wifi
 {
