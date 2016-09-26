@@ -27,10 +27,7 @@
   </MCUProperties>
   <BSPSourceFolderName>mbed Files</BSPSourceFolderName>
   <MCUMakFile>mbed.mak</MCUMakFile>
-  <ReferencedFrameworks>
-    <string>com.sysprogs.arm.mbed.rtos</string>
-    <string>com.sysprogs.arm.mbed.rtx</string>
-  </ReferencedFrameworks>
+  <ReferencedFrameworks />
   <FrameworkProperties>
     <Entries />
   </FrameworkProperties>

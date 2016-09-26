@@ -185,9 +185,9 @@ void FlightControl_update()
 			//PRINTF("%d, %d, %d, %d\r\n", (int)sfPitch, (int)pitch_stab_output, (int)gx, (int)pitch_output);
 			//PRINTF("%d, %d, %d, %d\r\n", (int)sfYaw, (int)yaw_stab_output, (int)gz, (int)yaw_output);
 			//PRINTF("%.2f, %.2f\r\n", sfYaw, heading);					// yaw, pitch, roll
-			PRINTF("%.2f, %d, %d\r\n", heading, (int)sfPitch, (int)sfRoll);					// yaw, pitch, roll
+			//PRINTF("%.2f, %d, %d\r\n", heading, (int)sfPitch, (int)sfRoll);					// yaw, pitch, roll
 			//PRINTF("%.2f, %.2f, %.2f\r\n", pInput->mag[0], pInput->mag[1], pInput->mag[2]);
-			//PRINTF("%d, %d, %d, %d\r\n", (int)powerA, (int)powerB, (int)powerC, (int)powerD);		// A, B, C, D
+			PRINTF("%d, %d, %d, %d\r\n", (int)powerA, (int)powerB, (int)powerC, (int)powerD);		// A, B, C, D
 			cnt = 0;
 		}
 		

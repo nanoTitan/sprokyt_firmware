@@ -2,7 +2,7 @@
 #ifndef _CONSTANTS_H_
 #define _CONSTANTS_H_
 
-#define MOTORS_ENABLED
+//#define MOTORS_ENABLED
 
 #define MIN_THROTTLE 1000
 #define MAX_THROTTLE 1900

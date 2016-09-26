@@ -118,7 +118,7 @@ of this function. */
 	PRINTF("R2 = %x\r\n", r2);
 	PRINTF("R3 = %x\r\n", r3);
 	PRINTF("R12 = %xv\r\n", r12);
-	PRINTF("LR [R14] = %x  subroutine call return addressv\r\n", lr);
+	PRINTF("LR [R14] = %x  subroutine call return address\r\n", lr);
 	PRINTF("PC [R15] = %x  program counter\r\n", pc);
 	PRINTF("PSR = %x\r\n", psr);
 	PRINTF("BFAR = %x\r\n", (*((volatile unsigned long *)(0xE000ED38))));
