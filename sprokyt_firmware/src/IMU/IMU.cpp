@@ -109,10 +109,7 @@ static unsigned char RecallCalibrationFromMemory();
 
 /* Private functions ---------------------------------------------------------*/
 void IMU_init()
-{	
-	BSP_LED_Init(LED_2);
-	BSP_LED_Off(LED_2);
-	
+{		
 	InitializeAllSensors();
 	EnableAllSensors();
   
@@ -130,10 +127,18 @@ void IMU_init()
 	pclk1 = HAL_RCC_GetPCLK1Freq();
 	pclk2 = HAL_RCC_GetPCLK2Freq();
 	
+	// Check if the calibration is already available in memory
+	unsigned char calibLoaded = RecallCalibrationFromMemory();
+	if (calibLoaded == 1)
+	{
+		PRINTF("IMU calibration successfully loaded\r\n");
+	}
+	else
+	{
+		PRINTF("IMU calibration failed to load!!!\r\n");
+	}
+	
 	SFTimerInit();
-  
-	/* Check if the calibration is already available in memory */
-	RecallCalibrationFromMemory();
 }
 
 /**
@@ -201,8 +206,86 @@ void SFTimerInit()
 	}
 }
 
-void IMU_update(void)
+/**
+* @brief  Conversion complete callback in non blocking mode
+* @param  htim timer handler
+* @retval None
+*/
+void HAL_TIM_OC_DelayElapsedCallback(TIM_HandleTypeDef *htim)
 {
+	SF_Handler();
+}
+
+/**
+ * @brief  Handles the Sensor Fusion
+ * @param  Msg Sensor Fusion part of the stream
+ * @retval None
+ */
+void SF_Handler()
+{
+	if (!SF_Active)
+		return;
+	
+	uint8_t status_acc = 0;
+	uint8_t status_gyr = 0;
+	uint8_t status_mag = 0;	
+	
+	BSP_ACCELERO_IsInitialized(ACCELERO_handle, &status_acc);
+	BSP_GYRO_IsInitialized(GYRO_handle, &status_gyr);
+	BSP_MAGNETO_IsInitialized(MAGNETO_handle, &status_mag);
+
+	if (status_acc && status_gyr && status_mag)
+	{
+		if (SF_change == 1)
+		{
+			if (SF_6x_enabled == 0)
+			{
+				MotionFX_manager_stop_9X();
+				MotionFX_manager_start_6X();
+				SF_6x_enabled = 1;
+			}
+			else
+			{
+				MotionFX_manager_stop_6X();
+				MotionFX_manager_start_9X();
+				SF_6x_enabled = 0;
+			}
+			SF_change = 0;
+		}
+      
+		BSP_ACCELERO_Get_Axes(ACCELERO_handle, &ACC_Value);
+		BSP_GYRO_Get_Axes(GYRO_handle, &GYR_Value);
+		BSP_MAGNETO_Get_Axes(MAGNETO_handle, &MAG_Value);
+		
+		MotionFX_manager_run();
+      
+		/* Check if is calibrated */
+		if (isCal != 0x01)
+		{
+			CalibrateSensorFusion();
+		}
+		
+		if (!isCal)
+			return;
+		
+		osxMFX_output *MotionFX_Engine_Out = MotionFX_manager_getDataOUT();
+		if (SF_6x_enabled == 1)
+		{
+			sf_yaw = MotionFX_Engine_Out->rotation_6X[0];
+			sf_pitch = MotionFX_Engine_Out->rotation_6X[1];
+			sf_roll = MotionFX_Engine_Out->rotation_6X[2];
+		}
+		else
+		{
+			sf_yaw = MotionFX_Engine_Out->rotation_9X[0];
+			sf_pitch = MotionFX_Engine_Out->rotation_9X[1];
+			sf_roll = MotionFX_Engine_Out->rotation_9X[2];
+		}
+	}
+}
+
+void IMU_update(void)
+{	
 	/* Check if user button was pressed only when Sensor Fusion is active */
 	if ((BSP_PB_GetState(BUTTON_KEY) == GPIO_PIN_RESET) /*&& SF_Active*/)
 	{
@@ -266,11 +349,12 @@ float IMU_get_roll()
 /**
  * @brief  Initialize all sensors
  * @param  None
- * @retval None
  */
 void InitializeAllSensors(void)
 {
-  /* Try to use LSM6DS3 DIL24 if present, otherwise use LSM6DS0 on board */
+	PRINTF("Initializing IMU sensors\r\n");
+	
+	/* Try to use LSM6DS3 DIL24 if present, otherwise use LSM6DS0 on board */
 	DrvStatusTypeDef result = BSP_ACCELERO_Init(ACCELERO_SENSORS_AUTO, &ACCELERO_handle);		// ACCELERO_SENSORS_AUTO, LSM6DS3_X_0, LSM6DS0_X_0
 	if (result != COMPONENT_OK)
 		CError_Handler();
@@ -289,6 +373,8 @@ void InitializeAllSensors(void)
 	result = BSP_PRESSURE_Init(PRESSURE_SENSORS_AUTO, &PRESSURE_handle);
 	if (result != COMPONENT_OK)
 		CError_Handler();
+	
+	PRINTF("IMU sensors initialized.\r\n");
 }
 
 /**
@@ -302,6 +388,8 @@ void EnableAllSensors(void)
 	BSP_GYRO_Sensor_Enable(GYRO_handle);
 	BSP_MAGNETO_Sensor_Enable(MAGNETO_handle);
 	BSP_PRESSURE_Sensor_Enable(PRESSURE_handle);
+	
+	PRINTF("IMU sensors enabled.\r\n");
 }
 
 /**
@@ -406,83 +494,6 @@ void CalibrateSensorFusion()
 	}
 }
 
-/**
- * @brief  Handles the Sensor Fusion
- * @param  Msg Sensor Fusion part of the stream
- * @retval None
- */
-void SF_Handler()
-{
-	if (!SF_Active)
-		return;
-	
-	uint8_t status_acc = 0;
-	uint8_t status_gyr = 0;
-	uint8_t status_mag = 0;	
-	
-	BSP_ACCELERO_IsInitialized(ACCELERO_handle, &status_acc);
-	BSP_GYRO_IsInitialized(GYRO_handle, &status_gyr);
-	BSP_MAGNETO_IsInitialized(MAGNETO_handle, &status_mag);
-
-	if (status_acc && status_gyr && status_mag)
-	{
-		if (SF_change == 1)
-		{
-			if (SF_6x_enabled == 0)
-			{
-				MotionFX_manager_stop_9X();
-				MotionFX_manager_start_6X();
-				SF_6x_enabled = 1;
-			}
-			else
-			{
-				MotionFX_manager_stop_6X();
-				MotionFX_manager_start_9X();
-				SF_6x_enabled = 0;
-			}
-			SF_change = 0;
-		}
-      
-		BSP_ACCELERO_Get_Axes(ACCELERO_handle, &ACC_Value);
-		BSP_GYRO_Get_Axes(GYRO_handle, &GYR_Value);
-		BSP_MAGNETO_Get_Axes(MAGNETO_handle, &MAG_Value);
-		
-		MotionFX_manager_run();
-      
-		/* Check if is calibrated */
-		if (isCal != 0x01)
-		{
-			CalibrateSensorFusion();
-		}
-		
-		if (!isCal)
-			return;
-		
-		osxMFX_output *MotionFX_Engine_Out = MotionFX_manager_getDataOUT();
-		if (SF_6x_enabled == 1)
-		{
-			sf_yaw = MotionFX_Engine_Out->rotation_6X[0];
-			sf_pitch = MotionFX_Engine_Out->rotation_6X[1];
-			sf_roll = MotionFX_Engine_Out->rotation_6X[2];
-		}
-		else
-		{
-			sf_yaw = MotionFX_Engine_Out->rotation_9X[0];
-			sf_pitch = MotionFX_Engine_Out->rotation_9X[1];
-			sf_roll = MotionFX_Engine_Out->rotation_9X[2];
-		}
-	}
-}
-
-/**
-* @brief  Conversion complete callback in non blocking mode
-* @param  htim timer handler
-* @retval None
-*/
-void HAL_TIM_OC_DelayElapsedCallback(TIM_HandleTypeDef *htim)
-{
-	SF_Handler();
-}
 
 /**
  * @brief  Get the current tick value in millisecond

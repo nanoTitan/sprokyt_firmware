@@ -38,7 +38,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <NMakeIncludeSearchPath>../../../../../../../STM32/X-CUBE-BLE1/Drivers/BSP/X-NUCLEO-IDB04A1;../../../../../../../STM32/X-CUBE-BLE1/Middlewares/ST/LowPowerManager/Inc;../../../../../../../STM32/X-CUBE-BLE1/Middlewares/ST/STM32_BlueNRG/Interface;../../../../../../../STM32/X-CUBE-BLE1/Middlewares/ST/STM32_BlueNRG/STM32F4xx_HAL_BlueNRG_Drivers/inc;../../../../../../../STM32/X-CUBE-BLE1/Middlewares/ST/TimerServer/inc;../../../../../../../STM32/X-CUBE-BLE1/Middlewares/ST/TimerServer/STM32xx_HAL_TimerServer_Drivers/inc;../../../../../../../STM32/X-CUBE-BLE1/Middlewares/ST/STM32_BlueNRG/SimpleBlueNRG_HCI/includes;../../../../../../../STM32/X-CUBE-BLE1/Middlewares/ST/STM32_BlueNRG/SimpleBlueNRG_HCI/hci;../../../../../../../STM32/X-CUBE-BLE1/Middlewares/ST/STM32_BlueNRG/SimpleBlueNRG_HCI/hci/controller;../../../../../../../STM32/X-CUBE-BLE1/Middlewares/ST/STM32_BlueNRG/SimpleBlueNRG_HCI/utils;../../../../../../../STM32/X-CUBE-BLE1/Drivers/BSP/STM32F4xx-Nucleo;../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/Components/Common;../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/Components/hts221;../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/Components/lis3mdl;../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/Components/lps22hb;../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/Components/lps25hb;../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/Components/lsm6ds0;../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/Components/lsm6ds3;../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/X_NUCLEO_IKS01A1;../../../../../../../STM32/X-CUBE-MEMS1/Middlewares/ST/STM32_OSX_MotionFX_Library;../../../../../../../STM32/X-CUBE-MEMS1/Middlewares/ST/STM32_OSX_MotionFX_Library/Inc;../../../../../../../STM32/X-CUBE-WIFI1/Middlewares/ST/STM32_SPWF01SA/Inc;../../../../../../../STM32/X-CUBE-WIFI1/Middlewares/ST/STM32_SPWF01SA/Utils;../../../../../../../STM32/X-CUBE-WIFI1/Middlewares/ST/STM32_SPWF01SA;../../../../../../../STM32/X-CUBE-WIFI1/Drivers/BSP/X-NUCLEO-IDW01M1;$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed\libraries\mbed\targets\cmsis\TOOLCHAIN_GCC;$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed\libraries\mbed\hal;$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed\libraries\mbed\targets\cmsis;$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed\libraries\mbed\targets\hal;$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed\libraries\mbed\common;$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed\libraries\mbed\targets;$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed\libraries\mbed;$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed\libraries\mbed\api;$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed\libraries\mbed\targets\cmsis\TARGET_STM\TARGET_STM32F4;$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed\libraries\mbed\targets\cmsis\TARGET_STM\TARGET_STM32F4\TARGET_NUCLEO_F411RE;$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed\libraries\mbed\targets\cmsis\TARGET_STM\TARGET_STM32F4\TARGET_NUCLEO_F411RE\TOOLCHAIN_GCC_ARM;$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed\libraries\mbed\targets\hal\TARGET_STM\TARGET_STM32F4\TARGET_NUCLEO_F411RE;$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed\libraries\mbed\targets\cmsis\TARGET_STM;$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed\libraries\mbed\targets\hal\TARGET_STM\TARGET_STM32F4;$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed\libraries\mbed\targets\hal\TARGET_STM;$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed\libraries\rtos\rtos;$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed\libraries\rtos\rtx;$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed\libraries\rtos\rtx\TARGET_CORTEX_M\TARGET_RTOS_M4_M7;$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed\libraries\rtos\rtx\TARGET_CORTEX_M;$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed\libraries\rtos\rtx\TARGET_CORTEX_M\TARGET_RTOS_M4_M7\TOOLCHAIN_GCC;c:\sysgcc\arm-eabi\arm-eabi\include\c++\5.3.0;c:\sysgcc\arm-eabi\arm-eabi\include\c++\5.3.0\arm-eabi\thumb\cortex_m4;c:\sysgcc\arm-eabi\arm-eabi\include\c++\5.3.0\backward;c:\sysgcc\arm-eabi\lib\gcc\arm-eabi\5.3.0\include;c:\sysgcc\arm-eabi\lib\gcc\arm-eabi\5.3.0\include-fixed;c:\sysgcc\arm-eabi\arm-eabi\sys-include;c:\sysgcc\arm-eabi\arm-eabi\include;src;src/ble;src/imu;src/motor;src/math;src/Controller;src/PID;src/wifi;src/wifi/ESP8266Interface;src/wifi/ESP8266Interface/ESP8266;src/wifi/ESP8266Interface/Helper;src/wifi/ESP8266Interface/Socket;$(NMakeIncludeSearchPath)</NMakeIncludeSearchPath>
+    <NMakeIncludeSearchPath>../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/Components/Common;../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/Components/hts221;../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/Components/lis3mdl;../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/Components/lps22hb;../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/Components/lps25hb;../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/Components/lsm6ds0;../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/Components/lsm6ds3;../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/X_NUCLEO_IKS01A1;../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/STM32F4xx-Nucleo;../../../../../../../STM32/X-CUBE-MEMS1/Middlewares/ST/STM32_OSX_MotionFX_Library;../../../../../../../STM32/X-CUBE-MEMS1/Middlewares/ST/STM32_OSX_MotionFX_Library/Inc;../../../../../../../STM32/X-CUBE-WIFI1/Middlewares/ST/STM32_SPWF01SA/Inc;../../../../../../../STM32/X-CUBE-WIFI1/Middlewares/ST/STM32_SPWF01SA/Utils;../../../../../../../STM32/X-CUBE-WIFI1/Middlewares/ST/STM32_SPWF01SA;../../../../../../../STM32/X-CUBE-WIFI1/Drivers/BSP/X-NUCLEO-IDW01M1;$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed\libraries\mbed\targets\cmsis\TOOLCHAIN_GCC;$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed\libraries\mbed\hal;$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed\libraries\mbed\targets\cmsis;$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed\libraries\mbed\targets\hal;$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed\libraries\mbed\common;$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed\libraries\mbed\targets;$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed\libraries\mbed;$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed\libraries\mbed\api;$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed\libraries\mbed\targets\cmsis\TARGET_STM\TARGET_STM32F4;$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed\libraries\mbed\targets\cmsis\TARGET_STM\TARGET_STM32F4\TARGET_NUCLEO_F411RE;$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed\libraries\mbed\targets\cmsis\TARGET_STM\TARGET_STM32F4\TARGET_NUCLEO_F411RE\TOOLCHAIN_GCC_ARM;$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed\libraries\mbed\targets\hal\TARGET_STM\TARGET_STM32F4\TARGET_NUCLEO_F411RE;$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed\libraries\mbed\targets\cmsis\TARGET_STM;$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed\libraries\mbed\targets\hal\TARGET_STM\TARGET_STM32F4;$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed\libraries\mbed\targets\hal\TARGET_STM;$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed\libraries\rtos\rtos;$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed\libraries\rtos\rtx;$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed\libraries\rtos\rtx\TARGET_CORTEX_M\TARGET_RTOS_M4_M7;$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed\libraries\rtos\rtx\TARGET_CORTEX_M;$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed\libraries\rtos\rtx\TARGET_CORTEX_M\TARGET_RTOS_M4_M7\TOOLCHAIN_GCC;c:\sysgcc\arm-eabi\arm-eabi\include\c++\5.3.0;c:\sysgcc\arm-eabi\arm-eabi\include\c++\5.3.0\arm-eabi\thumb\cortex_m4;c:\sysgcc\arm-eabi\arm-eabi\include\c++\5.3.0\backward;c:\sysgcc\arm-eabi\lib\gcc\arm-eabi\5.3.0\include;c:\sysgcc\arm-eabi\lib\gcc\arm-eabi\5.3.0\include-fixed;c:\sysgcc\arm-eabi\arm-eabi\sys-include;c:\sysgcc\arm-eabi\arm-eabi\include;src;src/imu;src/motor;src/math;src/Controller;src/PID;src/wifi;src/wifi/ESP8266Interface;src/wifi/ESP8266Interface/ESP8266;src/wifi/ESP8266Interface/Helper;src/wifi/ESP8266Interface/Socket;$(NMakeIncludeSearchPath)</NMakeIncludeSearchPath>
     <NMakeForcedIncludes>$(ProjectDir)\gcc_Debug.h;$(VISUALGDB_DIR)\gcc_compat.h;$(NMakeForcedIncludes)</NMakeForcedIncludes>
     <NMakeBuildCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /build "$(ProjectPath)" "/solution:$(SolutionPath)" "/config:$(Configuration)" "/platform:$(Platform)"</NMakeBuildCommandLine>
     <NMakeCleanCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /clean "$(ProjectPath)" "/solution:$(SolutionPath)" "/config:$(Configuration)" "/platform:$(Platform)"</NMakeCleanCommandLine>
@@ -64,7 +64,7 @@
   <ItemDefinitionGroup>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\..\..\STM32\X-CUBE-BLE1\Drivers\BSP\STM32F4xx-Nucleo\stm32f4xx_nucleo.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\STM32\X-CUBE-MEMS1\Drivers\BSP\STM32F4xx-Nucleo\stm32f4xx_nucleo.c" />
     <ClCompile Include="..\..\..\..\..\..\..\STM32\X-CUBE-WIFI1\Drivers\BSP\X-NUCLEO-IDW01M1\stm32_spwf_wifi.c" />
     <ClCompile Include="..\..\..\..\..\..\..\STM32\X-CUBE-WIFI1\Middlewares\ST\STM32_SPWF01SA\Utils\event_buffer.c" />
     <ClCompile Include="..\..\..\..\..\..\..\STM32\X-CUBE-WIFI1\Middlewares\ST\STM32_SPWF01SA\Utils\ring_buffer.c" />
@@ -212,26 +212,6 @@
     <ClCompile Include="..\..\..\..\..\AppData\Local\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed\libraries\rtos\rtx\TARGET_CORTEX_M\rt_Task.c" />
     <ClCompile Include="..\..\..\..\..\AppData\Local\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed\libraries\rtos\rtx\TARGET_CORTEX_M\rt_Time.c" />
     <ClCompile Include="..\..\..\..\..\AppData\Local\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed\stubs.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\..\STM32\X-CUBE-BLE1\Drivers\BSP\X-NUCLEO-IDB04A1\stm32_bluenrg_ble.c" />
-    <ClCompile Include="..\..\..\..\..\..\..\STM32\X-CUBE-BLE1\Middlewares\ST\LowPowerManager\Src\stm32xx_lpm.c" />
-    <ClCompile Include="..\..\..\..\..\..\..\STM32\X-CUBE-BLE1\Middlewares\ST\STM32_BlueNRG\Interface\bluenrg_itf_template.c" />
-    <ClCompile Include="..\..\..\..\..\..\..\STM32\X-CUBE-BLE1\Middlewares\ST\STM32_BlueNRG\SimpleBlueNRG_HCI\hci\hci.c" />
-    <ClCompile Include="..\..\..\..\..\..\..\STM32\X-CUBE-BLE1\Middlewares\ST\STM32_BlueNRG\SimpleBlueNRG_HCI\hci\controller\bluenrg_gap_aci.c" />
-    <ClCompile Include="..\..\..\..\..\..\..\STM32\X-CUBE-BLE1\Middlewares\ST\STM32_BlueNRG\SimpleBlueNRG_HCI\hci\controller\bluenrg_gatt_aci.c" />
-    <ClCompile Include="..\..\..\..\..\..\..\STM32\X-CUBE-BLE1\Middlewares\ST\STM32_BlueNRG\SimpleBlueNRG_HCI\hci\controller\bluenrg_hal_aci.c" />
-    <ClCompile Include="..\..\..\..\..\..\..\STM32\X-CUBE-BLE1\Middlewares\ST\STM32_BlueNRG\SimpleBlueNRG_HCI\hci\controller\bluenrg_IFR.c" />
-    <ClCompile Include="..\..\..\..\..\..\..\STM32\X-CUBE-BLE1\Middlewares\ST\STM32_BlueNRG\SimpleBlueNRG_HCI\hci\controller\bluenrg_l2cap_aci.c" />
-    <ClCompile Include="..\..\..\..\..\..\..\STM32\X-CUBE-BLE1\Middlewares\ST\STM32_BlueNRG\SimpleBlueNRG_HCI\hci\controller\bluenrg_updater_aci.c" />
-    <ClCompile Include="..\..\..\..\..\..\..\STM32\X-CUBE-BLE1\Middlewares\ST\STM32_BlueNRG\SimpleBlueNRG_HCI\hci\controller\bluenrg_utils.c" />
-    <ClCompile Include="..\..\..\..\..\..\..\STM32\X-CUBE-BLE1\Middlewares\ST\STM32_BlueNRG\SimpleBlueNRG_HCI\utils\ble_list.c" />
-    <ClCompile Include="..\..\..\..\..\..\..\STM32\X-CUBE-BLE1\Middlewares\ST\STM32_BlueNRG\SimpleBlueNRG_HCI\utils\gp_timer.c" />
-    <ClCompile Include="..\..\..\..\..\..\..\STM32\X-CUBE-BLE1\Middlewares\ST\STM32_BlueNRG\SimpleBlueNRG_HCI\utils\osal.c" />
-    <ClCompile Include="..\..\..\..\..\..\..\STM32\X-CUBE-BLE1\Middlewares\ST\STM32_BlueNRG\STM32F4xx_HAL_BlueNRG_Drivers\src\stm32f4xx_hal_bluenrg_gpio.c" />
-    <ClCompile Include="..\..\..\..\..\..\..\STM32\X-CUBE-BLE1\Middlewares\ST\STM32_BlueNRG\STM32F4xx_HAL_BlueNRG_Drivers\src\stm32f4xx_hal_bluenrg_syscfg.c" />
-    <ClCompile Include="..\..\..\..\..\..\..\STM32\X-CUBE-BLE1\Middlewares\ST\TimerServer\src\stm32xx_timerserver.c" />
-    <ClCompile Include="src\ble\BLE.cpp" />
-    <ClCompile Include="src\ble\bluenrg_interface.c" />
-    <ClCompile Include="src\clock.c" />
     <ClCompile Include="src\Controller\control_manager.cpp" />
     <ClCompile Include="src\Controller\esc_programmer.cpp" />
     <ClCompile Include="src\Controller\flight_control.cpp" />
@@ -285,6 +265,7 @@
     <None Include="sprokyt_firmware-Release.vgdbsettings" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\..\..\..\STM32\X-CUBE-MEMS1\Drivers\BSP\STM32F4xx-Nucleo\stm32f4xx_nucleo.h" />
     <ClInclude Include="..\..\..\..\..\..\..\STM32\X-CUBE-WIFI1\Drivers\BSP\X-NUCLEO-IDW01M1\stm32_spwf_wifi.h" />
     <ClInclude Include="..\..\..\..\..\..\..\STM32\X-CUBE-WIFI1\Middlewares\ST\STM32_SPWF01SA\Inc\wifi_const.h" />
     <ClInclude Include="..\..\..\..\..\..\..\STM32\X-CUBE-WIFI1\Middlewares\ST\STM32_SPWF01SA\Inc\wifi_interface.h" />
@@ -467,45 +448,6 @@
     <ClInclude Include="..\..\..\..\..\AppData\Local\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed\libraries\mbed\targets\hal\TARGET_STM\TARGET_STM32F4\TARGET_NUCLEO_F411RE\PeripheralNames.h" />
     <ClInclude Include="..\..\..\..\..\AppData\Local\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed\libraries\mbed\targets\hal\TARGET_STM\TARGET_STM32F4\TARGET_NUCLEO_F411RE\PinNames.h" />
     <ClInclude Include="..\..\..\..\..\AppData\Local\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed\libraries\mbed\targets\hal\TARGET_STM\TARGET_STM32F4\TARGET_NUCLEO_F411RE\PortNames.h" />
-    <ClInclude Include="..\..\..\..\..\..\..\STM32\X-CUBE-BLE1\Drivers\BSP\STM32F4xx-Nucleo\stm32f4xx_nucleo.h" />
-    <ClInclude Include="..\..\..\..\..\..\..\STM32\X-CUBE-BLE1\Drivers\BSP\STM32F4xx-Nucleo\stm32f4xx_nucleo_bluenrg.h" />
-    <ClInclude Include="..\..\..\..\..\..\..\STM32\X-CUBE-BLE1\Drivers\BSP\X-NUCLEO-IDB04A1\stm32_bluenrg_ble.h" />
-    <ClInclude Include="..\..\..\..\..\..\..\STM32\X-CUBE-BLE1\Middlewares\ST\LowPowerManager\Inc\stm32xx_lpm.h" />
-    <ClInclude Include="..\..\..\..\..\..\..\STM32\X-CUBE-BLE1\Middlewares\ST\LowPowerManager\Inc\stm32xx_lpm_conf.h" />
-    <ClInclude Include="..\..\..\..\..\..\..\STM32\X-CUBE-BLE1\Middlewares\ST\STM32_BlueNRG\Interface\bluenrg_itf_template.h" />
-    <ClInclude Include="..\..\..\..\..\..\..\STM32\X-CUBE-BLE1\Middlewares\ST\STM32_BlueNRG\SimpleBlueNRG_HCI\includes\ble_clock.h" />
-    <ClInclude Include="..\..\..\..\..\..\..\STM32\X-CUBE-BLE1\Middlewares\ST\STM32_BlueNRG\SimpleBlueNRG_HCI\includes\ble_list.h" />
-    <ClInclude Include="..\..\..\..\..\..\..\STM32\X-CUBE-BLE1\Middlewares\ST\STM32_BlueNRG\SimpleBlueNRG_HCI\includes\ble_status.h" />
-    <ClInclude Include="..\..\..\..\..\..\..\STM32\X-CUBE-BLE1\Middlewares\ST\STM32_BlueNRG\SimpleBlueNRG_HCI\includes\bluenrg_aci.h" />
-    <ClInclude Include="..\..\..\..\..\..\..\STM32\X-CUBE-BLE1\Middlewares\ST\STM32_BlueNRG\SimpleBlueNRG_HCI\includes\bluenrg_aci_const.h" />
-    <ClInclude Include="..\..\..\..\..\..\..\STM32\X-CUBE-BLE1\Middlewares\ST\STM32_BlueNRG\SimpleBlueNRG_HCI\includes\bluenrg_gap.h" />
-    <ClInclude Include="..\..\..\..\..\..\..\STM32\X-CUBE-BLE1\Middlewares\ST\STM32_BlueNRG\SimpleBlueNRG_HCI\includes\bluenrg_gap_aci.h" />
-    <ClInclude Include="..\..\..\..\..\..\..\STM32\X-CUBE-BLE1\Middlewares\ST\STM32_BlueNRG\SimpleBlueNRG_HCI\includes\bluenrg_gatt_aci.h" />
-    <ClInclude Include="..\..\..\..\..\..\..\STM32\X-CUBE-BLE1\Middlewares\ST\STM32_BlueNRG\SimpleBlueNRG_HCI\includes\bluenrg_gatt_server.h" />
-    <ClInclude Include="..\..\..\..\..\..\..\STM32\X-CUBE-BLE1\Middlewares\ST\STM32_BlueNRG\SimpleBlueNRG_HCI\includes\bluenrg_hal_aci.h" />
-    <ClInclude Include="..\..\..\..\..\..\..\STM32\X-CUBE-BLE1\Middlewares\ST\STM32_BlueNRG\SimpleBlueNRG_HCI\includes\bluenrg_l2cap_aci.h" />
-    <ClInclude Include="..\..\..\..\..\..\..\STM32\X-CUBE-BLE1\Middlewares\ST\STM32_BlueNRG\SimpleBlueNRG_HCI\includes\bluenrg_updater_aci.h" />
-    <ClInclude Include="..\..\..\..\..\..\..\STM32\X-CUBE-BLE1\Middlewares\ST\STM32_BlueNRG\SimpleBlueNRG_HCI\includes\bluenrg_utils.h" />
-    <ClInclude Include="..\..\..\..\..\..\..\STM32\X-CUBE-BLE1\Middlewares\ST\STM32_BlueNRG\SimpleBlueNRG_HCI\includes\compiler.h" />
-    <ClInclude Include="..\..\..\..\..\..\..\STM32\X-CUBE-BLE1\Middlewares\ST\STM32_BlueNRG\SimpleBlueNRG_HCI\includes\debug.h" />
-    <ClInclude Include="..\..\..\..\..\..\..\STM32\X-CUBE-BLE1\Middlewares\ST\STM32_BlueNRG\SimpleBlueNRG_HCI\includes\gp_timer.h" />
-    <ClInclude Include="..\..\..\..\..\..\..\STM32\X-CUBE-BLE1\Middlewares\ST\STM32_BlueNRG\SimpleBlueNRG_HCI\includes\hal.h" />
-    <ClInclude Include="..\..\..\..\..\..\..\STM32\X-CUBE-BLE1\Middlewares\ST\STM32_BlueNRG\SimpleBlueNRG_HCI\includes\hal_types.h" />
-    <ClInclude Include="..\..\..\..\..\..\..\STM32\X-CUBE-BLE1\Middlewares\ST\STM32_BlueNRG\SimpleBlueNRG_HCI\includes\hci.h" />
-    <ClInclude Include="..\..\..\..\..\..\..\STM32\X-CUBE-BLE1\Middlewares\ST\STM32_BlueNRG\SimpleBlueNRG_HCI\includes\hci_const.h" />
-    <ClInclude Include="..\..\..\..\..\..\..\STM32\X-CUBE-BLE1\Middlewares\ST\STM32_BlueNRG\SimpleBlueNRG_HCI\includes\link_layer.h" />
-    <ClInclude Include="..\..\..\..\..\..\..\STM32\X-CUBE-BLE1\Middlewares\ST\STM32_BlueNRG\SimpleBlueNRG_HCI\includes\osal.h" />
-    <ClInclude Include="..\..\..\..\..\..\..\STM32\X-CUBE-BLE1\Middlewares\ST\STM32_BlueNRG\SimpleBlueNRG_HCI\includes\sm.h" />
-    <ClInclude Include="..\..\..\..\..\..\..\STM32\X-CUBE-BLE1\Middlewares\ST\STM32_BlueNRG\STM32F4xx_HAL_BlueNRG_Drivers\inc\stm32f4xx_hal_bluenrg_dma.h" />
-    <ClInclude Include="..\..\..\..\..\..\..\STM32\X-CUBE-BLE1\Middlewares\ST\STM32_BlueNRG\STM32F4xx_HAL_BlueNRG_Drivers\inc\stm32f4xx_hal_bluenrg_exti.h" />
-    <ClInclude Include="..\..\..\..\..\..\..\STM32\X-CUBE-BLE1\Middlewares\ST\STM32_BlueNRG\STM32F4xx_HAL_BlueNRG_Drivers\inc\stm32f4xx_hal_bluenrg_gpio.h" />
-    <ClInclude Include="..\..\..\..\..\..\..\STM32\X-CUBE-BLE1\Middlewares\ST\STM32_BlueNRG\STM32F4xx_HAL_BlueNRG_Drivers\inc\stm32f4xx_hal_bluenrg_spi.h" />
-    <ClInclude Include="..\..\..\..\..\..\..\STM32\X-CUBE-BLE1\Middlewares\ST\STM32_BlueNRG\STM32F4xx_HAL_BlueNRG_Drivers\inc\stm32f4xx_hal_bluenrg_syscfg.h" />
-    <ClInclude Include="..\..\..\..\..\..\..\STM32\X-CUBE-BLE1\Middlewares\ST\STM32_BlueNRG\STM32F4xx_HAL_BlueNRG_Drivers\inc\stm32f4xx_hal_bluenrg_uart.h" />
-    <ClInclude Include="..\..\..\..\..\..\..\STM32\X-CUBE-BLE1\Middlewares\ST\TimerServer\inc\stm32xx_timerserver.h" />
-    <ClInclude Include="..\..\..\..\..\..\..\STM32\X-CUBE-BLE1\Middlewares\ST\TimerServer\inc\stm32xx_timerserver_conf.h" />
-    <ClInclude Include="..\..\..\..\..\..\..\STM32\X-CUBE-BLE1\Middlewares\ST\TimerServer\STM32xx_HAL_TimerServer_Drivers\inc\stm32xx_hal_timerserver_exti.h" />
-    <ClInclude Include="..\..\..\..\..\..\..\STM32\X-CUBE-BLE1\Middlewares\ST\TimerServer\STM32xx_HAL_TimerServer_Drivers\inc\stm32xx_hal_timerserver_rtc.h" />
     <ClInclude Include="..\..\..\..\..\AppData\Local\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed\libraries\rtos\rtos\Mail.h" />
     <ClInclude Include="..\..\..\..\..\AppData\Local\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed\libraries\rtos\rtos\MemoryPool.h" />
     <ClInclude Include="..\..\..\..\..\AppData\Local\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed\libraries\rtos\rtos\Mutex.h" />
@@ -530,13 +472,12 @@
     <ClInclude Include="..\..\..\..\..\AppData\Local\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed\libraries\rtos\rtx\TARGET_CORTEX_M\rt_Task.h" />
     <ClInclude Include="..\..\..\..\..\AppData\Local\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed\libraries\rtos\rtx\TARGET_CORTEX_M\rt_Time.h" />
     <ClInclude Include="..\..\..\..\..\AppData\Local\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed\libraries\rtos\rtx\TARGET_CORTEX_M\rt_TypeDef.h" />
-    <ClInclude Include="src\ble\BLE.h" />
-    <ClInclude Include="src\ble\bluenrg_interface.h" />
     <ClInclude Include="src\constants.h" />
     <ClInclude Include="src\Controller\control_manager.h" />
     <ClInclude Include="src\Controller\esc_programmer.h" />
     <ClInclude Include="src\Controller\flight_control.h" />
     <ClInclude Include="src\cube_hal.h" />
+    <ClInclude Include="src\debug.h" />
     <ClInclude Include="src\error.h" />
     <ClInclude Include="src\IMU\imu.h" />
     <ClInclude Include="src\IMU\MotionFX_Manager.h" />

@@ -112,13 +112,13 @@ of this function. */
 	pc = pulFaultStackAddress[6];
 	psr = pulFaultStackAddress[7];
 	
-	PRINTF("\n\n[Hard fault handler - all numbers in hex]\n");
+	PRINTF("\n\n[Hard fault handler - all numbers in hex]\r\n");
 	PRINTF("R0 = %x\r\n", r0);
 	PRINTF("R1 = %x\r\n", r1);
 	PRINTF("R2 = %x\r\n", r2);
 	PRINTF("R3 = %x\r\n", r3);
-	PRINTF("R12 = %xv\n", r12);
-	PRINTF("LR [R14] = %x  subroutine call return addressv\n", lr);
+	PRINTF("R12 = %xv\r\n", r12);
+	PRINTF("LR [R14] = %x  subroutine call return addressv\r\n", lr);
 	PRINTF("PC [R15] = %x  program counter\r\n", pc);
 	PRINTF("PSR = %x\r\n", psr);
 	PRINTF("BFAR = %x\r\n", (*((volatile unsigned long *)(0xE000ED38))));
@@ -140,6 +140,11 @@ of this function. */
 void HardFault_Handler(void)
 {
 	PRINTF("Hard Fault Exception\r\n");
+	
+	/* Go to infinite loop when Memory Manage exception occurs */
+//	while (1)
+//	{ 
+//	}
 	
 	/* Go to infinite loop when Hard Fault exception occurs */
 	__asm volatile
@@ -269,7 +274,10 @@ void SysTick_Handler(void)
 */
 void BNRG_SPI_EXTI_IRQHandler(void)
 {
-  HAL_GPIO_EXTI_IRQHandler(BNRG_SPI_EXTI_PIN);
+	while (1)
+	{
+	}
+	//HAL_GPIO_EXTI_IRQHandler(BNRG_SPI_EXTI_PIN);
 }
 
 
@@ -280,9 +288,9 @@ void BNRG_SPI_EXTI_IRQHandler(void)
 */
 void PUSH_BUTTON_EXTI_IRQHandler(void)
 {
-  HAL_GPIO_EXTI_IRQHandler(KEY_BUTTON_PIN);
+	HAL_GPIO_EXTI_IRQHandler(KEY_BUTTON_PIN);
   
-  button_event = 1;
+	button_event = 1;
 }
 
 /**

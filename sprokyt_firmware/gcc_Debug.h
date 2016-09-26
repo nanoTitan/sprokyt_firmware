@@ -1131,17 +1131,6 @@
 #endif
 
 // --- Include directories begin --- //
-//../../../../../../../STM32/X-CUBE-BLE1/Drivers/BSP/X-NUCLEO-IDB04A1
-//../../../../../../../STM32/X-CUBE-BLE1/Middlewares/ST/LowPowerManager/Inc
-//../../../../../../../STM32/X-CUBE-BLE1/Middlewares/ST/STM32_BlueNRG/Interface
-//../../../../../../../STM32/X-CUBE-BLE1/Middlewares/ST/STM32_BlueNRG/STM32F4xx_HAL_BlueNRG_Drivers/inc
-//../../../../../../../STM32/X-CUBE-BLE1/Middlewares/ST/TimerServer/inc
-//../../../../../../../STM32/X-CUBE-BLE1/Middlewares/ST/TimerServer/STM32xx_HAL_TimerServer_Drivers/inc
-//../../../../../../../STM32/X-CUBE-BLE1/Middlewares/ST/STM32_BlueNRG/SimpleBlueNRG_HCI/includes
-//../../../../../../../STM32/X-CUBE-BLE1/Middlewares/ST/STM32_BlueNRG/SimpleBlueNRG_HCI/hci
-//../../../../../../../STM32/X-CUBE-BLE1/Middlewares/ST/STM32_BlueNRG/SimpleBlueNRG_HCI/hci/controller
-//../../../../../../../STM32/X-CUBE-BLE1/Middlewares/ST/STM32_BlueNRG/SimpleBlueNRG_HCI/utils
-//../../../../../../../STM32/X-CUBE-BLE1/Drivers/BSP/STM32F4xx-Nucleo
 //../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/Components/Common
 //../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/Components/hts221
 //../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/Components/lis3mdl
@@ -1150,6 +1139,7 @@
 //../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/Components/lsm6ds0
 //../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/Components/lsm6ds3
 //../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/X_NUCLEO_IKS01A1
+//../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/STM32F4xx-Nucleo
 //../../../../../../../STM32/X-CUBE-MEMS1/Middlewares/ST/STM32_OSX_MotionFX_Library
 //../../../../../../../STM32/X-CUBE-MEMS1/Middlewares/ST/STM32_OSX_MotionFX_Library/Inc
 //../../../../../../../STM32/X-CUBE-WIFI1/Middlewares/ST/STM32_SPWF01SA/Inc
@@ -1184,7 +1174,6 @@
 //c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/5.3.0/../../../../arm-eabi/sys-include
 //c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/5.3.0/../../../../arm-eabi/include
 //src
-//src/ble
 //src/imu
 //src/motor
 //src/math

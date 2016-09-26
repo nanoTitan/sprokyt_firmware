@@ -1008,9 +1008,6 @@
 #ifndef __INTMAX_TYPE__
 #define __INTMAX_TYPE__ long long int
 #endif
-#ifndef OSXMOTIONFX_STORE_CALIB_FLASH
-#define OSXMOTIONFX_STORE_CALIB_FLASH 1
-#endif
 #ifndef __DEC128_MAX_EXP__
 #define __DEC128_MAX_EXP__ 6145
 #endif
@@ -1128,6 +1125,9 @@
 #ifndef __ATOMIC_RELEASE
 #define __ATOMIC_RELEASE 3
 #endif
+#ifndef O
+#define O 1
+#endif
 #endif
 
 // --- Include directories begin --- //
@@ -1171,6 +1171,11 @@
 //$(LOCALAPPDATA)/VisualGDB/EmbeddedBSPs/arm-eabi/com.sysprogs.arm.mbed/libraries/mbed/targets/cmsis/TARGET_STM
 //$(LOCALAPPDATA)/VisualGDB/EmbeddedBSPs/arm-eabi/com.sysprogs.arm.mbed/libraries/mbed/targets/hal/TARGET_STM/TARGET_STM32F4
 //$(LOCALAPPDATA)/VisualGDB/EmbeddedBSPs/arm-eabi/com.sysprogs.arm.mbed/libraries/mbed/targets/hal/TARGET_STM
+//$(LOCALAPPDATA)/VisualGDB/EmbeddedBSPs/arm-eabi/com.sysprogs.arm.mbed/libraries/rtos/rtos
+//$(LOCALAPPDATA)/VisualGDB/EmbeddedBSPs/arm-eabi/com.sysprogs.arm.mbed/libraries/rtos/rtx
+//$(LOCALAPPDATA)/VisualGDB/EmbeddedBSPs/arm-eabi/com.sysprogs.arm.mbed/libraries/rtos/rtx/TARGET_CORTEX_M/TARGET_RTOS_M4_M7
+//$(LOCALAPPDATA)/VisualGDB/EmbeddedBSPs/arm-eabi/com.sysprogs.arm.mbed/libraries/rtos/rtx/TARGET_CORTEX_M
+//$(LOCALAPPDATA)/VisualGDB/EmbeddedBSPs/arm-eabi/com.sysprogs.arm.mbed/libraries/rtos/rtx/TARGET_CORTEX_M/TARGET_RTOS_M4_M7/TOOLCHAIN_GCC
 //c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/5.3.0/../../../../arm-eabi/include/c++/5.3.0
 //c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/5.3.0/../../../../arm-eabi/include/c++/5.3.0/arm-eabi/thumb/cortex_m4
 //c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/5.3.0/../../../../arm-eabi/include/c++/5.3.0/backward
@@ -1186,6 +1191,10 @@
 //src/Controller
 //src/PID
 //src/wifi
+//src/wifi/ESP8266Interface
+//src/wifi/ESP8266Interface/ESP8266
+//src/wifi/ESP8266Interface/Helper
+//src/wifi/ESP8266Interface/Socket
 // --- Include directories end --- //
 
 

@@ -7,7 +7,7 @@
 /* Private Variables ------------------------------------------------------------------*/
 //PwmOut _bldcArray[4] = { D9, D10, PC_9, PC_8  };
 TB6612FNG motorDriver1(PB_10, PA_1, PA_0, PA_7, PA_5, PA_6, PA_4);
-TB6612FNG motorDriver2(PB_6, PA_15, PA_8, PC_7, PC_3, PC_4, PC_2);
+TB6612FNG motorDriver2(PB_6, PA_15, PA_8, PC_7/*PB_3*/, PC_3, PC_4, PC_2);
 Timeout _motorArmTimeout;
 bool _motorsArmed = false;
 
@@ -82,7 +82,6 @@ void MotorController_setMotor(uint8_t motorIndxMask, float power, uint8_t direct
 //		_bldcArray[2].pulsewidth_us(power);	
 //	if (motorIndxMask & 0x08)
 //		_bldcArray[3].pulsewidth_us(power);	
-	
 	
 	
 	if (motorIndxMask & 0x01)

@@ -1,10 +1,10 @@
 /**
   ******************************************************************************
-  * @file    cube_hal.h 
+  * @file    debug.h 
   * @author  CL
   * @version V1.0.0
-  * @date    03-November-2014
-  * @brief   
+  * @date    04-July-2014
+  * @brief   This file defines print functions for debug purposes.
   ******************************************************************************
   * @attention
   *
@@ -34,70 +34,40 @@
   *
   ******************************************************************************
   */
-  
+
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef _CUBE_HAL_H_
-#define _CUBE_HAL_H_
+#ifndef __DEBUG_H
+#define __DEBUG_H
+
+#ifdef __cplusplus
+ extern "C" {
+#endif 
 
 /* Includes ------------------------------------------------------------------*/
-#ifdef USE_STM32F4XX_NUCLEO
-  #include "stm32f4xx_hal.h"
-  #include "stm32f4xx_nucleo.h"
-  //#include "stm32f4xx_nucleo_bluenrg.h"
-  #include "stm32f4xx_hal_conf.h"
+#include <string.h>
+
+/* Exported macro ------------------------------------------------------------*/
+//#define DEBUG
+#ifdef DEBUG
+#include <stdio.h>
+#define PRINTF(...) printf(__VA_ARGS__)
+#else
+#define PRINTF(...)
 #endif
 
-#ifdef USE_STM32L0XX_NUCLEO
-  #include "stm32l0xx_hal.h"
-  #include "stm32l0xx_nucleo.h"
-  #include "stm32l0xx_nucleo_bluenrg.h"
-  #include "stm32l0xx_hal_conf.h"
+/* Print the data travelling over the SPI in the .csv format for the GUI*/
+//#define PRINT_CSV_FORMAT 
+#ifdef PRINT_CSV_FORMAT
+#include <stdio.h>
+#define PRINT_CSV(...) printf(__VA_ARGS__)
+#else
+#define PRINT_CSV(...)
 #endif
 
-#ifdef USE_STM32L4XX_NUCLEO
-  #include "stm32l4xx_hal.h"
-  #include "stm32l4xx_nucleo.h"
-  #include "stm32l4xx_nucleo_bluenrg.h"
-  #include "stm32l4xx_hal_conf.h"
+#ifdef __cplusplus
+}
 #endif
 
-/* Uncomment to enable the adaquate RTC Clock Source */
-#define RTC_CLOCK_SOURCE_LSE
-//#define RTC_CLOCK_SOURCE_LSI
-
-#ifdef USE_STM32F4XX_NUCLEO
-#define USARTx_TX_AF                     GPIO_AF7_USART2
-#define USARTx_RX_AF                     GPIO_AF7_USART2
-
-#ifdef RTC_CLOCK_SOURCE_LSI
-#define RTC_ASYNCH_PREDIV  0x7F
-#define RTC_SYNCH_PREDIV   0xF9
-#endif
-
-#ifdef RTC_CLOCK_SOURCE_LSE
-#define RTC_ASYNCH_PREDIV  0x7F
-#define RTC_SYNCH_PREDIV   0x00FF
-#endif
-#endif
-
-#ifdef USE_STM32L4XX_NUCLEO
-#define USARTx_TX_AF                     GPIO_AF7_USART2
-#define USARTx_RX_AF                     GPIO_AF7_USART2
-
-#ifdef RTC_CLOCK_SOURCE_LSI
-#define RTC_ASYNCH_PREDIV  0x7F
-#define RTC_SYNCH_PREDIV   0xF9
-#endif
-
-#ifdef RTC_CLOCK_SOURCE_LSE
-#define RTC_ASYNCH_PREDIV  0x7F
-#define RTC_SYNCH_PREDIV   0x00FF
-#endif
-#endif
-
-void SystemClock_Config(void);
-
-#endif //_CUBE_HAL_H_
+#endif /* __DEBUG_H */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
-

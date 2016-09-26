@@ -13,7 +13,7 @@ Wifi* Wifi::m_pInstance = NULL;
 Timeout timer_buffer_debug;
 CircBuffer<char> buffer_ESP8266_recv(2048);
 RawSerial pc(USBTX, USBRX);
-ESP8266 esp(D8, D2, D9, "NETGEAR35", "yellowquail877", 115200);		// tx, rx - D1, D0, D2   - 115200
+ESP8266 esp(D8, D2, PC_10, "NETGEAR35", "yellowquail877", 115200);		// tx, rx - D1, D0, D2   - 115200
 
 Wifi::Wifi()
 :m_numConnections(0),
