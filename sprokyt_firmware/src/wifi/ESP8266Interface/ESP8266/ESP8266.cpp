@@ -180,6 +180,9 @@ bool ESP8266::startServerWithAP(char* ssid, char* pwd, int chl, int ecn, int por
     command_results[0]=sendCommand("AT+CWMODE=2", "OK", NULL, 1000);
     command_results[1]=sendCommand("AT+CIPMUX=1", "OK", NULL, 1000);
     
+	// Set server IP
+	sendCommand(("AT+CIPAP=" + (string)"\"192.168.4.1\"").c_str(), "OK", NULL, 1000);	
+	
     sendCommand("AT+CWSAP?", "OK", NULL, 1000);
     
     char chlstr[4];
@@ -199,7 +202,11 @@ bool ESP8266::startServerWithAP(char* ssid, char* pwd, int chl, int ecn, int por
 		command_results[3] = sendCommand(("AT+CIPSERVER=1," + (string)portstr).c_str(), "OK", NULL, 1000);
 	}
 	
-	sendCommand("AT+CIFSR", "OK", NULL, 1000);
+	sendCommand("AT+CIFSR", "OK", NULL, 1000);	
+	
+	char portstr[8] = { 0,0,0,0,0,0,0,0 };
+	sprintf(portstr, "%d", port);
+	sendCommand(("AT+CIPSTART=1,\"UDP\",\"192.168.4.1\",8080," + (string)portstr + ",0").c_str(), "OK", NULL, 1000);	
     
     DBG("Data Mode\r\n");
     state.cmdMode = false;

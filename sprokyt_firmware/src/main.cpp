@@ -39,20 +39,20 @@ int main()
 	
 	// Must initialize ControlManager before 
 	//MotorController_init();	
-	ControlMgr_init();
-	ControlMgr_setType(CONTROLLER_FLIGHT);	//  CONTROLLER_ESC_PROGRAMMER CONTROLLER_FLIGHT
+	//ControlMgr_init();
+	//ControlMgr_setType(CONTROLLER_FLIGHT);	//  CONTROLLER_ESC_PROGRAMMER CONTROLLER_FLIGHT
 	//BLE::InitBLE();
 	//SWPF01SA::Instance()->InitWifi();
 	Wifi::Instance()->Init();
-	IMU_init();
+	//IMU_init();
 	
 	while (1)
 	{
 		//BLE::Update();
 		//SWPF01SA::Instance()->Update();
 		Wifi::Instance()->Update();
-		IMU_update();
-		ControlMgr_update();
+		//IMU_update();
+		//ControlMgr_update();
 	}
 }
 
