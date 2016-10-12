@@ -190,7 +190,7 @@ void SFTimerInit()
 	/* Set the pulse value for channel 1 */
 	sConfig.Pulse = timer_period / 2;
   
-	if (HAL_TIM_OC_ConfigChannel(&SFTimHandle, &sConfig, TIM_CHANNEL_1) != HAL_OK)
+	if (HAL_TIM_OC_ConfigChannel(&SFTimHandle, &sConfig, TIM_SF_CHANNEL) != HAL_OK)
 	{
 	  /* Initialization Error */
 		CError_Handler();
@@ -199,7 +199,7 @@ void SFTimerInit()
   
 	/*##-4- Start the Output Compare mode in interrupt mode ####################*/
 	/* Start Channel1 */
-	if (HAL_TIM_OC_Start_IT(&SFTimHandle, TIM_CHANNEL_1) != HAL_OK)
+	if (HAL_TIM_OC_Start_IT(&SFTimHandle, TIM_SF_CHANNEL) != HAL_OK)
 	{
 	  /* Initialization Error */
 		CError_Handler();

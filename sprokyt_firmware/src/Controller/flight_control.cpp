@@ -1,4 +1,5 @@
 #include "imu.h"
+#include "control_manager.h"
 #include "flight_control.h"
 #include "motor_controller.h"
 #include "constants.h"
@@ -9,7 +10,8 @@
 #include "debug.h"
 #include <mbed.h>
 
-extern "C" {
+extern "C" 
+{
 #include "MotionFX_Manager.h"
 }
 
@@ -36,9 +38,11 @@ FLIGHT_MODE m_flightMode = STABILITY_MODE;
 Timer fcTimer;
 
 /* Private function prototypes -----------------------------------------------*/
-static void UpdateConnectionLost();
 static void Disarm();
-void FlightControl_setPIDValue(int index, const PIDInfo& info);
+static void FlightControl_setPIDValue(uint8_t instruction, const PIDInfo& info);
+static void UpdateIdle();
+static void UpdateConnected();
+static void UpdateDisconnected();
 
 /* Private functions ---------------------------------------------------------*/
 void FlightControl_init()
@@ -65,26 +69,34 @@ void FlightControl_init()
 	fcTimer.start();
 }
 
-
 void FlightControl_update()
+{	
+	CONTROL_STATE state = ControlMgr_getState();
+	switch (state)
+	{
+	case CONTROL_STATE_IDLE:
+		break;
+		
+	case CONTROL_STATE_CONNECTED:
+		UpdateConnected();
+		break;
+		
+	case CONTROL_STATE_DISCONNECTED:
+		UpdateDisconnected();
+		break;
+		
+	default:
+		break;
+	}
+}
+
+void UpdateConnected()
 {		
 	// Don't update motors if we aren't in a connection lost state and without valid throttle values
 	if (m_rcThrottle == 0)
 	{
 		// Reset target yaw for next takeoff
 		m_targetYaw = IMU_get_sf_yaw();	
-		return;
-	}
-	
-	//if (!BLE::IsConnected())
-	if(!Wifi::Instance()->IsConnected())
-	{
-		if (m_rcThrottle > MIN_FLIGHT_THROTTLE)
-			UpdateConnectionLost();
-		
-		if (m_rcThrottle <= MIN_FLIGHT_THROTTLE)
-			Disarm();
-		
 		return;
 	}
 	
@@ -134,9 +146,6 @@ void FlightControl_update()
 		float gy = pInput->gyro[1] - bias[1];
 		float gz = pInput->gyro[2] - bias[2];
 		
-		osxMFX_output* pOutput = MotionFX_manager_getDataOUT();
-		float heading = pOutput->heading_9X;
-		
 		float yaw_output   = clampf(m_pidArray[PID_YAW_RATE].get_pid(yaw_stab_output + gz, 1), -500, 500);
 		float pitch_output = clampf(m_pidArray[PID_PITCH_RATE].get_pid(pitch_stab_output + gx, 1), -500, 500);
 		float roll_output  = clampf(m_pidArray[PID_ROLL_RATE].get_pid(roll_stab_output + gy, 1), -500, 500);
@@ -185,9 +194,9 @@ void FlightControl_update()
 			//PRINTF("%d, %d, %d, %d\r\n", (int)sfPitch, (int)pitch_stab_output, (int)gx, (int)pitch_output);
 			//PRINTF("%d, %d, %d, %d\r\n", (int)sfYaw, (int)yaw_stab_output, (int)gz, (int)yaw_output);
 			//PRINTF("%.2f, %.2f\r\n", sfYaw, heading);					// yaw, pitch, roll
-			//PRINTF("%.2f, %d, %d\r\n", heading, (int)sfPitch, (int)sfRoll);					// yaw, pitch, roll
+			PRINTF("%.2f, %.2f, %.2f\r\n", sfYaw, sfPitch, sfRoll);			// yaw, pitch, roll
 			//PRINTF("%.2f, %.2f, %.2f\r\n", pInput->mag[0], pInput->mag[1], pInput->mag[2]);
-			PRINTF("%d, %d, %d, %d\r\n", (int)powerA, (int)powerB, (int)powerC, (int)powerD);		// A, B, C, D
+			//PRINTF("%d, %d, %d, %d\r\n", (int)powerA, (int)powerB, (int)powerC, (int)powerD);		// A, B, C, D
 			cnt = 0;
 		}
 		
@@ -214,20 +223,21 @@ void FlightControl_update()
 	}
 }
 
-void UpdateConnectionLost()
+void UpdateDisconnected()
 {
 	// TODO: Show flashing LEDs if connection is lost
 	
-	// Power down motors slowly
-	
-	m_rcThrottle -= 0.5f;
-	if (m_rcThrottle < MIN_FLIGHT_THROTTLE)
+	// Power down motors slowly		
+	if (m_rcThrottle > MIN_FLIGHT_THROTTLE)
 	{
-		m_rcThrottle = MIN_FLIGHT_THROTTLE;
+		m_rcThrottle -= 0.1f;
 	}
 	
 	MotorController_setMotor(MOTOR_ALL, m_rcThrottle, 0);	
 	//PRINTF("power down %d\n", (int)m_rcThrottle);	
+	
+	if (m_rcThrottle <= MIN_FLIGHT_THROTTLE)
+		Disarm();
 }
 
 void Disarm()
@@ -235,6 +245,8 @@ void Disarm()
 	// Turn motors off
 	MotorController_setMotor(MOTOR_ALL, MIN_THROTTLE, 0);
 	m_rcThrottle = 0;
+	
+	ControlMgr_setState(CONTROL_STATE_IDLE);
 }
 
 void FlightControl_parseInstruction(uint8_t data_length, uint8_t *att_data)
@@ -260,21 +272,21 @@ void FlightControl_parseInstruction(uint8_t data_length, uint8_t *att_data)
 	}
 }
 
-void FlightControl_setPIDValue(int index, const PIDInfo& info)
+void FlightControl_setPIDValue(uint8_t instruction, const PIDInfo& info)
 {
-	if (index == PID_YAW_RATE)
+	if (instruction == INSTRUCTION_YAW_PID)
 	{
 		m_pidArray[PID_YAW_RATE].kP(info.P);
 		m_pidArray[PID_YAW_RATE].kI(info.I);
 		m_pidArray[PID_YAW_RATE].kD(info.D);
 	}
-	else if (index == PID_PITCH_RATE)
+	else if (instruction == INSTRUCTION_PITCH_PID)
 	{
 		m_pidArray[PID_PITCH_RATE].kP(info.P);
 		m_pidArray[PID_PITCH_RATE].kI(info.I);	
 		m_pidArray[PID_PITCH_RATE].kD(info.D);
 	}
-	else if (index == PID_ROLL_RATE)
+	else if (instruction == INSTRUCTION_ROLL_PID)
 	{
 		m_pidArray[PID_ROLL_RATE].kP(info.P);
 		m_pidArray[PID_ROLL_RATE].kI(info.I);

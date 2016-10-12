@@ -1,4 +1,10 @@
-//#include <mbed.h>
+/*
+Ruka Firmware
+Copyright Sprokyt LLC 2016
+All Rights Reserved
+*/
+
+#include "constants.h"
 #include "control_manager.h"
 //#include "BLE.h"
 //#include "SWPF01SA.h"
@@ -21,7 +27,11 @@ extern "C" {
 
 int main()
 {	
-	PRINTF("Ruka Firmware version 0.1\r\n");
+	PRINTF("***************************\r\n");
+	PRINTF("Ruka Firmware Version %.02f\r\n", FIRMWARE_VERSION);
+	PRINTF("Copyright Sprokyt LLC 2016\r\n");
+	PRINTF("All Rights Reserved\r\n");
+	PRINTF("***************************\r\n\r\n");
 	
 	if (HAL_Init() != HAL_OK)
 	{
@@ -38,42 +48,26 @@ int main()
 	BSP_PB_Init(BUTTON_KEY, BUTTON_MODE_GPIO);
 	
 	// Must initialize ControlManager before 
-	//MotorController_init();	
-	//ControlMgr_init();
-	//ControlMgr_setType(CONTROLLER_FLIGHT);	//  CONTROLLER_ESC_PROGRAMMER CONTROLLER_FLIGHT
+	MotorController_init();	
+	
+	// Control Manager
+	ControlMgr_init();
+	ControlMgr_setType(CONTROLLER_FLIGHT);	//  CONTROLLER_ESC_PROGRAMMER CONTROLLER_FLIGHT
+	
+	// Communication Init
 	//BLE::InitBLE();
 	//SWPF01SA::Instance()->InitWifi();
 	Wifi::Instance()->Init();
-	//IMU_init();
+	
+	// IMU and Sensors
+	IMU_init();
 	
 	while (1)
 	{
 		//BLE::Update();
 		//SWPF01SA::Instance()->Update();
 		Wifi::Instance()->Update();
-		//IMU_update();
-		//ControlMgr_update();
+		IMU_update();
+		ControlMgr_update();
 	}
 }
-
-
-//int main() 
-//{
-//	if (HAL_Init() != HAL_OK)
-//	{
-//		Error_Handler(); 
-//	}
-//	
-//	MotorController_init();
-//	
-////	MotorController_setMotor(MOTOR_A, 1200, 0);	
-////	wait_ms(3000);
-//	MotorController_setMotor(MOTOR_ALL, 1200, 0);
-//	wait_ms(3000);
-//	
-//	MotorController_setMotor(MOTOR_ALL, 1000, 0);
-//	
-//	while (1)
-//	{
-//	}
-//}

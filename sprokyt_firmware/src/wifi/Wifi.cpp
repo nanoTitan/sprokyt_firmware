@@ -12,7 +12,7 @@ Wifi* Wifi::m_pInstance = NULL;
 Timeout timer_buffer_debug;
 CircBuffer<char> buffer_ESP8266_recv(2048);
 RawSerial pc(USBTX, USBRX);
-ESP8266 esp(D8, D2, PC_10, "NETGEAR35", "yellowquail877", 115200);		// tx, rx - D1, D0, D2   - 115200
+ESP8266 esp(PA_9, PA_10, PC_10, "NETGEAR35", "yellowquail877", 115200);		// tx, rx - D1, D0, D2   - 115200
 
 Wifi::Wifi()
 :m_wifiCallbackTime(0.05),
@@ -45,6 +45,8 @@ Wifi* Wifi::Instance()
 
 void Wifi::Init()
 {
+	PRINTF("Wifi - Initializing\r\n");
+	
 	esp.reset();
 	esp.startServerWithAP((char*)DEFAULT_WIFI_SSID.c_str(), (char*)DEFAULT_WIFI_PWRD.c_str(), 7, 4, 1001);
 	
@@ -214,6 +216,7 @@ void Wifi::HandleRx()
 		if (indx != -1)
 		{
 			++m_numConnections;
+			PRINTF("WiFi - connection created, connections: %d\r\n", m_numConnections);
 			
 			uint32_t length = buffer_ESP8266_recv.getLength(indx + strlen(term));
 			for (uint32_t i = 0; i < length; ++i)
@@ -228,10 +231,12 @@ void Wifi::HandleRx()
 		if (indx != -1)
 		{
 			--m_numConnections;
+			PRINTF("WiFi - connection closed, connections: %d\r\n", m_numConnections);
+			
 			if (m_numConnections == 0)
 			{
 				m_rxData.erase(m_rxData.begin(), m_rxData.end());
-				ControlMgr_connectionLost();
+				ControlMgr_setState(CONTROL_STATE_DISCONNECTED);
 			}
 			
 			if (m_numConnections < 0)
@@ -262,9 +267,9 @@ void Wifi::HandleRx()
 			}
 		}
 		
-		if (partialInstrFound)
+		if (partialInstrFound && m_rxData.size() > 0)
 		{	
-			PRINTF("Partial Instr Found. Clearing rxData buffer!\r\n");
+			PRINTF("Wifi - partial Instr Found. Clearing rxData buffer!\r\n");
 			m_rxData.erase(m_rxData.begin(), m_rxData.end());
 		}
 			
