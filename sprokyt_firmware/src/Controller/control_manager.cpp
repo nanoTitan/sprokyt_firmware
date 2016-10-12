@@ -24,7 +24,7 @@ void ControlMgr_setState(CONTROL_STATE state)
 	m_controlState = state;
 	
 	if (m_controlState != CONTROL_STATE_CONNECTED)
-		m_controlState = CONTROL_STATE_CONNECTED;
+		m_controlState = state;
 }
 
 void ControlMgr_setType(CONTROLLER_TYPE ctrlType)

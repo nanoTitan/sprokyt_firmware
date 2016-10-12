@@ -33,6 +33,8 @@ float m_trimPitch = 0;
 float m_trimRoll = 0;
 float m_targetYaw = 0;
 float m_trimScale = 10.0f;
+uint32_t m_lastThrottleDown = 0;
+uint32_t m_lastHoverShutdown = -1;
 FLIGHT_MODE m_flightMode = STABILITY_MODE;
 
 Timer fcTimer;
@@ -41,7 +43,7 @@ Timer fcTimer;
 static void Disarm();
 static void FlightControl_setPIDValue(uint8_t instruction, const PIDInfo& info);
 static void UpdateIdle();
-static void UpdateConnected();
+static void UpdateFlightControl();
 static void UpdateDisconnected();
 
 /* Private functions ---------------------------------------------------------*/
@@ -78,7 +80,7 @@ void FlightControl_update()
 		break;
 		
 	case CONTROL_STATE_CONNECTED:
-		UpdateConnected();
+		UpdateFlightControl();
 		break;
 		
 	case CONTROL_STATE_DISCONNECTED:
@@ -90,7 +92,7 @@ void FlightControl_update()
 	}
 }
 
-void UpdateConnected()
+void UpdateFlightControl()
 {		
 	// Don't update motors if we aren't in a connection lost state and without valid throttle values
 	if (m_rcThrottle == 0)
@@ -187,14 +189,14 @@ void UpdateConnected()
 		
 		static int cnt = 0;
 		++cnt;
-		if (cnt == 50)
+		if (cnt == 100)
 		{
-			//PRINTF("%d, %d, %d, %d\r\n", (int)m_rcThrottle, (int)m_rcYaw, (int)m_rcPitch, (int)m_rcRoll);
+			PRINTF("%d, %d, %d, %d\r\n", (int)m_rcThrottle, (int)m_rcYaw, (int)m_rcPitch, (int)m_rcRoll);
 			//PRINTF("%d, %d, %d, %d\r\n", (int)sfRoll, (int)roll_stab_output, (int)gy, (int)roll_output);
 			//PRINTF("%d, %d, %d, %d\r\n", (int)sfPitch, (int)pitch_stab_output, (int)gx, (int)pitch_output);
 			//PRINTF("%d, %d, %d, %d\r\n", (int)sfYaw, (int)yaw_stab_output, (int)gz, (int)yaw_output);
 			//PRINTF("%.2f, %.2f\r\n", sfYaw, heading);					// yaw, pitch, roll
-			PRINTF("%.2f, %.2f, %.2f\r\n", sfYaw, sfPitch, sfRoll);			// yaw, pitch, roll
+			//PRINTF("%.2f, %.2f, %.2f\r\n", sfYaw, sfPitch, sfRoll);			// yaw, pitch, roll
 			//PRINTF("%.2f, %.2f, %.2f\r\n", pInput->mag[0], pInput->mag[1], pInput->mag[2]);
 			//PRINTF("%d, %d, %d, %d\r\n", (int)powerA, (int)powerB, (int)powerC, (int)powerD);		// A, B, C, D
 			cnt = 0;
@@ -227,17 +229,35 @@ void UpdateDisconnected()
 {
 	// TODO: Show flashing LEDs if connection is lost
 	
+	// TODO: Measure barometer to know when to exit descent
+	
 	// Power down motors slowly		
 	if (m_rcThrottle > MIN_FLIGHT_THROTTLE)
 	{
-		m_rcThrottle -= 0.1f;
+		uint32_t currTick = HAL_GetTick();
+		if (m_rcThrottle >= DESCENT_FLIGHT_THROTTLE)
+		{
+			if (m_lastHoverShutdown == -1)
+			{
+				m_rcThrottle = DESCENT_FLIGHT_THROTTLE;
+				m_lastHoverShutdown = currTick;
+			}
+			
+			if (currTick - m_lastHoverShutdown > 3000)		// 3 second hover before shutdown
+				m_rcThrottle = DESCENT_FLIGHT_THROTTLE - 1;
+		}
+		else if (currTick - m_lastThrottleDown > 10)
+		{
+			m_rcThrottle -= 1;
+			m_lastThrottleDown = currTick;
+		}
+		
+		UpdateFlightControl();
 	}
-	
-	MotorController_setMotor(MOTOR_ALL, m_rcThrottle, 0);	
-	//PRINTF("power down %d\n", (int)m_rcThrottle);	
-	
-	if (m_rcThrottle <= MIN_FLIGHT_THROTTLE)
+	else
+	{
 		Disarm();
+	}	
 }
 
 void Disarm()
@@ -245,6 +265,8 @@ void Disarm()
 	// Turn motors off
 	MotorController_setMotor(MOTOR_ALL, MIN_THROTTLE, 0);
 	m_rcThrottle = 0;
+	m_lastThrottleDown = -1;
+	m_lastThrottleDown = 0;
 	
 	ControlMgr_setState(CONTROL_STATE_IDLE);
 }
