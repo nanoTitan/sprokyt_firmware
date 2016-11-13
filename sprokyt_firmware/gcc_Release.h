@@ -681,6 +681,9 @@
 #ifndef __LACCUM_EPSILON__
 #define __LACCUM_EPSILON__ 0x1P-31LK
 #endif
+#ifndef STSPIN_240
+#define STSPIN_240 1
+#endif
 #ifndef __DEC32_SUBNORMAL_MIN__
 #define __DEC32_SUBNORMAL_MIN__ 0.000001E-95DF
 #endif

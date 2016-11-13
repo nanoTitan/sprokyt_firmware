@@ -678,6 +678,9 @@
 #ifndef __LACCUM_EPSILON__
 #define __LACCUM_EPSILON__ 0x1P-31LK
 #endif
+#ifndef STSPIN_240
+#define STSPIN_240 1
+#endif
 #ifndef __DEC32_SUBNORMAL_MIN__
 #define __DEC32_SUBNORMAL_MIN__ 0.000001E-95DF
 #endif
@@ -1146,6 +1149,10 @@
 //../../../../../../../STM32/X-CUBE-WIFI1/Middlewares/ST/STM32_SPWF01SA/Utils
 //../../../../../../../STM32/X-CUBE-WIFI1/Middlewares/ST/STM32_SPWF01SA
 //../../../../../../../STM32/X-CUBE-WIFI1/Drivers/BSP/X-NUCLEO-IDW01M1
+//../../../../../../../STM32/X-CUBE-SPN12/Drivers/BSP/Components/Common
+//../../../../../../../STM32/X-CUBE-SPN12/Drivers/BSP/Components/stspin240_250
+//../../../../../../../STM32/X-CUBE-SPN12/Drivers/BSP/MotorControl
+//../../../../../../../STM32/X-CUBE-SPN12/Drivers/BSP/STM32F4xx-Nucleo
 //$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed/libraries/mbed/targets/cmsis/TOOLCHAIN_GCC
 //$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed/libraries/mbed/hal
 //$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed/libraries/mbed/targets/cmsis

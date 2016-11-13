@@ -18,7 +18,7 @@ All Rights Reserved
 #ifdef __cplusplus
 extern "C" {
 #endif 
-	
+
 #include "cube_hal.h"
 
 #ifdef __cplusplus
@@ -47,27 +47,29 @@ int main()
 	// Initialize Button
 	BSP_PB_Init(BUTTON_KEY, BUTTON_MODE_GPIO);
 	
-	// Must initialize ControlManager before 
+	// Motor Controller
 	MotorController_init();	
 	
 	// Control Manager
 	ControlMgr_init();
 	ControlMgr_setType(CONTROLLER_FLIGHT);	//  CONTROLLER_ESC_PROGRAMMER CONTROLLER_FLIGHT
 	
-	// Communication Init
+	// Communication
 	//BLE::InitBLE();
-	//SWPF01SA::Instance()->InitWifi();
-	Wifi::Instance()->Init();
+	//SWPF01SA::Instance()->InitWifi();		// ST Wifi
+	//Wifi::Instance()->Init();				// ESP Wifi
 	
 	// IMU and Sensors
-	IMU_init();
+	//IMU_init();
+	
+	MotorController_setMotor(MOTOR_A, 1500, DIR_CW);
 	
 	while (1)
 	{
 		//BLE::Update();
 		//SWPF01SA::Instance()->Update();
-		Wifi::Instance()->Update();
-		IMU_update();
+		//Wifi::Instance()->Update();
+		//IMU_update();
 		ControlMgr_update();
 	}
 }

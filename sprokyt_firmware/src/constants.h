@@ -4,8 +4,6 @@
 
 #define FIRMWARE_VERSION 0.1f
 
-#define MOTORS_ENABLED
-
 #define WIFI_PING_TIMEOUT 3600
 
 #define MIN_THROTTLE 1000
@@ -29,7 +27,12 @@
 #define INSTRUCTION_PITCH_PID		19
 #define INSTRUCTION_ROLL_PID		20
 
+#define MOTORS_ENABLED
 #define MC_NUM_MOTORS 4
+
+//#define MOTOR_ESC
+//#define MOTOR_TOSHIBA
+#define MOTOR_STSPIN
 
 // 250 Quad H Setup
 #define MOTOR_A 0x01

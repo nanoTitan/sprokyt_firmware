@@ -80,7 +80,7 @@ void HAL_RTC_MspInit(RTC_HandleTypeDef *hrtc)
   if(HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
     /* Initialization Error */
-    Error_Handler();
+    CError_Handler();
   }
   
   PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_RTC;
@@ -88,7 +88,7 @@ void HAL_RTC_MspInit(RTC_HandleTypeDef *hrtc)
   if(HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK)
   {
     /* Initialization Error */
-    Error_Handler();
+    CError_Handler();
   }
 #elif defined (RTC_CLOCK_SOURCE_LSI)
   RCC_OscInitStruct.OscillatorType =  RCC_OSCILLATORTYPE_LSI | RCC_OSCILLATORTYPE_LSE;
@@ -98,7 +98,7 @@ void HAL_RTC_MspInit(RTC_HandleTypeDef *hrtc)
   if(HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
     /* Initialization Error */
-    Error_Handler();
+    CError_Handler();
   }
   
   PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_RTC;
