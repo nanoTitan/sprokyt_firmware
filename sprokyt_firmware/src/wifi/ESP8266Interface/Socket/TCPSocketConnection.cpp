@@ -23,10 +23,10 @@ using std::memset;
 using std::memcpy;
 
 //Debug is disabled by default
-#if 1
+#if 0
 #define DBG(x, ...)  printf("[TCPConnection : DBG]"x" \t[%s,%d]\r\n", ##__VA_ARGS__,__FILE__,__LINE__); 
 #define WARN(x, ...) printf("[TCPConnection: WARN]"x" \t[%s,%d]\r\n", ##__VA_ARGS__,__FILE__,__LINE__); 
-#define ERR(x, ...)  printf("[TCPConnection : ERR]"x" \t[%s,%d]\r\n", ##__VA_ARGS__,__FILE__,__LINE__); 
+#define ERR(x, ...)  printf("[TCPConnection: ERR]"x" \t[%s,%d]\r\n", ##__VA_ARGS__,__FILE__,__LINE__); 
 #else
 #define DBG(x, ...)
 #define WARN(x, ...)
@@ -67,7 +67,7 @@ bool TCPSocketConnection::is_connected(void)
 int TCPSocketConnection::send(char* data, int length)
 {
     if (!_is_connected) {
-        ERR("TCPSocketConnection::receive() - _is_connected is false : you cant receive data until you connect to a socket!");
+	    ERR("TCPSocketConnection::receive() - _is_connected is false : you cant receive data until you connect to a socket!");
         return -1;
     }
     Timer tmr;
@@ -130,7 +130,7 @@ int TCPSocketConnection::send_all(char* data, int length)
 int TCPSocketConnection::receive(char* buffer, int length)
 {
     if (!_is_connected) {
-        ERR("TCPSocketConnection::receive() - _is_connected is false : you cant receive data until you connect to a socket!");
+	    ERR("TCPSocketConnection::receive() - _is_connected is false : you cant receive data until you connect to a socket!");
         return -1;
     }
     Timer tmr;

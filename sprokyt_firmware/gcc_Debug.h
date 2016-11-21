@@ -14,6 +14,9 @@
 #ifndef STM32F411xE
 #define STM32F411xE 1
 #endif
+#ifndef __cpp_attributes
+#define __cpp_attributes 200809
+#endif
 #ifndef __UINT_LEAST16_MAX__
 #define __UINT_LEAST16_MAX__ 0xffff
 #endif
@@ -31,6 +34,9 @@
 #endif
 #ifndef __GCC_IEC_559_COMPLEX
 #define __GCC_IEC_559_COMPLEX 0
+#endif
+#ifndef __cpp_aggregate_nsdmi
+#define __cpp_aggregate_nsdmi 201304
 #endif
 #ifndef __UFRACT_MAX__
 #define __UFRACT_MAX__ 0XFFFFP-16UR
@@ -64,6 +70,9 @@
 #endif
 #ifndef __WINT_MAX__
 #define __WINT_MAX__ 0xffffffffU
+#endif
+#ifndef __cpp_static_assert
+#define __cpp_static_assert 200410
 #endif
 #ifndef __USFRACT_FBIT__
 #define __USFRACT_FBIT__ 8
@@ -104,6 +113,9 @@
 #ifndef __cpp_binary_literals
 #define __cpp_binary_literals 201304
 #endif
+#ifndef TARGET_LIKE_CORTEX_M4
+#define TARGET_LIKE_CORTEX_M4 1
+#endif
 #ifndef __LLACCUM_MAX__
 #define __LLACCUM_MAX__ 0X7FFFFFFFFFFFFFFFP-31LLK
 #endif
@@ -112,6 +124,9 @@
 #endif
 #ifndef __FRACT_FBIT__
 #define __FRACT_FBIT__ 15
+#endif
+#ifndef __cpp_variadic_templates
+#define __cpp_variadic_templates 200704
 #endif
 #ifndef __UINT_FAST64_MAX__
 #define __UINT_FAST64_MAX__ 0xffffffffffffffffULL
@@ -131,6 +146,9 @@
 #ifndef __ARMEL__
 #define __ARMEL__ 1
 #endif
+#ifndef __cpp_variable_templates
+#define __cpp_variable_templates 201304
+#endif
 #ifndef __ARM_FEATURE_UNALIGNED
 #define __ARM_FEATURE_UNALIGNED 1
 #endif
@@ -142,6 +160,9 @@
 #endif
 #ifndef __LFRACT_MAX__
 #define __LFRACT_MAX__ 0X7FFFFFFFP-31LR
+#endif
+#ifndef TARGET_UVISOR_UNSUPPORTED
+#define TARGET_UVISOR_UNSUPPORTED 1
 #endif
 #ifndef __UINT_FAST8_MAX__
 #define __UINT_FAST8_MAX__ 0xffffffffU
@@ -203,6 +224,9 @@
 #ifndef __UINT32_MAX__
 #define __UINT32_MAX__ 0xffffffffUL
 #endif
+#if !defined(__GXX_EXPERIMENTAL_CXX0X__) && defined(__SYSPROGS_CODESENSE__)
+#define __GXX_EXPERIMENTAL_CXX0X__ 1
+#endif
 #ifndef __ULFRACT_MAX__
 #define __ULFRACT_MAX__ 0XFFFFFFFFP-32ULR
 #endif
@@ -236,14 +260,20 @@
 #ifndef __LLACCUM_MIN__
 #define __LLACCUM_MIN__ (-0X1P31LLK-0X1P31LLK)
 #endif
+#ifndef DEVICE_INTERRUPTIN
+#define DEVICE_INTERRUPTIN 1
+#endif
 #ifndef __SIZEOF_INT__
 #define __SIZEOF_INT__ 4
 #endif
 #ifndef __SIZEOF_POINTER__
 #define __SIZEOF_POINTER__ 4
 #endif
+#ifndef DEVICE_I2C_ASYNCH
+#define DEVICE_I2C_ASYNCH 1
+#endif
 #ifndef MBED_BUILD_TIMESTAMP
-#define MBED_BUILD_TIMESTAMP 1453433829.93
+#define MBED_BUILD_TIMESTAMP 1478563085.58
 #endif
 #ifndef __GCC_ATOMIC_CHAR16_T_LOCK_FREE
 #define __GCC_ATOMIC_CHAR16_T_LOCK_FREE 2
@@ -281,8 +311,14 @@
 #ifndef __GXX_WEAK__
 #define __GXX_WEAK__ 1
 #endif
+#ifndef MBED_CONF_PLATFORM_STDIO_BAUD_RATE
+#define MBED_CONF_PLATFORM_STDIO_BAUD_RATE 9600
+#endif
 #ifndef TARGET_NUCLEO_F411RE
 #define TARGET_NUCLEO_F411RE 1
+#endif
+#ifndef DEVICE_ERROR_RED
+#define DEVICE_ERROR_RED 1
 #endif
 #ifndef __USFRACT_IBIT__
 #define __USFRACT_IBIT__ 0
@@ -304,6 +340,12 @@
 #endif
 #ifndef __INT32_MAX__
 #define __INT32_MAX__ 0x7fffffffL
+#endif
+#ifndef MBED_CONF_PLATFORM_STDIO_FLUSH_AT_EXIT
+#define MBED_CONF_PLATFORM_STDIO_FLUSH_AT_EXIT 1
+#endif
+#ifndef DEVICE_SERIAL_ASYNCH
+#define DEVICE_SERIAL_ASYNCH 1
 #endif
 #ifndef __UQQ_FBIT__
 #define __UQQ_FBIT__ 8
@@ -332,14 +374,23 @@
 #ifndef __ULACCUM_IBIT__
 #define __ULACCUM_IBIT__ 32
 #endif
+#ifndef DEVICE_PORTOUT
+#define DEVICE_PORTOUT 1
+#endif
+#ifndef DEVICE_PORTINOUT
+#define DEVICE_PORTINOUT 1
+#endif
 #ifndef __UACCUM_EPSILON__
 #define __UACCUM_EPSILON__ 0x1P-16UK
 #endif
 #ifndef __GNUC__
-#define __GNUC__ 5
+#define __GNUC__ 6
 #endif
 #ifndef __ULLACCUM_MAX__
 #define __ULLACCUM_MAX__ 0XFFFFFFFFFFFFFFFFP-32ULLK
+#endif
+#ifndef __cpp_delegating_constructors
+#define __cpp_delegating_constructors 200604
 #endif
 #ifndef __HQ_IBIT__
 #define __HQ_IBIT__ 0
@@ -353,8 +404,14 @@
 #ifndef __BIGGEST_ALIGNMENT__
 #define __BIGGEST_ALIGNMENT__ 8
 #endif
+#ifndef __STDC_UTF_16__
+#define __STDC_UTF_16__ 1
+#endif
 #ifndef __MBED__
 #define __MBED__ 1
+#endif
+#ifndef __GNUC_STDC_INLINE__
+#define __GNUC_STDC_INLINE__ 1
 #endif
 #ifndef __DQ_IBIT__
 #define __DQ_IBIT__ 0
@@ -364,6 +421,12 @@
 #endif
 #ifndef __ULFRACT_IBIT__
 #define __ULFRACT_IBIT__ 0
+#endif
+#ifndef DEVICE_PORTIN
+#define DEVICE_PORTIN 1
+#endif
+#ifndef __cpp_raw_strings
+#define __cpp_raw_strings 200710
 #endif
 #ifndef __INT_FAST32_MAX__
 #define __INT_FAST32_MAX__ 0x7fffffff
@@ -389,6 +452,9 @@
 #ifndef __INT_FAST16_TYPE__
 #define __INT_FAST16_TYPE__ int
 #endif
+#ifndef DEVICE_STDIO_MESSAGES
+#define DEVICE_STDIO_MESSAGES 1
+#endif
 #ifndef __LDBL_HAS_DENORM__
 #define __LDBL_HAS_DENORM__ 1
 #endif
@@ -397,7 +463,10 @@
 #endif
 //VS2005-2012 treats all files as C++, while VS2013+ can treat C files correctly.
 #if defined(_MSC_VER) && (_MSC_VER < 1800 || defined(__cplusplus))
-#define __cplusplus 199711L
+#define __cplusplus 201402L
+#endif
+#ifndef __cpp_ref_qualifiers
+#define __cpp_ref_qualifiers 200710
 #endif
 #ifndef __DEC128_MAX__
 #define __DEC128_MAX__ 9.999999999999999999999999999999999E6144DL
@@ -416,6 +485,9 @@
 #endif
 #ifndef __DEPRECATED
 #define __DEPRECATED 1
+#endif
+#ifndef __cpp_rvalue_references
+#define __cpp_rvalue_references 200610
 #endif
 #ifndef __DBL_MAX_EXP__
 #define __DBL_MAX_EXP__ 1024
@@ -438,11 +510,20 @@
 #ifndef __UACCUM_MIN__
 #define __UACCUM_MIN__ 0.0UK
 #endif
+#ifndef MBED_CONF_PLATFORM_STDIO_CONVERT_NEWLINES
+#define MBED_CONF_PLATFORM_STDIO_CONVERT_NEWLINES 0
+#endif
 #ifndef __UACCUM_IBIT__
 #define __UACCUM_IBIT__ 16
 #endif
+#ifndef DEVICE_SERIAL
+#define DEVICE_SERIAL 1
+#endif
+#ifndef DEVICE_I2CSLAVE
+#define DEVICE_I2CSLAVE 1
+#endif
 #ifndef __GNUG__
-#define __GNUG__ 5
+#define __GNUG__ 6
 #endif
 #ifndef __LONG_LONG_MAX__
 #define __LONG_LONG_MAX__ 0x7fffffffffffffffLL
@@ -453,8 +534,17 @@
 #ifndef __ULACCUM_MAX__
 #define __ULACCUM_MAX__ 0XFFFFFFFFFFFFFFFFP-32ULK
 #endif
+#ifndef __cpp_rvalue_reference
+#define __cpp_rvalue_reference 200610
+#endif
+#ifndef __cpp_nsdmi
+#define __cpp_nsdmi 200809
+#endif
 #ifndef __SIZEOF_WINT_T__
 #define __SIZEOF_WINT_T__ 4
+#endif
+#ifndef __cpp_initializer_lists
+#define __cpp_initializer_lists 200806
 #endif
 #ifndef __SA_IBIT__
 #define __SA_IBIT__ 16
@@ -462,11 +552,14 @@
 #ifndef __ULLACCUM_MIN__
 #define __ULLACCUM_MIN__ 0.0ULLK
 #endif
+#ifndef __cpp_hex_float
+#define __cpp_hex_float 201603
+#endif
 #ifndef __GCC_HAVE_DWARF2_CFI_ASM
 #define __GCC_HAVE_DWARF2_CFI_ASM 1
 #endif
 #ifndef __GXX_ABI_VERSION
-#define __GXX_ABI_VERSION 1009
+#define __GXX_ABI_VERSION 1010
 #endif
 #ifndef __UTA_FBIT__
 #define __UTA_FBIT__ 64
@@ -479,6 +572,9 @@
 #endif
 #ifndef __UFRACT_IBIT__
 #define __UFRACT_IBIT__ 0
+#endif
+#ifndef __cpp_lambdas
+#define __cpp_lambdas 200907
 #endif
 #ifndef TARGET_FF_MORPHO
 #define TARGET_FF_MORPHO 1
@@ -516,6 +612,9 @@
 #ifndef __DEC128_MIN__
 #define __DEC128_MIN__ 1E-6143DL
 #endif
+#ifndef __MBED_CMSIS_RTOS_CM
+#define __MBED_CMSIS_RTOS_CM 1
+#endif
 #ifndef __REGISTER_PREFIX__
 #define __REGISTER_PREFIX__ 
 #endif
@@ -524,6 +623,9 @@
 #endif
 #ifndef __DBL_HAS_DENORM__
 #define __DBL_HAS_DENORM__ 1
+#endif
+#ifndef DEVICE_SERIAL_FC
+#define DEVICE_SERIAL_FC 1
 #endif
 #ifndef __ACCUM_MIN__
 #define __ACCUM_MIN__ (-0X1P15K-0X1P15K)
@@ -553,10 +655,13 @@
 #define __FLT_MANT_DIG__ 24
 #endif
 #ifndef __VERSION__
-#define __VERSION__ "5.3.0"
+#define __VERSION__ "6.2.0"
 #endif
 #ifndef __ULLFRACT_FBIT__
 #define __ULLFRACT_FBIT__ 64
+#endif
+#ifndef __cpp_unicode_characters
+#define __cpp_unicode_characters 200704
 #endif
 #ifndef __FRACT_EPSILON__
 #define __FRACT_EPSILON__ 0x1P-15R
@@ -567,6 +672,9 @@
 #ifndef __UDA_FBIT__
 #define __UDA_FBIT__ 32
 #endif
+#ifndef __cpp_decltype_auto
+#define __cpp_decltype_auto 201304
+#endif
 #ifndef __LLACCUM_EPSILON__
 #define __LLACCUM_EPSILON__ 0x1P-31LLK
 #endif
@@ -575,6 +683,9 @@
 #endif
 #ifndef __GCC_ATOMIC_INT_LOCK_FREE
 #define __GCC_ATOMIC_INT_LOCK_FREE 2
+#endif
+#ifndef DEVICE_SLEEP
+#define DEVICE_SLEEP 1
 #endif
 #ifndef __FLOAT_WORD_ORDER__
 #define __FLOAT_WORD_ORDER__ __ORDER_LITTLE_ENDIAN__
@@ -593,6 +704,9 @@
 #endif
 #ifndef __UQQ_IBIT__
 #define __UQQ_IBIT__ 0
+#endif
+#ifndef DEVICE_RTC
+#define DEVICE_RTC 1
 #endif
 #ifndef __DEC64_EPSILON__
 #define __DEC64_EPSILON__ 1E-15DD
@@ -636,6 +750,9 @@
 #ifndef __thumb__
 #define __thumb__ 1
 #endif
+#ifndef __cpp_digit_separators
+#define __cpp_digit_separators 201309
+#endif
 #ifndef __ELF__
 #define __ELF__ 1
 #endif
@@ -669,11 +786,17 @@
 #ifndef __GCC_ATOMIC_WCHAR_T_LOCK_FREE
 #define __GCC_ATOMIC_WCHAR_T_LOCK_FREE 2
 #endif
+#ifndef __cpp_sized_deallocation
+#define __cpp_sized_deallocation 201309
+#endif
 #ifndef __VFP_FP__
 #define __VFP_FP__ 1
 #endif
 #ifndef __SIZEOF_PTRDIFF_T__
 #define __SIZEOF_PTRDIFF_T__ 4
+#endif
+#ifndef DEVICE_PWMOUT
+#define DEVICE_PWMOUT 1
 #endif
 #ifndef __LACCUM_EPSILON__
 #define __LACCUM_EPSILON__ 0x1P-31LK
@@ -681,8 +804,14 @@
 #ifndef STSPIN_240
 #define STSPIN_240 1
 #endif
+#ifndef TARGET_RELEASE
+#define TARGET_RELEASE 1
+#endif
 #ifndef __DEC32_SUBNORMAL_MIN__
 #define __DEC32_SUBNORMAL_MIN__ 0.000001E-95DF
+#endif
+#ifndef TRANSACTION_QUEUE_SIZE_SPI
+#define TRANSACTION_QUEUE_SIZE_SPI 2
 #endif
 #ifndef __INT_FAST16_MAX__
 #define __INT_FAST16_MAX__ 0x7fffffff
@@ -699,6 +828,9 @@
 #ifndef __SFRACT_EPSILON__
 #define __SFRACT_EPSILON__ 0x1P-7HR
 #endif
+#ifndef DEVICE_SPI_ASYNCH
+#define DEVICE_SPI_ASYNCH 1
+#endif
 #ifndef __FLT_HAS_QUIET_NAN__
 #define __FLT_HAS_QUIET_NAN__ 1
 #endif
@@ -714,6 +846,9 @@
 #ifndef __FLT_HAS_INFINITY__
 #define __FLT_HAS_INFINITY__ 1
 #endif
+#ifndef __cpp_unicode_literals
+#define __cpp_unicode_literals 200710
+#endif
 #ifndef __USA_FBIT__
 #define __USA_FBIT__ 16
 #endif
@@ -722,6 +857,9 @@
 #endif
 #ifndef __DEC64_MAX__
 #define __DEC64_MAX__ 9.999999999999999E384DD
+#endif
+#ifndef DEVICE_LOWPOWERTIMER
+#define DEVICE_LOWPOWERTIMER 1
 #endif
 #ifndef __ARM_32BIT_STATE
 #define __ARM_32BIT_STATE 1
@@ -786,6 +924,9 @@
 #ifndef __QQ_FBIT__
 #define __QQ_FBIT__ 7
 #endif
+#ifndef __cpp_range_based_for
+#define __cpp_range_based_for 200907
+#endif
 #ifndef __UTA_IBIT__
 #define __UTA_IBIT__ 64
 #endif
@@ -810,6 +951,9 @@
 #ifndef __SIG_ATOMIC_MIN__
 #define __SIG_ATOMIC_MIN__ (-__SIG_ATOMIC_MAX__ - 1)
 #endif
+#ifndef __cpp_return_type_deduction
+#define __cpp_return_type_deduction 201304
+#endif
 #ifndef __INTPTR_TYPE__
 #define __INTPTR_TYPE__ int
 #endif
@@ -833,6 +977,9 @@
 #endif
 #ifndef __DEC64_MIN_EXP__
 #define __DEC64_MIN_EXP__ (-382)
+#endif
+#ifndef __cpp_decltype
+#define __cpp_decltype 200707
 #endif
 #ifndef __INT_FAST64_MAX__
 #define __INT_FAST64_MAX__ 0x7fffffffffffffffLL
@@ -872,6 +1019,9 @@
 #endif
 #ifndef __DBL_MANT_DIG__
 #define __DBL_MANT_DIG__ 53
+#endif
+#ifndef __cpp_inheriting_constructors
+#define __cpp_inheriting_constructors 200802
 #endif
 #ifndef __INT_LEAST64_MAX__
 #define __INT_LEAST64_MAX__ 0x7fffffffffffffffLL
@@ -915,14 +1065,23 @@
 #ifndef __ATOMIC_RELAXED
 #define __ATOMIC_RELAXED 0
 #endif
+#ifndef DEVICE_SPI
+#define DEVICE_SPI 1
+#endif
 #ifndef __DBL_EPSILON__
 #define __DBL_EPSILON__ double(2.2204460492503131e-16L)
+#endif
+#ifndef TOOLCHAIN_object
+#define TOOLCHAIN_object 1
 #endif
 #ifndef __ARM_ARCH_7EM__
 #define __ARM_ARCH_7EM__ 1
 #endif
 #ifndef __ARM_FEATURE_SIMD32
 #define __ARM_FEATURE_SIMD32 1
+#endif
+#ifndef MBED_CONF_EVENTS_PRESENT
+#define MBED_CONF_EVENTS_PRESENT 1
 #endif
 #ifndef __INT_LEAST32_TYPE__
 #define __INT_LEAST32_TYPE__ long int
@@ -936,14 +1095,23 @@
 #ifndef __LLFRACT_MAX__
 #define __LLFRACT_MAX__ 0X7FFFFFFFFFFFFFFFP-63LLR
 #endif
+#ifndef DEVICE_SPISLAVE
+#define DEVICE_SPISLAVE 1
+#endif
 #ifndef __TQ_FBIT__
 #define __TQ_FBIT__ 127
+#endif
+#ifndef MBED_CONF_PLATFORM_DEFAULT_SERIAL_BAUD_RATE
+#define MBED_CONF_PLATFORM_DEFAULT_SERIAL_BAUD_RATE 9600
 #endif
 #ifndef __INT_FAST8_TYPE__
 #define __INT_FAST8_TYPE__ int
 #endif
 #ifndef __ULLACCUM_EPSILON__
 #define __ULLACCUM_EPSILON__ 0x1P-32ULLK
+#endif
+#ifndef DEVICE_ANALOGIN
+#define DEVICE_ANALOGIN 1
 #endif
 #ifndef __UHQ_IBIT__
 #define __UHQ_IBIT__ 0
@@ -953,6 +1121,9 @@
 #endif
 #ifndef __DBL_DECIMAL_DIG__
 #define __DBL_DECIMAL_DIG__ 17
+#endif
+#ifndef __STDC_UTF_32__
+#define __STDC_UTF_32__ 1
 #endif
 #ifndef __DEC_EVAL_METHOD__
 #define __DEC_EVAL_METHOD__ 2
@@ -975,6 +1146,9 @@
 #ifndef __INTMAX_MAX__
 #define __INTMAX_MAX__ 0x7fffffffffffffffLL
 #endif
+#ifndef __cpp_alias_templates
+#define __cpp_alias_templates 200704
+#endif
 #ifndef __BYTE_ORDER__
 #define __BYTE_ORDER__ __ORDER_LITTLE_ENDIAN__
 #endif
@@ -996,6 +1170,9 @@
 #ifndef __FLT_MAX__
 #define __FLT_MAX__ 3.4028234663852886e+38F
 #endif
+#ifndef __cpp_constexpr
+#define __cpp_constexpr 201304
+#endif
 #ifndef __USACCUM_FBIT__
 #define __USACCUM_FBIT__ 8
 #endif
@@ -1007,6 +1184,9 @@
 #endif
 #ifndef __UFRACT_EPSILON__
 #define __UFRACT_EPSILON__ 0x1P-16UR
+#endif
+#ifndef __CMSIS_RTOS
+#define __CMSIS_RTOS 1
 #endif
 #ifndef __INTMAX_TYPE__
 #define __INTMAX_TYPE__ long long int
@@ -1024,7 +1204,7 @@
 #define __ATOMIC_CONSUME 1
 #endif
 #ifndef __GNUC_MINOR__
-#define __GNUC_MINOR__ 3
+#define __GNUC_MINOR__ 2
 #endif
 #ifndef __UINTMAX_MAX__
 #define __UINTMAX_MAX__ 0xffffffffffffffffULL
@@ -1041,6 +1221,9 @@
 #ifndef __LDBL_DENORM_MIN__
 #define __LDBL_DENORM_MIN__ 4.9406564584124654e-324L
 #endif
+#ifndef __cpp_generic_lambdas
+#define __cpp_generic_lambdas 201304
+#endif
 #ifndef __STDC__
 #define __STDC__ 1
 #endif
@@ -1049,6 +1232,9 @@
 #endif
 #ifndef __LLFRACT_MIN__
 #define __LLFRACT_MIN__ (-0.5LLR-0.5LLR)
+#endif
+#ifndef DEVICE_I2C
+#define DEVICE_I2C 1
 #endif
 #ifndef __ATOMIC_SEQ_CST
 #define __ATOMIC_SEQ_CST 5
@@ -1080,11 +1266,17 @@
 #ifndef __LDBL_MIN_10_EXP__
 #define __LDBL_MIN_10_EXP__ (-307)
 #endif
+#ifndef TARGET_LIKE_MBED
+#define TARGET_LIKE_MBED 1
+#endif
 #ifndef __SIZEOF_LONG_LONG__
 #define __SIZEOF_LONG_LONG__ 8
 #endif
 #ifndef __ULACCUM_EPSILON__
 #define __ULACCUM_EPSILON__ 0x1P-32ULK
+#endif
+#ifndef __cpp_user_defined_literals
+#define __cpp_user_defined_literals 200809
 #endif
 #ifndef __SACCUM_IBIT__
 #define __SACCUM_IBIT__ 8
@@ -1100,9 +1292,6 @@
 #endif
 #ifndef __UINT_FAST16_MAX__
 #define __UINT_FAST16_MAX__ 0xffffffffU
-#endif
-#ifndef __GNUC_GNU_INLINE__
-#define __GNUC_GNU_INLINE__ 1
 #endif
 #ifndef __GCC_ATOMIC_SHORT_LOCK_FREE
 #define __GCC_ATOMIC_SHORT_LOCK_FREE 2
@@ -1124,6 +1313,9 @@
 #endif
 #ifndef __QQ_IBIT__
 #define __QQ_IBIT__ 0
+#endif
+#ifndef __cpp_init_captures
+#define __cpp_init_captures 201304
 #endif
 #ifndef __ATOMIC_ACQ_REL
 #define __ATOMIC_ACQ_REL 4
@@ -1153,28 +1345,32 @@
 //../../../../../../../STM32/X-CUBE-SPN12/Drivers/BSP/Components/stspin240_250
 //../../../../../../../STM32/X-CUBE-SPN12/Drivers/BSP/MotorControl
 //../../../../../../../STM32/X-CUBE-SPN12/Drivers/BSP/STM32F4xx-Nucleo
-//$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed/libraries/mbed/targets/cmsis/TOOLCHAIN_GCC
-//$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed/libraries/mbed/hal
-//$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed/libraries/mbed/targets/cmsis
-//$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed/libraries/mbed/targets/hal
-//$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed/libraries/mbed/common
-//$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed/libraries/mbed/targets
-//$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed/libraries/mbed
-//$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed/libraries/mbed/api
-//$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4
-//$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/TARGET_NUCLEO_F411RE
-//$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/TARGET_NUCLEO_F411RE/TOOLCHAIN_GCC_ARM
-//$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed/libraries/mbed/targets/hal/TARGET_STM/TARGET_STM32F4/TARGET_NUCLEO_F411RE
-//$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed/libraries/mbed/targets/cmsis/TARGET_STM
-//$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed/libraries/mbed/targets/hal/TARGET_STM/TARGET_STM32F4
-//$(LOCALAPPDATA)\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.mbed/libraries/mbed/targets/hal/TARGET_STM
-//c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/5.3.0/../../../../arm-eabi/include/c++/5.3.0
-//c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/5.3.0/../../../../arm-eabi/include/c++/5.3.0/arm-eabi/thumb/cortex_m4
-//c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/5.3.0/../../../../arm-eabi/include/c++/5.3.0/backward
-//c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/5.3.0/include
-//c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/5.3.0/include-fixed
-//c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/5.3.0/../../../../arm-eabi/sys-include
-//c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/5.3.0/../../../../arm-eabi/include
+//$(LOCALAPPDATA)/VisualGDB/EmbeddedBSPs/arm-eabi/com.sysprogs.arm.mbed/targets
+//$(LOCALAPPDATA)/VisualGDB/EmbeddedBSPs/arm-eabi/com.sysprogs.arm.mbed/cmsis
+//$(LOCALAPPDATA)/VisualGDB/EmbeddedBSPs/arm-eabi/com.sysprogs.arm.mbed/cmsis/TOOLCHAIN_GCC
+//$(LOCALAPPDATA)/VisualGDB/EmbeddedBSPs/arm-eabi/com.sysprogs.arm.mbed/events/equeue
+//$(LOCALAPPDATA)/VisualGDB/EmbeddedBSPs/arm-eabi/com.sysprogs.arm.mbed
+//$(LOCALAPPDATA)/VisualGDB/EmbeddedBSPs/arm-eabi/com.sysprogs.arm.mbed/hal
+//$(LOCALAPPDATA)/VisualGDB/EmbeddedBSPs/arm-eabi/com.sysprogs.arm.mbed/drivers
+//$(LOCALAPPDATA)/VisualGDB/EmbeddedBSPs/arm-eabi/com.sysprogs.arm.mbed/hal/hal
+//$(LOCALAPPDATA)/VisualGDB/EmbeddedBSPs/arm-eabi/com.sysprogs.arm.mbed/events
+//$(LOCALAPPDATA)/VisualGDB/EmbeddedBSPs/arm-eabi/com.sysprogs.arm.mbed/platform
+//$(LOCALAPPDATA)/VisualGDB/EmbeddedBSPs/arm-eabi/com.sysprogs.arm.mbed/hal/storage_abstraction
+//$(LOCALAPPDATA)/VisualGDB/EmbeddedBSPs/arm-eabi/com.sysprogs.arm.mbed/docs
+//$(LOCALAPPDATA)/VisualGDB/EmbeddedBSPs/arm-eabi/com.sysprogs.arm.mbed/DeviceDefinitions
+//$(LOCALAPPDATA)/VisualGDB/EmbeddedBSPs/arm-eabi/com.sysprogs.arm.mbed/targets/TARGET_STM/TARGET_STM32F4
+//$(LOCALAPPDATA)/VisualGDB/EmbeddedBSPs/arm-eabi/com.sysprogs.arm.mbed/targets/TARGET_STM/TARGET_STM32F4/TARGET_NUCLEO_F411RE
+//$(LOCALAPPDATA)/VisualGDB/EmbeddedBSPs/arm-eabi/com.sysprogs.arm.mbed/targets/TARGET_STM/TARGET_STM32F4/device
+//$(LOCALAPPDATA)/VisualGDB/EmbeddedBSPs/arm-eabi/com.sysprogs.arm.mbed/targets/TARGET_STM
+//$(LOCALAPPDATA)/VisualGDB/EmbeddedBSPs/arm-eabi/com.sysprogs.arm.mbed/targets/TARGET_STM/TARGET_STM32F4/TARGET_NUCLEO_F411RE/device/TOOLCHAIN_GCC_ARM
+//$(LOCALAPPDATA)/VisualGDB/EmbeddedBSPs/arm-eabi/com.sysprogs.arm.mbed/targets/TARGET_STM/TARGET_STM32F4/TARGET_NUCLEO_F411RE/device
+//c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/6.2.0/../../../../arm-eabi/include/c++/6.2.0
+//c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/6.2.0/../../../../arm-eabi/include/c++/6.2.0/arm-eabi/thumb/cortex_m4
+//c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/6.2.0/../../../../arm-eabi/include/c++/6.2.0/backward
+//c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/6.2.0/include
+//c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/6.2.0/include-fixed
+//c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/6.2.0/../../../../arm-eabi/sys-include
+//c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/6.2.0/../../../../arm-eabi/include
 //src
 //src/imu
 //src/motor
@@ -1190,10 +1386,10 @@
 
 
 // --- Library directories begin --- //
-//c:/sysgcc/arm-eabi/bin/../lib/gcc/arm-eabi/5.3.0/thumb/cortex_m4/
-//c:/sysgcc/arm-eabi/bin/../lib/gcc/arm-eabi/5.3.0/../../../../arm-eabi/lib/thumb/cortex_m4/
-//c:/sysgcc/arm-eabi/bin/../lib/gcc/arm-eabi/5.3.0/
+//c:/sysgcc/arm-eabi/bin/../lib/gcc/arm-eabi/6.2.0/thumb/cortex_m4/
+//c:/sysgcc/arm-eabi/bin/../lib/gcc/arm-eabi/6.2.0/../../../../arm-eabi/lib/thumb/cortex_m4/
+//c:/sysgcc/arm-eabi/bin/../lib/gcc/arm-eabi/6.2.0/
 //c:/sysgcc/arm-eabi/bin/../lib/gcc/
-//c:/sysgcc/arm-eabi/bin/../lib/gcc/arm-eabi/5.3.0/../../../../arm-eabi/lib/
+//c:/sysgcc/arm-eabi/bin/../lib/gcc/arm-eabi/6.2.0/../../../../arm-eabi/lib/
 // --- Library directories begin --- //
 

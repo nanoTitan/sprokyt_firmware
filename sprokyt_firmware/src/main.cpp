@@ -57,19 +57,23 @@ int main()
 	// Communication
 	//BLE::InitBLE();
 	//SWPF01SA::Instance()->InitWifi();		// ST Wifi
-	//Wifi::Instance()->Init();				// ESP Wifi
+	Wifi::Instance()->Init();				// ESP Wifi
 	
 	// IMU and Sensors
-	//IMU_init();
+	IMU_init();
 	
 	MotorController_setMotor(MOTOR_A, 1500, DIR_CW);
 	
 	while (1)
 	{
+		// Communication
+		Wifi::Instance()->Update();
 		//BLE::Update();
 		//SWPF01SA::Instance()->Update();
-		//Wifi::Instance()->Update();
-		//IMU_update();
+		
+		// IMU and Sensors
+		IMU_update();
+		
 		ControlMgr_update();
 	}
 }

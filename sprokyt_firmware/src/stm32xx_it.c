@@ -335,7 +335,7 @@ void PPP_IRQHandler(void)
 */
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 { 
-	Wifi_TIM_Handler(htim);
+	//Wifi_TIM_Handler(htim);
 }
 
 /**
@@ -346,7 +346,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 */
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandleArg)
 {
-	WiFi_HAL_UART_RxCpltCallback(UartHandleArg);
+	//WiFi_HAL_UART_RxCpltCallback(UartHandleArg);
 }
 
 /**
@@ -355,10 +355,11 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandleArg)
 * @param  UsartHandle: UART handle 
 * @retval None
 */
-void HAL_UART_TxCpltCallback(UART_HandleTypeDef *UartHandleArg)
-{
-	WiFi_HAL_UART_TxCpltCallback(UartHandleArg);
-}
+// Overriden in serial_api.c
+//void HAL_UART_TxCpltCallback(UART_HandleTypeDef *UartHandleArg)
+//{
+//	WiFi_HAL_UART_TxCpltCallback(UartHandleArg);
+//}
 
 /**
   * @brief  UART error callbacks
@@ -367,10 +368,11 @@ void HAL_UART_TxCpltCallback(UART_HandleTypeDef *UartHandleArg)
   *         add your own implementation.
   * @retval None
   */
-void HAL_UART_ErrorCallback(UART_HandleTypeDef *UartHandle)
-{
-	WiFi_HAL_UART_ErrorCallback(UartHandle);
-}
+// Overriden in serial_api.c
+//void HAL_UART_ErrorCallback(UART_HandleTypeDef *UartHandle)
+//{
+//	WiFi_HAL_UART_ErrorCallback(UartHandle);
+//}
 
 /******************************************************************************/
 /*                 STM32 Peripherals Interrupt Handlers						  */
