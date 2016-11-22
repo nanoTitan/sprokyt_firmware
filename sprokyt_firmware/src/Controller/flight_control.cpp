@@ -74,6 +74,12 @@ void FlightControl_init()
 void FlightControl_update()
 {	
 	CONTROL_STATE state = ControlMgr_getState();
+	
+// Debug flight control without begin connected
+#if defined(DEBUG_FLIGHT_CONTROL_NO_CONNECT)
+	state = CONTROL_STATE_CONNECTED;
+#endif 
+	
 	switch (state)
 	{
 	case CONTROL_STATE_IDLE:
@@ -94,7 +100,7 @@ void FlightControl_update()
 
 void UpdateFlightControl()
 {		
-	// Don't update motors if we aren't in a connection lost state and without valid throttle values
+	// Don't update motors if we don't have valid throttle values
 	if (m_rcThrottle == 0)
 	{
 		// Reset target yaw for next takeoff
@@ -191,12 +197,12 @@ void UpdateFlightControl()
 		++cnt;
 		if (cnt == 100)
 		{
-			PRINTF("%d, %d, %d, %d\r\n", (int)m_rcThrottle, (int)m_rcYaw, (int)m_rcPitch, (int)m_rcRoll);
+			//PRINTF("%d, %d, %d, %d\r\n", (int)m_rcThrottle, (int)m_rcYaw, (int)m_rcPitch, (int)m_rcRoll);
 			//PRINTF("%d, %d, %d, %d\r\n", (int)sfRoll, (int)roll_stab_output, (int)gy, (int)roll_output);
 			//PRINTF("%d, %d, %d, %d\r\n", (int)sfPitch, (int)pitch_stab_output, (int)gx, (int)pitch_output);
 			//PRINTF("%d, %d, %d, %d\r\n", (int)sfYaw, (int)yaw_stab_output, (int)gz, (int)yaw_output);
 			//PRINTF("%.2f, %.2f\r\n", sfYaw, heading);					// yaw, pitch, roll
-			//PRINTF("%.2f, %.2f, %.2f\r\n", sfYaw, sfPitch, sfRoll);			// yaw, pitch, roll
+			PRINTF("%.2f, %.2f, %.2f\r\n", sfYaw, sfPitch, sfRoll);			// yaw, pitch, roll
 			//PRINTF("%.2f, %.2f, %.2f\r\n", pInput->mag[0], pInput->mag[1], pInput->mag[2]);
 			//PRINTF("%d, %d, %d, %d\r\n", (int)powerA, (int)powerB, (int)powerC, (int)powerD);		// A, B, C, D
 			cnt = 0;

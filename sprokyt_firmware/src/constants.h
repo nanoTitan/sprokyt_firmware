@@ -54,6 +54,9 @@
 //#define MOTOR_C 0x02
 //#define MOTOR_ALL 0xFF
 
+// Debugging
+#define DEBUG_FLIGHT_CONTROL_NO_CONNECT
+
 #endif /* _CONSTANTS_H_ */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
