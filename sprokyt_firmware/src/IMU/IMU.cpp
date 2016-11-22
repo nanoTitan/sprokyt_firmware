@@ -84,7 +84,7 @@ float sf_pitch = 0;
 float sf_roll = 0;
 float PRESSURE_Value = 0;
 uint8_t SF_Active = 0;
-uint8_t SF_6x_enabled = 0;
+uint8_t SF_6x_enabled = 1;
 uint8_t SF_change = 0;
 uint32_t sysclk = 0;
 uint32_t hclk = 0;
@@ -234,7 +234,7 @@ void SF_Handler()
 	BSP_GYRO_IsInitialized(GYRO_handle, &status_gyr);
 	BSP_MAGNETO_IsInitialized(MAGNETO_handle, &status_mag);
 
-	if (status_acc && status_gyr && status_mag)
+	if (status_acc && status_gyr && (SF_6x_enabled || status_mag))
 	{
 		if (SF_change == 1)
 		{
