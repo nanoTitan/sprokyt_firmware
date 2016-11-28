@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdint.h>
+#include "constants.h"
 
 enum CONTROL_STATE
 {
@@ -25,5 +26,5 @@ void ControlMgr_setState(CONTROL_STATE state);
 CONTROL_STATE ControlMgr_getState();
 void ControlMgr_setType(CONTROLLER_TYPE ctrlType);
 void ControlMgr_update();
-void ControlMgr_setMotor(uint8_t motorIndex, uint8_t value, uint8_t direction);
+void ControlMgr_setMotor(uint8_t motorIndex, uint8_t value, direction_t dir);
 void ControlMgr_parseInstruction(uint8_t data_length, uint8_t *att_data);

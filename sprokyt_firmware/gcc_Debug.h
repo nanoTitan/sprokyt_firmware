@@ -1341,10 +1341,6 @@
 //../../../../../../../STM32/X-CUBE-WIFI1/Middlewares/ST/STM32_SPWF01SA/Utils
 //../../../../../../../STM32/X-CUBE-WIFI1/Middlewares/ST/STM32_SPWF01SA
 //../../../../../../../STM32/X-CUBE-WIFI1/Drivers/BSP/X-NUCLEO-IDW01M1
-//../../../../../../../STM32/X-CUBE-SPN12/Drivers/BSP/Components/Common
-//../../../../../../../STM32/X-CUBE-SPN12/Drivers/BSP/Components/stspin240_250
-//../../../../../../../STM32/X-CUBE-SPN12/Drivers/BSP/MotorControl
-//../../../../../../../STM32/X-CUBE-SPN12/Drivers/BSP/STM32F4xx-Nucleo
 //$(LOCALAPPDATA)/VisualGDB/EmbeddedBSPs/arm-eabi/com.sysprogs.arm.mbed/targets
 //$(LOCALAPPDATA)/VisualGDB/EmbeddedBSPs/arm-eabi/com.sysprogs.arm.mbed/cmsis
 //$(LOCALAPPDATA)/VisualGDB/EmbeddedBSPs/arm-eabi/com.sysprogs.arm.mbed/cmsis/TOOLCHAIN_GCC
@@ -1382,6 +1378,11 @@
 //src/wifi/ESP8266Interface/ESP8266
 //src/wifi/ESP8266Interface/Helper
 //src/wifi/ESP8266Interface/Socket
+//src/motor/X-NUCLEO-IHM12A1/Components/Common
+//src/motor/X-NUCLEO-IHM12A1/Components/stspin240_250
+//src/motor/X-NUCLEO-IHM12A1/ST_INTERFACES/Actuators
+//src/motor/X-NUCLEO-IHM12A1/ST_INTERFACES/Common
+//src/motor/X-NUCLEO-IHM12A1
 // --- Include directories end --- //
 
 

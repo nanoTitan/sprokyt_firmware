@@ -48,7 +48,7 @@ int main()
 	BSP_PB_Init(BUTTON_KEY, BUTTON_MODE_GPIO);
 	
 	// Motor Controller
-	//MotorController_init();	
+	MotorController_init();	
 	
 	// Control Manager
 	ControlMgr_init();
@@ -60,7 +60,7 @@ int main()
 	//Wifi::Instance()->Init();				// ESP Wifi
 	
 	// IMU and Sensors
-	IMU_init();
+	//IMU_init();
 	
 	//MotorController_setMotor(MOTOR_A, 1500, DIR_CW);
 	
@@ -72,7 +72,7 @@ int main()
 		//SWPF01SA::Instance()->Update();
 		
 		// IMU and Sensors
-		IMU_update();
+		//IMU_update();
 		
 		ControlMgr_update();
 	}

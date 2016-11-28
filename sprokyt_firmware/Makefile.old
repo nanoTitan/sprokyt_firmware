@@ -35,7 +35,7 @@ error:
 	$(error Invalid configuration, please check your inputs)
 endif
 
-SOURCEFILES := ../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/STM32F4xx-Nucleo/stm32f4xx_nucleo.c ../../../../../../../STM32/X-CUBE-SPN12/Drivers/BSP/Components/stspin240_250/stspin240_250.c ../../../../../../../STM32/X-CUBE-SPN12/Drivers/BSP/MotorControl/motorcontrol.c ../../../../../../../STM32/X-CUBE-SPN12/Drivers/BSP/STM32F4xx-Nucleo/stm32f4xx_nucleo_ihm12a1.c ../../../../../../../STM32/X-CUBE-WIFI1/Drivers/BSP/X-NUCLEO-IDW01M1/stm32_spwf_wifi.c ../../../../../../../STM32/X-CUBE-WIFI1/Middlewares/ST/STM32_SPWF01SA/Utils/event_buffer.c ../../../../../../../STM32/X-CUBE-WIFI1/Middlewares/ST/STM32_SPWF01SA/Utils/ring_buffer.c ../../../../../../../STM32/X-CUBE-WIFI1/Middlewares/ST/STM32_SPWF01SA/Utils/wifi_globals.c ../../../../../../../STM32/X-CUBE-WIFI1/Middlewares/ST/STM32_SPWF01SA/wifi_interface.c ../../../../../../../STM32/X-CUBE-WIFI1/Middlewares/ST/STM32_SPWF01SA/wifi_module.c $(BSP_ROOT)/libraries/mbed/common/assert.c $(BSP_ROOT)/libraries/mbed/common/board.c $(BSP_ROOT)/libraries/mbed/common/BusIn.cpp $(BSP_ROOT)/libraries/mbed/common/BusInOut.cpp $(BSP_ROOT)/libraries/mbed/common/BusOut.cpp $(BSP_ROOT)/libraries/mbed/common/CallChain.cpp $(BSP_ROOT)/libraries/mbed/common/CAN.cpp $(BSP_ROOT)/libraries/mbed/common/error.c $(BSP_ROOT)/libraries/mbed/common/Ethernet.cpp $(BSP_ROOT)/libraries/mbed/common/FileBase.cpp $(BSP_ROOT)/libraries/mbed/common/FileLike.cpp $(BSP_ROOT)/libraries/mbed/common/FilePath.cpp $(BSP_ROOT)/libraries/mbed/common/FileSystemLike.cpp $(BSP_ROOT)/libraries/mbed/common/gpio.c $(BSP_ROOT)/libraries/mbed/common/I2C.cpp $(BSP_ROOT)/libraries/mbed/common/I2CSlave.cpp $(BSP_ROOT)/libraries/mbed/common/InterruptIn.cpp $(BSP_ROOT)/libraries/mbed/common/InterruptManager.cpp $(BSP_ROOT)/libraries/mbed/common/LocalFileSystem.cpp $(BSP_ROOT)/libraries/mbed/common/lp_ticker_api.c $(BSP_ROOT)/libraries/mbed/common/mbed_interface.c $(BSP_ROOT)/libraries/mbed/common/pinmap_common.c $(BSP_ROOT)/libraries/mbed/common/RawSerial.cpp $(BSP_ROOT)/libraries/mbed/common/retarget.cpp $(BSP_ROOT)/libraries/mbed/common/rtc_time.c $(BSP_ROOT)/libraries/mbed/common/semihost_api.c $(BSP_ROOT)/libraries/mbed/common/Serial.cpp $(BSP_ROOT)/libraries/mbed/common/SerialBase.cpp $(BSP_ROOT)/libraries/mbed/common/SPI.cpp $(BSP_ROOT)/libraries/mbed/common/SPISlave.cpp $(BSP_ROOT)/libraries/mbed/common/Stream.cpp $(BSP_ROOT)/libraries/mbed/common/Ticker.cpp $(BSP_ROOT)/libraries/mbed/common/ticker_api.c $(BSP_ROOT)/libraries/mbed/common/Timeout.cpp $(BSP_ROOT)/libraries/mbed/common/Timer.cpp $(BSP_ROOT)/libraries/mbed/common/TimerEvent.cpp $(BSP_ROOT)/libraries/mbed/common/us_ticker_api.c $(BSP_ROOT)/libraries/mbed/common/wait_api.c $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal.c $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_adc.c $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_adc_ex.c $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_can.c $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_cec.c $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_cortex.c $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_crc.c $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_cryp.c $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_cryp_ex.c $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_dac.c $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_dac_ex.c $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_dcmi.c $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_dcmi_ex.c $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_dma.c $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_dma2d.c $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_dma_ex.c $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_dsi.c $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_eth.c $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_flash.c $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_flash_ex.c $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_flash_ramfunc.c $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_fmpi2c.c $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_fmpi2c_ex.c $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_gpio.c $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_hash.c $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_hash_ex.c $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_hcd.c $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_i2c.c $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_i2c_ex.c $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_i2s.c $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_i2s_ex.c $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_irda.c $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_iwdg.c $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_lptim.c $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_ltdc.c $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_ltdc_ex.c $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_msp_template.c $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_nand.c $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_nor.c $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_pccard.c $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_pcd.c $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_pcd_ex.c $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_pwr.c $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_pwr_ex.c $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_qspi.c $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_rcc.c $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_rcc_ex.c $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_rng.c $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_rtc.c $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_rtc_ex.c $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_sai.c $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_sai_ex.c $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_sd.c $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_sdram.c $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_smartcard.c $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_spdifrx.c $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_spi.c $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_sram.c $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_tim.c $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_tim_ex.c $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_uart.c $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_usart.c $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_wwdg.c $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_ll_fmc.c $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_ll_fsmc.c $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_ll_sdmmc.c $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_ll_usb.c $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/TARGET_NUCLEO_F411RE/cmsis_nvic.c $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/TARGET_NUCLEO_F411RE/hal_tick.c $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/TARGET_NUCLEO_F411RE/system_stm32f4xx.c $(BSP_ROOT)/libraries/mbed/targets/hal/TARGET_STM/TARGET_STM32F4/analogin_api.c $(BSP_ROOT)/libraries/mbed/targets/hal/TARGET_STM/TARGET_STM32F4/analogout_api.c $(BSP_ROOT)/libraries/mbed/targets/hal/TARGET_STM/TARGET_STM32F4/gpio_api.c $(BSP_ROOT)/libraries/mbed/targets/hal/TARGET_STM/TARGET_STM32F4/gpio_irq_api.c $(BSP_ROOT)/libraries/mbed/targets/hal/TARGET_STM/TARGET_STM32F4/i2c_api.c $(BSP_ROOT)/libraries/mbed/targets/hal/TARGET_STM/TARGET_STM32F4/mbed_overrides.c $(BSP_ROOT)/libraries/mbed/targets/hal/TARGET_STM/TARGET_STM32F4/pinmap.c $(BSP_ROOT)/libraries/mbed/targets/hal/TARGET_STM/TARGET_STM32F4/port_api.c $(BSP_ROOT)/libraries/mbed/targets/hal/TARGET_STM/TARGET_STM32F4/pwmout_api.c $(BSP_ROOT)/libraries/mbed/targets/hal/TARGET_STM/TARGET_STM32F4/rtc_api.c $(BSP_ROOT)/libraries/mbed/targets/hal/TARGET_STM/TARGET_STM32F4/serial_api.c $(BSP_ROOT)/libraries/mbed/targets/hal/TARGET_STM/TARGET_STM32F4/sleep.c $(BSP_ROOT)/libraries/mbed/targets/hal/TARGET_STM/TARGET_STM32F4/spi_api.c $(BSP_ROOT)/libraries/mbed/targets/hal/TARGET_STM/TARGET_STM32F4/TARGET_NUCLEO_F411RE/PeripheralPins.c $(BSP_ROOT)/libraries/mbed/targets/hal/TARGET_STM/TARGET_STM32F4/us_ticker.c $(BSP_ROOT)/stubs.cpp src/Controller/control_manager.cpp src/Controller/esc_programmer.cpp src/Controller/flight_control.cpp src/cube_hal_f4.c src/IMU/imu.cpp src/IMU/MotionFX_Manager.c src/IMU/serial_protocol.c src/main.cpp src/motor/motor_controller.cpp src/motor/stspin240.c src/motor/TB6612FNG.cpp src/PID/PID.cpp src/stm32f4xx_hal_msp.c src/stm32xx_it.c ../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/Components/hts221/HTS221_Driver.c ../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/Components/hts221/HTS221_Driver_HL.c ../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/Components/lis3mdl/LIS3MDL_MAG_driver.c ../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/Components/lis3mdl/LIS3MDL_MAG_driver_HL.c ../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/Components/lps22hb/LPS22HB_Driver.c ../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/Components/lps22hb/LPS22HB_Driver_HL.c ../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/Components/lps25hb/LPS25HB_Driver.c ../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/Components/lps25hb/LPS25HB_Driver_HL.c ../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/Components/lsm6ds0/LSM6DS0_ACC_GYRO_driver.c ../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/Components/lsm6ds0/LSM6DS0_ACC_GYRO_driver_HL.c ../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/Components/lsm6ds3/LSM6DS3_ACC_GYRO_driver.c ../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/Components/lsm6ds3/LSM6DS3_ACC_GYRO_driver_HL.c ../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/X_NUCLEO_IKS01A1/x_nucleo_iks01a1.c ../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/X_NUCLEO_IKS01A1/x_nucleo_iks01a1_accelero.c ../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/X_NUCLEO_IKS01A1/x_nucleo_iks01a1_gyro.c ../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/X_NUCLEO_IKS01A1/x_nucleo_iks01a1_humidity.c ../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/X_NUCLEO_IKS01A1/x_nucleo_iks01a1_magneto.c ../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/X_NUCLEO_IKS01A1/x_nucleo_iks01a1_pressure.c ../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/X_NUCLEO_IKS01A1/x_nucleo_iks01a1_temperature.c src/wifi/ESP8266Interface/ESP8266/ESP8266.cpp src/wifi/ESP8266Interface/Socket/Endpoint.cpp src/wifi/ESP8266Interface/Socket/Socket.cpp src/wifi/ESP8266Interface/Socket/TCPSocketConnection.cpp src/wifi/ESP8266Interface/Socket/TCPSocketServer.cpp src/wifi/ESP8266Interface/Socket/UDPSocket.cpp src/wifi/SWPF01SA.cpp src/wifi/Wifi.cpp $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/TARGET_NUCLEO_F411RE/TOOLCHAIN_GCC_ARM/startup_stm32f411xe.S
+SOURCEFILES := ../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/STM32F4xx-Nucleo/stm32f4xx_nucleo.c ../../../../../../../STM32/X-CUBE-WIFI1/Drivers/BSP/X-NUCLEO-IDW01M1/stm32_spwf_wifi.c ../../../../../../../STM32/X-CUBE-WIFI1/Middlewares/ST/STM32_SPWF01SA/Utils/event_buffer.c ../../../../../../../STM32/X-CUBE-WIFI1/Middlewares/ST/STM32_SPWF01SA/Utils/ring_buffer.c ../../../../../../../STM32/X-CUBE-WIFI1/Middlewares/ST/STM32_SPWF01SA/Utils/wifi_globals.c ../../../../../../../STM32/X-CUBE-WIFI1/Middlewares/ST/STM32_SPWF01SA/wifi_interface.c ../../../../../../../STM32/X-CUBE-WIFI1/Middlewares/ST/STM32_SPWF01SA/wifi_module.c $(BSP_ROOT)/drivers/AnalogIn.cpp $(BSP_ROOT)/drivers/BusIn.cpp $(BSP_ROOT)/drivers/BusInOut.cpp $(BSP_ROOT)/drivers/BusOut.cpp $(BSP_ROOT)/drivers/CAN.cpp $(BSP_ROOT)/drivers/Ethernet.cpp $(BSP_ROOT)/drivers/FileBase.cpp $(BSP_ROOT)/drivers/FileLike.cpp $(BSP_ROOT)/drivers/FilePath.cpp $(BSP_ROOT)/drivers/FileSystemLike.cpp $(BSP_ROOT)/drivers/I2C.cpp $(BSP_ROOT)/drivers/I2CSlave.cpp $(BSP_ROOT)/drivers/InterruptIn.cpp $(BSP_ROOT)/drivers/InterruptManager.cpp $(BSP_ROOT)/drivers/LocalFileSystem.cpp $(BSP_ROOT)/drivers/RawSerial.cpp $(BSP_ROOT)/drivers/Serial.cpp $(BSP_ROOT)/drivers/SerialBase.cpp $(BSP_ROOT)/drivers/SPI.cpp $(BSP_ROOT)/drivers/SPISlave.cpp $(BSP_ROOT)/drivers/Stream.cpp $(BSP_ROOT)/drivers/Ticker.cpp $(BSP_ROOT)/drivers/Timeout.cpp $(BSP_ROOT)/drivers/Timer.cpp $(BSP_ROOT)/drivers/TimerEvent.cpp $(BSP_ROOT)/events/equeue/equeue.c $(BSP_ROOT)/events/equeue/equeue_mbed.cpp $(BSP_ROOT)/events/equeue/equeue_posix.c $(BSP_ROOT)/events/EventQueue.cpp $(BSP_ROOT)/hal/mbed_gpio.c $(BSP_ROOT)/hal/mbed_lp_ticker_api.c $(BSP_ROOT)/hal/mbed_pinmap_common.c $(BSP_ROOT)/hal/mbed_ticker_api.c $(BSP_ROOT)/hal/mbed_us_ticker_api.c $(BSP_ROOT)/platform/CallChain.cpp $(BSP_ROOT)/platform/mbed_alloc_wrappers.cpp $(BSP_ROOT)/platform/mbed_assert.c $(BSP_ROOT)/platform/mbed_board.c $(BSP_ROOT)/platform/mbed_critical.c $(BSP_ROOT)/platform/mbed_error.c $(BSP_ROOT)/platform/mbed_interface.c $(BSP_ROOT)/platform/mbed_mem_trace.c $(BSP_ROOT)/platform/mbed_rtc_time.cpp $(BSP_ROOT)/platform/mbed_semihost_api.c $(BSP_ROOT)/platform/mbed_wait_api_no_rtos.c $(BSP_ROOT)/platform/mbed_wait_api_rtos.cpp $(BSP_ROOT)/platform/retarget.cpp $(BSP_ROOT)/stubs.cpp $(BSP_ROOT)/targets/TARGET_STM/stm_spi_api.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/analogin_api.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/analogout_api.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/can_api.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_adc.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_adc_ex.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_can.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_cec.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_cortex.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_crc.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_cryp.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_cryp_ex.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_dac.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_dac_ex.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_dcmi.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_dcmi_ex.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_dfsdm.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_dma.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_dma2d.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_dma_ex.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_dsi.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_eth.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_flash.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_flash_ex.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_flash_ramfunc.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_fmpi2c.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_fmpi2c_ex.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_gpio.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_hash.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_hash_ex.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_hcd.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_i2c.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_i2c_ex.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_i2s.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_i2s_ex.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_irda.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_iwdg.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_lptim.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_ltdc.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_ltdc_ex.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_msp_template.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_nand.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_nor.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_pccard.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_pcd.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_pcd_ex.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_pwr.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_pwr_ex.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_qspi.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_rcc.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_rcc_ex.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_rng.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_rtc.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_rtc_ex.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_sai.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_sai_ex.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_sd.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_sdram.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_smartcard.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_spdifrx.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_spi.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_sram.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_tim.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_tim_ex.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_uart.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_usart.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_wwdg.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_ll_fmc.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_ll_fsmc.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_ll_sdmmc.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_ll_usb.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/gpio_api.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/gpio_irq_api.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/i2c_api.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/lp_ticker.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/mbed_overrides.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/pinmap.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/port_api.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/pwmout_api.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/rtc_api.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/serial_api.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/sleep.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/spi_api.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/TARGET_NUCLEO_F411RE/device/cmsis_nvic.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/TARGET_NUCLEO_F411RE/device/hal_tick.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/TARGET_NUCLEO_F411RE/device/system_stm32f4xx.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/TARGET_NUCLEO_F411RE/PeripheralPins.c $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/us_ticker.c $(BSP_ROOT)/targets/TARGET_STM/trng_api.c src/Controller/control_manager.cpp src/Controller/esc_programmer.cpp src/Controller/flight_control.cpp src/cube_hal_f4.c src/IMU/imu.cpp src/IMU/MotionFX_Manager.c src/IMU/serial_protocol.c src/main.cpp src/motor/motor_controller.cpp src/motor/stspin240.c src/motor/TB6612FNG.cpp src/motor/X-NUCLEO-IHM12A1/Components/stspin240_250/stspin240_250_class.cpp src/PID/PID.cpp src/stm32f4xx_hal_msp.c src/stm32xx_it.c ../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/Components/hts221/HTS221_Driver.c ../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/Components/hts221/HTS221_Driver_HL.c ../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/Components/lis3mdl/LIS3MDL_MAG_driver.c ../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/Components/lis3mdl/LIS3MDL_MAG_driver_HL.c ../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/Components/lps22hb/LPS22HB_Driver.c ../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/Components/lps22hb/LPS22HB_Driver_HL.c ../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/Components/lps25hb/LPS25HB_Driver.c ../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/Components/lps25hb/LPS25HB_Driver_HL.c ../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/Components/lsm6ds0/LSM6DS0_ACC_GYRO_driver.c ../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/Components/lsm6ds0/LSM6DS0_ACC_GYRO_driver_HL.c ../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/Components/lsm6ds3/LSM6DS3_ACC_GYRO_driver.c ../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/Components/lsm6ds3/LSM6DS3_ACC_GYRO_driver_HL.c ../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/X_NUCLEO_IKS01A1/x_nucleo_iks01a1.c ../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/X_NUCLEO_IKS01A1/x_nucleo_iks01a1_accelero.c ../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/X_NUCLEO_IKS01A1/x_nucleo_iks01a1_gyro.c ../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/X_NUCLEO_IKS01A1/x_nucleo_iks01a1_humidity.c ../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/X_NUCLEO_IKS01A1/x_nucleo_iks01a1_magneto.c ../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/X_NUCLEO_IKS01A1/x_nucleo_iks01a1_pressure.c ../../../../../../../STM32/X-CUBE-MEMS1/Drivers/BSP/X_NUCLEO_IKS01A1/x_nucleo_iks01a1_temperature.c src/wifi/ESP8266Interface/ESP8266/ESP8266.cpp src/wifi/ESP8266Interface/Socket/Endpoint.cpp src/wifi/ESP8266Interface/Socket/Socket.cpp src/wifi/ESP8266Interface/Socket/TCPSocketConnection.cpp src/wifi/ESP8266Interface/Socket/TCPSocketServer.cpp src/wifi/ESP8266Interface/Socket/UDPSocket.cpp src/wifi/SWPF01SA.cpp src/wifi/Wifi.cpp $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/TARGET_NUCLEO_F411RE/device/TOOLCHAIN_GCC_ARM/startup_stm32f411xe.S
 EXTERNAL_LIBS := 
 EXTERNAL_LIBS_COPIED := $(foreach lib, $(EXTERNAL_LIBS),$(BINARYDIR)/$(notdir $(lib)))
 
@@ -185,18 +185,6 @@ $(BINARYDIR)/stm32f4xx_nucleo.o : ../../../../../../../STM32/X-CUBE-MEMS1/Driver
 	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
-$(BINARYDIR)/stspin240_250.o : ../../../../../../../STM32/X-CUBE-SPN12/Drivers/BSP/Components/stspin240_250/stspin240_250.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/motorcontrol.o : ../../../../../../../STM32/X-CUBE-SPN12/Drivers/BSP/MotorControl/motorcontrol.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/stm32f4xx_nucleo_ihm12a1.o : ../../../../../../../STM32/X-CUBE-SPN12/Drivers/BSP/STM32F4xx-Nucleo/stm32f4xx_nucleo_ihm12a1.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
 $(BINARYDIR)/stm32_spwf_wifi.o : ../../../../../../../STM32/X-CUBE-WIFI1/Drivers/BSP/X-NUCLEO-IDW01M1/stm32_spwf_wifi.c $(all_make_files) |$(BINARYDIR)
 	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
@@ -221,500 +209,556 @@ $(BINARYDIR)/wifi_module.o : ../../../../../../../STM32/X-CUBE-WIFI1/Middlewares
 	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
-$(BINARYDIR)/assert.o : $(BSP_ROOT)/libraries/mbed/common/assert.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/board.o : $(BSP_ROOT)/libraries/mbed/common/board.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/BusIn.o : $(BSP_ROOT)/libraries/mbed/common/BusIn.cpp $(all_make_files) |$(BINARYDIR)
+$(BINARYDIR)/AnalogIn.o : $(BSP_ROOT)/drivers/AnalogIn.cpp $(all_make_files) |$(BINARYDIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
-$(BINARYDIR)/BusInOut.o : $(BSP_ROOT)/libraries/mbed/common/BusInOut.cpp $(all_make_files) |$(BINARYDIR)
+$(BINARYDIR)/BusIn.o : $(BSP_ROOT)/drivers/BusIn.cpp $(all_make_files) |$(BINARYDIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
-$(BINARYDIR)/BusOut.o : $(BSP_ROOT)/libraries/mbed/common/BusOut.cpp $(all_make_files) |$(BINARYDIR)
+$(BINARYDIR)/BusInOut.o : $(BSP_ROOT)/drivers/BusInOut.cpp $(all_make_files) |$(BINARYDIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
-$(BINARYDIR)/CallChain.o : $(BSP_ROOT)/libraries/mbed/common/CallChain.cpp $(all_make_files) |$(BINARYDIR)
+$(BINARYDIR)/BusOut.o : $(BSP_ROOT)/drivers/BusOut.cpp $(all_make_files) |$(BINARYDIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
-$(BINARYDIR)/CAN.o : $(BSP_ROOT)/libraries/mbed/common/CAN.cpp $(all_make_files) |$(BINARYDIR)
+$(BINARYDIR)/CAN.o : $(BSP_ROOT)/drivers/CAN.cpp $(all_make_files) |$(BINARYDIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
-$(BINARYDIR)/error.o : $(BSP_ROOT)/libraries/mbed/common/error.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/Ethernet.o : $(BSP_ROOT)/libraries/mbed/common/Ethernet.cpp $(all_make_files) |$(BINARYDIR)
+$(BINARYDIR)/Ethernet.o : $(BSP_ROOT)/drivers/Ethernet.cpp $(all_make_files) |$(BINARYDIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
-$(BINARYDIR)/FileBase.o : $(BSP_ROOT)/libraries/mbed/common/FileBase.cpp $(all_make_files) |$(BINARYDIR)
+$(BINARYDIR)/FileBase.o : $(BSP_ROOT)/drivers/FileBase.cpp $(all_make_files) |$(BINARYDIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
-$(BINARYDIR)/FileLike.o : $(BSP_ROOT)/libraries/mbed/common/FileLike.cpp $(all_make_files) |$(BINARYDIR)
+$(BINARYDIR)/FileLike.o : $(BSP_ROOT)/drivers/FileLike.cpp $(all_make_files) |$(BINARYDIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
-$(BINARYDIR)/FilePath.o : $(BSP_ROOT)/libraries/mbed/common/FilePath.cpp $(all_make_files) |$(BINARYDIR)
+$(BINARYDIR)/FilePath.o : $(BSP_ROOT)/drivers/FilePath.cpp $(all_make_files) |$(BINARYDIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
-$(BINARYDIR)/FileSystemLike.o : $(BSP_ROOT)/libraries/mbed/common/FileSystemLike.cpp $(all_make_files) |$(BINARYDIR)
+$(BINARYDIR)/FileSystemLike.o : $(BSP_ROOT)/drivers/FileSystemLike.cpp $(all_make_files) |$(BINARYDIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
-$(BINARYDIR)/gpio.o : $(BSP_ROOT)/libraries/mbed/common/gpio.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/I2C.o : $(BSP_ROOT)/libraries/mbed/common/I2C.cpp $(all_make_files) |$(BINARYDIR)
+$(BINARYDIR)/I2C.o : $(BSP_ROOT)/drivers/I2C.cpp $(all_make_files) |$(BINARYDIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
-$(BINARYDIR)/I2CSlave.o : $(BSP_ROOT)/libraries/mbed/common/I2CSlave.cpp $(all_make_files) |$(BINARYDIR)
+$(BINARYDIR)/I2CSlave.o : $(BSP_ROOT)/drivers/I2CSlave.cpp $(all_make_files) |$(BINARYDIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
-$(BINARYDIR)/InterruptIn.o : $(BSP_ROOT)/libraries/mbed/common/InterruptIn.cpp $(all_make_files) |$(BINARYDIR)
+$(BINARYDIR)/InterruptIn.o : $(BSP_ROOT)/drivers/InterruptIn.cpp $(all_make_files) |$(BINARYDIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
-$(BINARYDIR)/InterruptManager.o : $(BSP_ROOT)/libraries/mbed/common/InterruptManager.cpp $(all_make_files) |$(BINARYDIR)
+$(BINARYDIR)/InterruptManager.o : $(BSP_ROOT)/drivers/InterruptManager.cpp $(all_make_files) |$(BINARYDIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
-$(BINARYDIR)/LocalFileSystem.o : $(BSP_ROOT)/libraries/mbed/common/LocalFileSystem.cpp $(all_make_files) |$(BINARYDIR)
+$(BINARYDIR)/LocalFileSystem.o : $(BSP_ROOT)/drivers/LocalFileSystem.cpp $(all_make_files) |$(BINARYDIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
-$(BINARYDIR)/lp_ticker_api.o : $(BSP_ROOT)/libraries/mbed/common/lp_ticker_api.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/mbed_interface.o : $(BSP_ROOT)/libraries/mbed/common/mbed_interface.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/pinmap_common.o : $(BSP_ROOT)/libraries/mbed/common/pinmap_common.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/RawSerial.o : $(BSP_ROOT)/libraries/mbed/common/RawSerial.cpp $(all_make_files) |$(BINARYDIR)
+$(BINARYDIR)/RawSerial.o : $(BSP_ROOT)/drivers/RawSerial.cpp $(all_make_files) |$(BINARYDIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
-$(BINARYDIR)/retarget.o : $(BSP_ROOT)/libraries/mbed/common/retarget.cpp $(all_make_files) |$(BINARYDIR)
+$(BINARYDIR)/Serial.o : $(BSP_ROOT)/drivers/Serial.cpp $(all_make_files) |$(BINARYDIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
-$(BINARYDIR)/rtc_time.o : $(BSP_ROOT)/libraries/mbed/common/rtc_time.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/semihost_api.o : $(BSP_ROOT)/libraries/mbed/common/semihost_api.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/Serial.o : $(BSP_ROOT)/libraries/mbed/common/Serial.cpp $(all_make_files) |$(BINARYDIR)
+$(BINARYDIR)/SerialBase.o : $(BSP_ROOT)/drivers/SerialBase.cpp $(all_make_files) |$(BINARYDIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
-$(BINARYDIR)/SerialBase.o : $(BSP_ROOT)/libraries/mbed/common/SerialBase.cpp $(all_make_files) |$(BINARYDIR)
+$(BINARYDIR)/SPI.o : $(BSP_ROOT)/drivers/SPI.cpp $(all_make_files) |$(BINARYDIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
-$(BINARYDIR)/SPI.o : $(BSP_ROOT)/libraries/mbed/common/SPI.cpp $(all_make_files) |$(BINARYDIR)
+$(BINARYDIR)/SPISlave.o : $(BSP_ROOT)/drivers/SPISlave.cpp $(all_make_files) |$(BINARYDIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
-$(BINARYDIR)/SPISlave.o : $(BSP_ROOT)/libraries/mbed/common/SPISlave.cpp $(all_make_files) |$(BINARYDIR)
+$(BINARYDIR)/Stream.o : $(BSP_ROOT)/drivers/Stream.cpp $(all_make_files) |$(BINARYDIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
-$(BINARYDIR)/Stream.o : $(BSP_ROOT)/libraries/mbed/common/Stream.cpp $(all_make_files) |$(BINARYDIR)
+$(BINARYDIR)/Ticker.o : $(BSP_ROOT)/drivers/Ticker.cpp $(all_make_files) |$(BINARYDIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
-$(BINARYDIR)/Ticker.o : $(BSP_ROOT)/libraries/mbed/common/Ticker.cpp $(all_make_files) |$(BINARYDIR)
+$(BINARYDIR)/Timeout.o : $(BSP_ROOT)/drivers/Timeout.cpp $(all_make_files) |$(BINARYDIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
-$(BINARYDIR)/ticker_api.o : $(BSP_ROOT)/libraries/mbed/common/ticker_api.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/Timeout.o : $(BSP_ROOT)/libraries/mbed/common/Timeout.cpp $(all_make_files) |$(BINARYDIR)
+$(BINARYDIR)/Timer.o : $(BSP_ROOT)/drivers/Timer.cpp $(all_make_files) |$(BINARYDIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
-$(BINARYDIR)/Timer.o : $(BSP_ROOT)/libraries/mbed/common/Timer.cpp $(all_make_files) |$(BINARYDIR)
+$(BINARYDIR)/TimerEvent.o : $(BSP_ROOT)/drivers/TimerEvent.cpp $(all_make_files) |$(BINARYDIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
-$(BINARYDIR)/TimerEvent.o : $(BSP_ROOT)/libraries/mbed/common/TimerEvent.cpp $(all_make_files) |$(BINARYDIR)
+$(BINARYDIR)/equeue.o : $(BSP_ROOT)/events/equeue/equeue.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/equeue_mbed.o : $(BSP_ROOT)/events/equeue/equeue_mbed.cpp $(all_make_files) |$(BINARYDIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
-$(BINARYDIR)/us_ticker_api.o : $(BSP_ROOT)/libraries/mbed/common/us_ticker_api.c $(all_make_files) |$(BINARYDIR)
+$(BINARYDIR)/equeue_posix.o : $(BSP_ROOT)/events/equeue/equeue_posix.c $(all_make_files) |$(BINARYDIR)
 	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
-$(BINARYDIR)/wait_api.o : $(BSP_ROOT)/libraries/mbed/common/wait_api.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/stm32f4xx_hal.o : $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/stm32f4xx_hal_adc.o : $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_adc.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/stm32f4xx_hal_adc_ex.o : $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_adc_ex.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/stm32f4xx_hal_can.o : $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_can.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/stm32f4xx_hal_cec.o : $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_cec.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/stm32f4xx_hal_cortex.o : $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_cortex.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/stm32f4xx_hal_crc.o : $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_crc.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/stm32f4xx_hal_cryp.o : $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_cryp.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/stm32f4xx_hal_cryp_ex.o : $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_cryp_ex.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/stm32f4xx_hal_dac.o : $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_dac.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/stm32f4xx_hal_dac_ex.o : $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_dac_ex.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/stm32f4xx_hal_dcmi.o : $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_dcmi.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/stm32f4xx_hal_dcmi_ex.o : $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_dcmi_ex.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/stm32f4xx_hal_dma.o : $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_dma.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/stm32f4xx_hal_dma2d.o : $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_dma2d.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/stm32f4xx_hal_dma_ex.o : $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_dma_ex.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/stm32f4xx_hal_dsi.o : $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_dsi.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/stm32f4xx_hal_eth.o : $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_eth.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/stm32f4xx_hal_flash.o : $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_flash.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/stm32f4xx_hal_flash_ex.o : $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_flash_ex.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/stm32f4xx_hal_flash_ramfunc.o : $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_flash_ramfunc.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/stm32f4xx_hal_fmpi2c.o : $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_fmpi2c.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/stm32f4xx_hal_fmpi2c_ex.o : $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_fmpi2c_ex.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/stm32f4xx_hal_gpio.o : $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_gpio.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/stm32f4xx_hal_hash.o : $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_hash.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/stm32f4xx_hal_hash_ex.o : $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_hash_ex.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/stm32f4xx_hal_hcd.o : $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_hcd.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/stm32f4xx_hal_i2c.o : $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_i2c.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/stm32f4xx_hal_i2c_ex.o : $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_i2c_ex.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/stm32f4xx_hal_i2s.o : $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_i2s.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/stm32f4xx_hal_i2s_ex.o : $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_i2s_ex.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/stm32f4xx_hal_irda.o : $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_irda.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/stm32f4xx_hal_iwdg.o : $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_iwdg.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/stm32f4xx_hal_lptim.o : $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_lptim.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+$(BINARYDIR)/EventQueue.o : $(BSP_ROOT)/events/EventQueue.cpp $(all_make_files) |$(BINARYDIR)
+	$(CXX) $(CXXFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
-$(BINARYDIR)/stm32f4xx_hal_ltdc.o : $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_ltdc.c $(all_make_files) |$(BINARYDIR)
+$(BINARYDIR)/mbed_gpio.o : $(BSP_ROOT)/hal/mbed_gpio.c $(all_make_files) |$(BINARYDIR)
 	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
-$(BINARYDIR)/stm32f4xx_hal_ltdc_ex.o : $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_ltdc_ex.c $(all_make_files) |$(BINARYDIR)
+$(BINARYDIR)/mbed_lp_ticker_api.o : $(BSP_ROOT)/hal/mbed_lp_ticker_api.c $(all_make_files) |$(BINARYDIR)
 	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
-$(BINARYDIR)/stm32f4xx_hal_msp_template.o : $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_msp_template.c $(all_make_files) |$(BINARYDIR)
+$(BINARYDIR)/mbed_pinmap_common.o : $(BSP_ROOT)/hal/mbed_pinmap_common.c $(all_make_files) |$(BINARYDIR)
 	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
-$(BINARYDIR)/stm32f4xx_hal_nand.o : $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_nand.c $(all_make_files) |$(BINARYDIR)
+$(BINARYDIR)/mbed_ticker_api.o : $(BSP_ROOT)/hal/mbed_ticker_api.c $(all_make_files) |$(BINARYDIR)
 	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
-$(BINARYDIR)/stm32f4xx_hal_nor.o : $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_nor.c $(all_make_files) |$(BINARYDIR)
+$(BINARYDIR)/mbed_us_ticker_api.o : $(BSP_ROOT)/hal/mbed_us_ticker_api.c $(all_make_files) |$(BINARYDIR)
 	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
-$(BINARYDIR)/stm32f4xx_hal_pccard.o : $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_pccard.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/stm32f4xx_hal_pcd.o : $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_pcd.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/stm32f4xx_hal_pcd_ex.o : $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_pcd_ex.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/stm32f4xx_hal_pwr.o : $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_pwr.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/stm32f4xx_hal_pwr_ex.o : $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_pwr_ex.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/stm32f4xx_hal_qspi.o : $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_qspi.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/stm32f4xx_hal_rcc.o : $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_rcc.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/stm32f4xx_hal_rcc_ex.o : $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_rcc_ex.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/stm32f4xx_hal_rng.o : $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_rng.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/stm32f4xx_hal_rtc.o : $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_rtc.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/stm32f4xx_hal_rtc_ex.o : $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_rtc_ex.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/stm32f4xx_hal_sai.o : $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_sai.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/stm32f4xx_hal_sai_ex.o : $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_sai_ex.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/stm32f4xx_hal_sd.o : $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_sd.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/stm32f4xx_hal_sdram.o : $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_sdram.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/stm32f4xx_hal_smartcard.o : $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_smartcard.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/stm32f4xx_hal_spdifrx.o : $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_spdifrx.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/stm32f4xx_hal_spi.o : $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_spi.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+$(BINARYDIR)/CallChain.o : $(BSP_ROOT)/platform/CallChain.cpp $(all_make_files) |$(BINARYDIR)
+	$(CXX) $(CXXFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
-$(BINARYDIR)/stm32f4xx_hal_sram.o : $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_sram.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/stm32f4xx_hal_tim.o : $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_tim.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/stm32f4xx_hal_tim_ex.o : $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_tim_ex.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/stm32f4xx_hal_uart.o : $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_uart.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/stm32f4xx_hal_usart.o : $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_usart.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/stm32f4xx_hal_wwdg.o : $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_hal_wwdg.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/stm32f4xx_ll_fmc.o : $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_ll_fmc.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/stm32f4xx_ll_fsmc.o : $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_ll_fsmc.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/stm32f4xx_ll_sdmmc.o : $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_ll_sdmmc.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
+$(BINARYDIR)/mbed_alloc_wrappers.o : $(BSP_ROOT)/platform/mbed_alloc_wrappers.cpp $(all_make_files) |$(BINARYDIR)
+	$(CXX) $(CXXFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
-$(BINARYDIR)/stm32f4xx_ll_usb.o : $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/stm32f4xx_ll_usb.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/cmsis_nvic.o : $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/TARGET_NUCLEO_F411RE/cmsis_nvic.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/hal_tick.o : $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/TARGET_NUCLEO_F411RE/hal_tick.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/system_stm32f4xx.o : $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/TARGET_NUCLEO_F411RE/system_stm32f4xx.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/analogin_api.o : $(BSP_ROOT)/libraries/mbed/targets/hal/TARGET_STM/TARGET_STM32F4/analogin_api.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
-
-$(BINARYDIR)/analogout_api.o : $(BSP_ROOT)/libraries/mbed/targets/hal/TARGET_STM/TARGET_STM32F4/analogout_api.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/gpio_api.o : $(BSP_ROOT)/libraries/mbed/targets/hal/TARGET_STM/TARGET_STM32F4/gpio_api.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/gpio_irq_api.o : $(BSP_ROOT)/libraries/mbed/targets/hal/TARGET_STM/TARGET_STM32F4/gpio_irq_api.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
-
-
-$(BINARYDIR)/i2c_api.o : $(BSP_ROOT)/libraries/mbed/targets/hal/TARGET_STM/TARGET_STM32F4/i2c_api.c $(all_make_files) |$(BINARYDIR)
+$(BINARYDIR)/mbed_assert.o : $(BSP_ROOT)/platform/mbed_assert.c $(all_make_files) |$(BINARYDIR)
 	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
-$(BINARYDIR)/mbed_overrides.o : $(BSP_ROOT)/libraries/mbed/targets/hal/TARGET_STM/TARGET_STM32F4/mbed_overrides.c $(all_make_files) |$(BINARYDIR)
+$(BINARYDIR)/mbed_board.o : $(BSP_ROOT)/platform/mbed_board.c $(all_make_files) |$(BINARYDIR)
 	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
-$(BINARYDIR)/pinmap.o : $(BSP_ROOT)/libraries/mbed/targets/hal/TARGET_STM/TARGET_STM32F4/pinmap.c $(all_make_files) |$(BINARYDIR)
+$(BINARYDIR)/mbed_critical.o : $(BSP_ROOT)/platform/mbed_critical.c $(all_make_files) |$(BINARYDIR)
 	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
-$(BINARYDIR)/port_api.o : $(BSP_ROOT)/libraries/mbed/targets/hal/TARGET_STM/TARGET_STM32F4/port_api.c $(all_make_files) |$(BINARYDIR)
+$(BINARYDIR)/mbed_error.o : $(BSP_ROOT)/platform/mbed_error.c $(all_make_files) |$(BINARYDIR)
 	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
-$(BINARYDIR)/pwmout_api.o : $(BSP_ROOT)/libraries/mbed/targets/hal/TARGET_STM/TARGET_STM32F4/pwmout_api.c $(all_make_files) |$(BINARYDIR)
+$(BINARYDIR)/mbed_interface.o : $(BSP_ROOT)/platform/mbed_interface.c $(all_make_files) |$(BINARYDIR)
 	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
-$(BINARYDIR)/rtc_api.o : $(BSP_ROOT)/libraries/mbed/targets/hal/TARGET_STM/TARGET_STM32F4/rtc_api.c $(all_make_files) |$(BINARYDIR)
+$(BINARYDIR)/mbed_mem_trace.o : $(BSP_ROOT)/platform/mbed_mem_trace.c $(all_make_files) |$(BINARYDIR)
 	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
-$(BINARYDIR)/serial_api.o : $(BSP_ROOT)/libraries/mbed/targets/hal/TARGET_STM/TARGET_STM32F4/serial_api.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+$(BINARYDIR)/mbed_rtc_time.o : $(BSP_ROOT)/platform/mbed_rtc_time.cpp $(all_make_files) |$(BINARYDIR)
+	$(CXX) $(CXXFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
-$(BINARYDIR)/sleep.o : $(BSP_ROOT)/libraries/mbed/targets/hal/TARGET_STM/TARGET_STM32F4/sleep.c $(all_make_files) |$(BINARYDIR)
+$(BINARYDIR)/mbed_semihost_api.o : $(BSP_ROOT)/platform/mbed_semihost_api.c $(all_make_files) |$(BINARYDIR)
 	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
-$(BINARYDIR)/spi_api.o : $(BSP_ROOT)/libraries/mbed/targets/hal/TARGET_STM/TARGET_STM32F4/spi_api.c $(all_make_files) |$(BINARYDIR)
+$(BINARYDIR)/mbed_wait_api_no_rtos.o : $(BSP_ROOT)/platform/mbed_wait_api_no_rtos.c $(all_make_files) |$(BINARYDIR)
 	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
-$(BINARYDIR)/PeripheralPins.o : $(BSP_ROOT)/libraries/mbed/targets/hal/TARGET_STM/TARGET_STM32F4/TARGET_NUCLEO_F411RE/PeripheralPins.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+$(BINARYDIR)/mbed_wait_api_rtos.o : $(BSP_ROOT)/platform/mbed_wait_api_rtos.cpp $(all_make_files) |$(BINARYDIR)
+	$(CXX) $(CXXFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
-$(BINARYDIR)/us_ticker.o : $(BSP_ROOT)/libraries/mbed/targets/hal/TARGET_STM/TARGET_STM32F4/us_ticker.c $(all_make_files) |$(BINARYDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+$(BINARYDIR)/retarget.o : $(BSP_ROOT)/platform/retarget.cpp $(all_make_files) |$(BINARYDIR)
+	$(CXX) $(CXXFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
 $(BINARYDIR)/stubs.o : $(BSP_ROOT)/stubs.cpp $(all_make_files) |$(BINARYDIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/stm_spi_api.o : $(BSP_ROOT)/targets/TARGET_STM/stm_spi_api.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/analogin_api.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/analogin_api.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/analogout_api.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/analogout_api.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/can_api.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/can_api.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/stm32f4xx_hal.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/stm32f4xx_hal_adc.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_adc.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/stm32f4xx_hal_adc_ex.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_adc_ex.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/stm32f4xx_hal_can.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_can.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/stm32f4xx_hal_cec.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_cec.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/stm32f4xx_hal_cortex.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_cortex.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/stm32f4xx_hal_crc.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_crc.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/stm32f4xx_hal_cryp.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_cryp.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/stm32f4xx_hal_cryp_ex.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_cryp_ex.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/stm32f4xx_hal_dac.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_dac.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/stm32f4xx_hal_dac_ex.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_dac_ex.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/stm32f4xx_hal_dcmi.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_dcmi.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/stm32f4xx_hal_dcmi_ex.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_dcmi_ex.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/stm32f4xx_hal_dfsdm.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_dfsdm.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/stm32f4xx_hal_dma.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_dma.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/stm32f4xx_hal_dma2d.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_dma2d.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/stm32f4xx_hal_dma_ex.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_dma_ex.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/stm32f4xx_hal_dsi.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_dsi.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/stm32f4xx_hal_eth.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_eth.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/stm32f4xx_hal_flash.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_flash.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/stm32f4xx_hal_flash_ex.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_flash_ex.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/stm32f4xx_hal_flash_ramfunc.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_flash_ramfunc.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/stm32f4xx_hal_fmpi2c.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_fmpi2c.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/stm32f4xx_hal_fmpi2c_ex.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_fmpi2c_ex.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/stm32f4xx_hal_gpio.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_gpio.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/stm32f4xx_hal_hash.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_hash.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/stm32f4xx_hal_hash_ex.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_hash_ex.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/stm32f4xx_hal_hcd.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_hcd.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/stm32f4xx_hal_i2c.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_i2c.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/stm32f4xx_hal_i2c_ex.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_i2c_ex.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/stm32f4xx_hal_i2s.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_i2s.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/stm32f4xx_hal_i2s_ex.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_i2s_ex.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/stm32f4xx_hal_irda.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_irda.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/stm32f4xx_hal_iwdg.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_iwdg.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/stm32f4xx_hal_lptim.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_lptim.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/stm32f4xx_hal_ltdc.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_ltdc.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/stm32f4xx_hal_ltdc_ex.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_ltdc_ex.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/stm32f4xx_hal_msp_template.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_msp_template.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/stm32f4xx_hal_nand.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_nand.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/stm32f4xx_hal_nor.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_nor.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/stm32f4xx_hal_pccard.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_pccard.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/stm32f4xx_hal_pcd.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_pcd.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/stm32f4xx_hal_pcd_ex.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_pcd_ex.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/stm32f4xx_hal_pwr.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_pwr.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/stm32f4xx_hal_pwr_ex.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_pwr_ex.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/stm32f4xx_hal_qspi.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_qspi.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/stm32f4xx_hal_rcc.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_rcc.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/stm32f4xx_hal_rcc_ex.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_rcc_ex.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/stm32f4xx_hal_rng.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_rng.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/stm32f4xx_hal_rtc.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_rtc.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/stm32f4xx_hal_rtc_ex.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_rtc_ex.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/stm32f4xx_hal_sai.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_sai.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/stm32f4xx_hal_sai_ex.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_sai_ex.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/stm32f4xx_hal_sd.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_sd.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/stm32f4xx_hal_sdram.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_sdram.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/stm32f4xx_hal_smartcard.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_smartcard.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/stm32f4xx_hal_spdifrx.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_spdifrx.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/stm32f4xx_hal_spi.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_spi.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/stm32f4xx_hal_sram.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_sram.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/stm32f4xx_hal_tim.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_tim.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/stm32f4xx_hal_tim_ex.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_tim_ex.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/stm32f4xx_hal_uart.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_uart.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/stm32f4xx_hal_usart.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_usart.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/stm32f4xx_hal_wwdg.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_hal_wwdg.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/stm32f4xx_ll_fmc.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_ll_fmc.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/stm32f4xx_ll_fsmc.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_ll_fsmc.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/stm32f4xx_ll_sdmmc.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_ll_sdmmc.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/stm32f4xx_ll_usb.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/device/stm32f4xx_ll_usb.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/gpio_api.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/gpio_api.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/gpio_irq_api.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/gpio_irq_api.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/i2c_api.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/i2c_api.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/lp_ticker.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/lp_ticker.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/mbed_overrides.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/mbed_overrides.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/pinmap.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/pinmap.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/port_api.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/port_api.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/pwmout_api.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/pwmout_api.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/rtc_api.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/rtc_api.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/serial_api.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/serial_api.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/sleep.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/sleep.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/spi_api.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/spi_api.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/cmsis_nvic.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/TARGET_NUCLEO_F411RE/device/cmsis_nvic.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/hal_tick.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/TARGET_NUCLEO_F411RE/device/hal_tick.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/system_stm32f4xx.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/TARGET_NUCLEO_F411RE/device/system_stm32f4xx.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/PeripheralPins.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/TARGET_NUCLEO_F411RE/PeripheralPins.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/us_ticker.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/us_ticker.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/trng_api.o : $(BSP_ROOT)/targets/TARGET_STM/trng_api.c $(all_make_files) |$(BINARYDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
 $(BINARYDIR)/control_manager.o : src/Controller/control_manager.cpp $(all_make_files) |$(BINARYDIR)
@@ -758,6 +802,10 @@ $(BINARYDIR)/stspin240.o : src/motor/stspin240.c $(all_make_files) |$(BINARYDIR)
 
 
 $(BINARYDIR)/TB6612FNG.o : src/motor/TB6612FNG.cpp $(all_make_files) |$(BINARYDIR)
+	$(CXX) $(CXXFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
+
+
+$(BINARYDIR)/stspin240_250_class.o : src/motor/X-NUCLEO-IHM12A1/Components/stspin240_250/stspin240_250_class.cpp $(all_make_files) |$(BINARYDIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
@@ -881,6 +929,6 @@ $(BINARYDIR)/Wifi.o : src/wifi/Wifi.cpp $(all_make_files) |$(BINARYDIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 
 
-$(BINARYDIR)/startup_stm32f411xe.o : $(BSP_ROOT)/libraries/mbed/targets/cmsis/TARGET_STM/TARGET_STM32F4/TARGET_NUCLEO_F411RE/TOOLCHAIN_GCC_ARM/startup_stm32f411xe.S $(all_make_files) |$(BINARYDIR)
+$(BINARYDIR)/startup_stm32f411xe.o : $(BSP_ROOT)/targets/TARGET_STM/TARGET_STM32F4/TARGET_NUCLEO_F411RE/device/TOOLCHAIN_GCC_ARM/startup_stm32f411xe.S $(all_make_files) |$(BINARYDIR)
 	$(CC) $(CFLAGS) $(ASFLAGS) -c $< -o $@ -MD -MF $(@:.o=.dep)
 

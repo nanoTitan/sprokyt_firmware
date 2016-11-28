@@ -31,8 +31,8 @@
 #define MC_NUM_MOTORS 4
 
 //#define MOTOR_ESC
-#define MOTOR_TOSHIBA
-//#define MOTOR_STSPIN
+//#define MOTOR_TOSHIBA
+#define MOTOR_STSPIN
 
 // 250 Quad H Setup
 #define MOTOR_A 0x01
@@ -40,9 +40,6 @@
 #define MOTOR_C 0x04
 #define MOTOR_D 0x08
 #define MOTOR_ALL 0xFF
-
-#define DIR_CW  0
-#define DIR_CCW 1
 
 #define CTRL_UPDATE_TIME 1000
 
@@ -56,6 +53,15 @@
 
 // Debugging
 #define DEBUG_FLIGHT_CONTROL_NO_CONNECT
+
+/**
+     * @brief Rotation modes.
+     */
+typedef enum
+{
+	BWD = 0, /* Backward. */
+	FWD = 1  /* Forward. */
+} direction_t;
 
 #endif /* _CONSTANTS_H_ */
 

@@ -210,17 +210,17 @@ void UpdateFlightControl()
 		
 		// Set motor speed
 #if defined(MOTORS_ENABLED)
-		MotorController_setMotor(MOTOR_A, powerA, DIR_CW);
-		MotorController_setMotor(MOTOR_B, powerB, DIR_CCW);
-		MotorController_setMotor(MOTOR_C, powerC, DIR_CW);		
-		MotorController_setMotor(MOTOR_D, powerD, DIR_CCW);
+		MotorController_setMotor(MOTOR_A, powerA, FWD);
+		MotorController_setMotor(MOTOR_B, powerB, BWD);
+		MotorController_setMotor(MOTOR_C, powerC, BWD);		
+		MotorController_setMotor(MOTOR_D, powerD, FWD);
 #endif // MOTORS_ENABLED
 	}
 	else
 	{
 #if defined(MOTORS_ENABLED)
 		// Allow ESCs to be armed or turn motors on/off
-		MotorController_setMotor(MOTOR_ALL, m_rcThrottle, 0);
+		MotorController_setMotor(MOTOR_ALL, m_rcThrottle, FWD);
 #endif // MOTORS_ENABLED
 		
 		// Reset target yaw for next takeoff
@@ -269,7 +269,7 @@ void UpdateDisconnected()
 void Disarm()
 {	
 	// Turn motors off
-	MotorController_setMotor(MOTOR_ALL, MIN_THROTTLE, 0);
+	MotorController_setMotor(MOTOR_ALL, MIN_THROTTLE, FWD);
 	m_rcThrottle = 0;
 	m_lastThrottleDown = -1;
 	m_lastThrottleDown = 0;
@@ -325,9 +325,9 @@ void FlightControl_setPIDValue(uint8_t instruction, const PIDInfo& info)
 	m_targetYaw = IMU_get_sf_yaw();	
 }
 
-void FlightControl_setMotor(uint8_t motorIndex, uint8_t value, uint8_t direction)
+void FlightControl_setMotor(uint8_t motorIndex, uint8_t value, direction_t dir)
 {
-	MotorController_setMotor(motorIndex, value, direction);
+	MotorController_setMotor(motorIndex, value, dir);
 }
 
 void FlightControl_setInstruction(uint8_t instruction, uint8_t value)

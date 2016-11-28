@@ -1,5 +1,4 @@
 #include "control_manager.h"
-#include "constants.h"
 #include "PID.h"
 #include "Wifi.h"
 #include "flight_control.h"
@@ -69,11 +68,11 @@ void ControlMgr_update()
 	}
 }
 
-void ControlMgr_setMotor(uint8_t motorIndex, uint8_t value, uint8_t direction)
+void ControlMgr_setMotor(uint8_t motorIndex, uint8_t value, direction_t dir)
 {
 	if (m_currControllerType == CONTROLLER_FLIGHT)
 	{
-		FlightControl_setMotor(motorIndex, value, direction);
+		FlightControl_setMotor(motorIndex, value, dir);
 	}
 	else if (m_currControllerType == CONTROLLER_ROVER)
 	{
@@ -83,7 +82,7 @@ void ControlMgr_setMotor(uint8_t motorIndex, uint8_t value, uint8_t direction)
 	}
 	else if(m_currControllerType == CONTROLLER_ESC_PROGRAMMER)
 	{
-		EscProgrammer_setMotor(motorIndex, value, direction);
+		EscProgrammer_setMotor(motorIndex, value, dir);
 	}
 }
 
