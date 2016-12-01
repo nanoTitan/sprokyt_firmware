@@ -28,7 +28,7 @@ extern "C" {
 int main()
 {	
 	PRINTF("***************************\r\n");
-	PRINTF("Ruka Firmware Version %.02f\r\n", FIRMWARE_VERSION);
+	PRINTF("Ruka Firmware Version %s\r\n", FIRMWARE_VERSION);
 	PRINTF("Copyright Sprokyt LLC 2016\r\n");
 	PRINTF("All Rights Reserved\r\n");
 	PRINTF("***************************\r\n\r\n");
@@ -60,7 +60,7 @@ int main()
 	//Wifi::Instance()->Init();				// ESP Wifi
 	
 	// IMU and Sensors
-	//IMU_init();
+	IMU_init();
 	
 	//MotorController_setMotor(MOTOR_A, 1500, DIR_CW);
 	
@@ -72,7 +72,7 @@ int main()
 		//SWPF01SA::Instance()->Update();
 		
 		// IMU and Sensors
-		//IMU_update();
+		IMU_update();
 		
 		ControlMgr_update();
 	}

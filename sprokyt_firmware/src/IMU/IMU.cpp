@@ -232,7 +232,7 @@ void SF_Handler()
 	
 	BSP_ACCELERO_IsInitialized(ACCELERO_handle, &status_acc);
 	BSP_GYRO_IsInitialized(GYRO_handle, &status_gyr);
-	BSP_MAGNETO_IsInitialized(MAGNETO_handle, &status_mag);
+	//BSP_MAGNETO_IsInitialized(MAGNETO_handle, &status_mag);
 
 	if (status_acc && status_gyr && (SF_6x_enabled || status_mag))
 	{
@@ -309,10 +309,10 @@ void IMU_update(void)
     
 	if (!SF_Active)
 	{
-		Pressure_Sensor_Handler();
+		//Pressure_Sensor_Handler();
 		Accelero_Sensor_Handler();
 		Gyro_Sensor_Handler();
-		Magneto_Sensor_Handler();
+		//Magneto_Sensor_Handler();
 	}
 }
 
@@ -365,14 +365,14 @@ void InitializeAllSensors(void)
 		CError_Handler();
 	
 	/* Force to use LIS3MDL */
-	result = BSP_MAGNETO_Init(LIS3MDL_0, &MAGNETO_handle);
-	if (result != COMPONENT_OK)
-		CError_Handler();
+	//result = BSP_MAGNETO_Init(LIS3MDL_0, &MAGNETO_handle);
+	//if (result != COMPONENT_OK)
+	//	CError_Handler();
 	
 	/* Try to use LPS22HB DIL24 or LPS25HB DIL24 if present, otherwise use LPS25HB on board */
-	result = BSP_PRESSURE_Init(PRESSURE_SENSORS_AUTO, &PRESSURE_handle);
-	if (result != COMPONENT_OK)
-		CError_Handler();
+	//result = BSP_PRESSURE_Init(PRESSURE_SENSORS_AUTO, &PRESSURE_handle);
+	//if (result != COMPONENT_OK)
+	//	CError_Handler();
 	
 	PRINTF("IMU sensors initialized.\r\n");
 }

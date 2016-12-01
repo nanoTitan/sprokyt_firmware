@@ -162,7 +162,7 @@ void MotorController_setMotors_TB6612(uint8_t motorIndxMask, float power, uint8_
 		else
 		{
 			motorDriver1.setPwmApulsewidth(pwm);
-			if (direction == DIR_CW)
+			if (direction == FWD)
 				motorDriver1.motorA_cw();
 			else
 				motorDriver1.motorA_ccw();
@@ -176,7 +176,7 @@ void MotorController_setMotors_TB6612(uint8_t motorIndxMask, float power, uint8_
 		else
 		{
 			motorDriver1.setPwmBpulsewidth(pwm);	
-			if (direction == DIR_CW)
+			if (direction == FWD)
 				motorDriver1.motorB_cw();
 			else
 				motorDriver1.motorB_ccw();
@@ -190,7 +190,7 @@ void MotorController_setMotors_TB6612(uint8_t motorIndxMask, float power, uint8_
 		else
 		{
 			motorDriver2.setPwmApulsewidth(pwm);	
-			if (direction == DIR_CW)
+			if (direction == FWD)
 				motorDriver2.motorA_cw();
 			else
 				motorDriver2.motorA_ccw();
@@ -204,7 +204,7 @@ void MotorController_setMotors_TB6612(uint8_t motorIndxMask, float power, uint8_
 		else
 		{
 			motorDriver2.setPwmBpulsewidth(pwm);	
-			if (direction == DIR_CW)
+			if (direction == FWD)
 				motorDriver2.motorB_cw();
 			else
 				motorDriver2.motorB_ccw();

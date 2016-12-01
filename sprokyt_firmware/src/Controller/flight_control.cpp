@@ -211,8 +211,8 @@ void UpdateFlightControl()
 		// Set motor speed
 #if defined(MOTORS_ENABLED)
 		MotorController_setMotor(MOTOR_A, powerA, FWD);
-		MotorController_setMotor(MOTOR_B, powerB, BWD);
-		MotorController_setMotor(MOTOR_C, powerC, BWD);		
+		MotorController_setMotor(MOTOR_B, powerB, FWD);
+		MotorController_setMotor(MOTOR_C, powerC, FWD);		
 		MotorController_setMotor(MOTOR_D, powerD, FWD);
 #endif // MOTORS_ENABLED
 	}

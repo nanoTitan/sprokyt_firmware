@@ -2,7 +2,7 @@
 #ifndef _CONSTANTS_H_
 #define _CONSTANTS_H_
 
-#define FIRMWARE_VERSION 0.1f
+#define FIRMWARE_VERSION "0.2.0"
 
 #define WIFI_PING_TIMEOUT 3600
 
@@ -31,8 +31,8 @@
 #define MC_NUM_MOTORS 4
 
 //#define MOTOR_ESC
-//#define MOTOR_TOSHIBA
-#define MOTOR_STSPIN
+#define MOTOR_TOSHIBA
+//#define MOTOR_STSPIN
 
 // 250 Quad H Setup
 #define MOTOR_A 0x01
