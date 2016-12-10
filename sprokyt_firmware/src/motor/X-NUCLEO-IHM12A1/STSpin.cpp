@@ -32,7 +32,7 @@ void STSpinInit()
 	PRINTF("Initializing STSpin Motor Controller... ");
 	
 	m_motorBrdg[0] = new STSPIN240_250(PA_6, PC_4, PB_10, PA_8, PB_0, PA_11, PA_0);		// PA_10 (EN), PC_7 (STBY), PB_10 (PHA), PA_8 (PHB), PB_4 (PWMA), PB_5 (PWMB), PA_0 (REF)
-	m_motorBrdg[1] = new STSPIN240_250(PC_5, PA_4, PC_3, PB_2, PB_1, PA_1, PA_0);		// PA_1 (EN), PA_4 (STBY), PA_5 (PHA), PB_1 (PHB), PB_6 (PWMA), PB_0 (PWMB), PA_6 (REF)
+	//m_motorBrdg[1] = new STSPIN240_250(PC_5, PA_4, PC_3, PB_2, PB_1, PA_1, PA_0);		// PA_1 (EN), PA_4 (STBY), PA_5 (PHA), PB_1 (PHB), PB_6 (PWMA), PB_0 (PWMB), PA_6 (REF)
 	
 	for (int i = 0; i < MAX_NUMBER_OF_DEVICES; ++i)
 	{

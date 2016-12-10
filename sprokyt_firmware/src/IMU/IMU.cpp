@@ -78,14 +78,12 @@ void *ACCELERO_handle = NULL;
 void *GYRO_handle = NULL;
 void *MAGNETO_handle = NULL;
 void *PRESSURE_handle = NULL;
-//Ticker m_sfTicker;
 float sf_yaw = 0;
 float sf_pitch = 0;
 float sf_roll = 0;
 float PRESSURE_Value = 0;
-uint8_t SF_Active = 0;
-uint8_t SF_6x_enabled = 1;
-uint8_t SF_change = 0;
+volatile uint8_t SF_Active = 0;
+volatile uint8_t SF_6x_enabled = 1;
 uint32_t sysclk = 0;
 uint32_t hclk = 0;
 uint32_t pclk1 = 0;
@@ -146,7 +144,7 @@ void IMU_init()
  * @param  None
  * @retval None
  */
-void SFTimerInit()
+static void SFTimerInit()
 {
 	TIM_OC_InitTypeDef sConfig;
 	uint16_t uhPrescalerValue;
@@ -232,27 +230,12 @@ void SF_Handler()
 	
 	BSP_ACCELERO_IsInitialized(ACCELERO_handle, &status_acc);
 	BSP_GYRO_IsInitialized(GYRO_handle, &status_gyr);
-	//BSP_MAGNETO_IsInitialized(MAGNETO_handle, &status_mag);
+	
+	if (!SF_6x_enabled)
+		BSP_MAGNETO_IsInitialized(MAGNETO_handle, &status_mag);
 
 	if (status_acc && status_gyr && (SF_6x_enabled || status_mag))
-	{
-		if (SF_change == 1)
-		{
-			if (SF_6x_enabled == 0)
-			{
-				MotionFX_manager_stop_9X();
-				MotionFX_manager_start_6X();
-				SF_6x_enabled = 1;
-			}
-			else
-			{
-				MotionFX_manager_stop_6X();
-				MotionFX_manager_start_9X();
-				SF_6x_enabled = 0;
-			}
-			SF_change = 0;
-		}
-      
+	{      
 		BSP_ACCELERO_Get_Axes(ACCELERO_handle, &ACC_Value);
 		BSP_GYRO_Get_Axes(GYRO_handle, &GYR_Value);
 		BSP_MAGNETO_Get_Axes(MAGNETO_handle, &MAG_Value);
@@ -312,7 +295,9 @@ void IMU_update(void)
 		//Pressure_Sensor_Handler();
 		Accelero_Sensor_Handler();
 		Gyro_Sensor_Handler();
-		//Magneto_Sensor_Handler();
+		
+		if (!SF_6x_enabled)
+			Magneto_Sensor_Handler();
 	}
 }
 
@@ -365,14 +350,12 @@ void InitializeAllSensors(void)
 		CError_Handler();
 	
 	/* Force to use LIS3MDL */
-	//result = BSP_MAGNETO_Init(LIS3MDL_0, &MAGNETO_handle);
-	//if (result != COMPONENT_OK)
-	//	CError_Handler();
-	
-	/* Try to use LPS22HB DIL24 or LPS25HB DIL24 if present, otherwise use LPS25HB on board */
-	//result = BSP_PRESSURE_Init(PRESSURE_SENSORS_AUTO, &PRESSURE_handle);
-	//if (result != COMPONENT_OK)
-	//	CError_Handler();
+	if (!SF_6x_enabled)
+	{
+		result = BSP_MAGNETO_Init(LIS3MDL_0, &MAGNETO_handle);
+		if (result != COMPONENT_OK)
+			CError_Handler();
+	}
 	
 	PRINTF("IMU sensors initialized.\r\n");
 }
@@ -386,8 +369,9 @@ void EnableAllSensors(void)
 {
 	BSP_ACCELERO_Sensor_Enable(ACCELERO_handle);
 	BSP_GYRO_Sensor_Enable(GYRO_handle);
-	BSP_MAGNETO_Sensor_Enable(MAGNETO_handle);
-	BSP_PRESSURE_Sensor_Enable(PRESSURE_handle);
+	
+	if (!SF_6x_enabled)
+		BSP_MAGNETO_Sensor_Enable(MAGNETO_handle);
 	
 	PRINTF("IMU sensors enabled.\r\n");
 }
@@ -440,23 +424,6 @@ void Magneto_Sensor_Handler()
 	}
 }
 
-/**
- * @brief  Handles the PRESSURE sensor data getting/sending
- * @param  Msg PRESSURE part of the stream
- * @retval None
- */
-void Pressure_Sensor_Handler()
-{
-	int32_t d1, d2;
-	uint8_t status = 0;
-  
-	if (PRESSURE_SENSOR && BSP_PRESSURE_IsInitialized(PRESSURE_handle, &status) == COMPONENT_OK && status == 1)
-	{
-		BSP_PRESSURE_Get_Press(PRESSURE_handle, &PRESSURE_Value);
-		//PRINTF("Pressure: %f\n", PRESSURE_Value);
-	}
-}
-
 void CalibrateSensorFusion()
 {
 	if (!SF_Active || isCal)
@@ -492,33 +459,6 @@ void CalibrateSensorFusion()
 		/* Switch on the Led */
 		BSP_LED_On(LED_2);
 	}
-}
-
-
-/**
- * @brief  Get the current tick value in millisecond
- * @param  None
- * @retval The tick value
- */
-uint32_t user_currentTimeGetTick(void)
-{
-	return HAL_GetTick();
-}
-
-/**
- * @brief  Get the delta tick value in millisecond from Tick1 to the current tick
- * @param  Tick1 the reference tick used to compute the delta
- * @retval The delta tick value
- */
-uint32_t user_currentTimeGetElapsedMS(uint32_t Tick1)
-{
-	volatile uint32_t Delta, Tick2;
-  
-	Tick2 = HAL_GetTick();
-  
-	/* Capture computation */
-	Delta = Tick2 - Tick1;
-	return Delta;
 }
 
 /**

@@ -57,7 +57,7 @@
   */   
 
 /// The maximum number of Stspin240 or Stspin250 devices 
-#define MAX_NUMBER_OF_DEVICES                 (2)
+#define MAX_NUMBER_OF_DEVICES                 (1)
    
 /// The maximum number of Brush DC motors connected to the Stspin240 or Stspin250
 #define MAX_NUMBER_OF_BRUSH_DC_MOTORS                    (2)

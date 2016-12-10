@@ -31,8 +31,8 @@
 #define MC_NUM_MOTORS 4
 
 //#define MOTOR_ESC
-#define MOTOR_TOSHIBA
-//#define MOTOR_STSPIN
+//#define MOTOR_TOSHIBA
+#define MOTOR_STSPIN
 
 // 250 Quad H Setup
 #define MOTOR_A 0x01
