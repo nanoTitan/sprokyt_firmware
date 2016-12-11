@@ -1,4 +1,3 @@
-#include "imu.h"
 #include "control_manager.h"
 #include "flight_control.h"
 #include "motor_controller.h"
@@ -13,6 +12,7 @@
 extern "C" 
 {
 #include "MotionFX_Manager.h"
+#include "imu.h"
 }
 
 enum FLIGHT_MODE

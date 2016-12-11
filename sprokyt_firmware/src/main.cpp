@@ -9,7 +9,6 @@ All Rights Reserved
 //#include "BLE.h"
 //#include "SWPF01SA.h"
 #include "Wifi.h"
-#include "imu.h"
 #include "motor_controller.h"
 #include "error.h"
 #include "debug.h"
@@ -20,6 +19,7 @@ extern "C" {
 #endif 
 
 #include "cube_hal.h"
+#include "imu.h"
 
 #ifdef __cplusplus
 }

@@ -22,9 +22,9 @@ enum CONTROLLER_TYPE
 };
 
 void ControlMgr_init();
-void ControlMgr_setState(CONTROL_STATE state);
-CONTROL_STATE ControlMgr_getState();
-void ControlMgr_setType(CONTROLLER_TYPE ctrlType);
+void ControlMgr_setState(enum CONTROL_STATE state);
+enum CONTROL_STATE ControlMgr_getState();
+void ControlMgr_setType(enum CONTROLLER_TYPE ctrlType);
 void ControlMgr_update();
 void ControlMgr_setMotor(uint8_t motorIndex, uint8_t value, direction_t dir);
 void ControlMgr_parseInstruction(uint8_t data_length, uint8_t *att_data);

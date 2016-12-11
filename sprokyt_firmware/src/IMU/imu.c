@@ -10,7 +10,7 @@
 #include <stdio.h>  // sprintf
 #include "debug.h"
 
-extern "C" {
+
 #include "stm32f4xx_hal_tim.h"
 #include "stm32f4xx_nucleo.h"
 #include "MotionFX_Manager.h"
@@ -20,7 +20,6 @@ extern "C" {
 #include "x_nucleo_iks01a1_magneto.h"
 #include "x_nucleo_iks01a1_pressure.h"
 #include "error.h"
-}
 	
 /* Definition for TIMx's NVIC */
 #define SF_TIM_COUNTER_CLK					 10000
