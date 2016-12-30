@@ -47,11 +47,21 @@ void Wifi::Init()
 {
 	PRINTF("Wifi - Initializing\r\n");
 	
-	esp.reset();
-	esp.startServerWithAP((char*)DEFAULT_WIFI_SSID.c_str(), (char*)DEFAULT_WIFI_PWRD.c_str(), 7, 4, 1001);
+	bool success = esp.reset();
+	if (!success)
+	{
+		PRINTF("server.reset error\r\n");
+		return;
+	}
 	
-	// Clear vector
-	m_isInitialized = true;
+	success = esp.startServerWithAP((char*)DEFAULT_WIFI_SSID.c_str(), (char*)DEFAULT_WIFI_PWRD.c_str(), 7, 4, 1001);
+	if (!success)
+	{
+		PRINTF("server.bind error\r\n");
+		return;
+	}
+	
+	m_isInitialized = success;
 	
 	/*
 	// Test server connecting to wifi

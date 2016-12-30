@@ -103,6 +103,7 @@ static void Pressure_Sensor_Handler();
 static unsigned char SaveCalibrationToMemory(void);
 static unsigned char ResetCalibrationInMemory();
 static unsigned char RecallCalibrationFromMemory();
+static uint8_t LoadDefaultCalibration();
 
 /* Private functions ---------------------------------------------------------*/
 void IMU_init()
@@ -126,14 +127,13 @@ void IMU_init()
 	
 	// Check if the calibration is already available in memory
 	unsigned char calibLoaded = RecallCalibrationFromMemory();
+	if(calibLoaded == 0)
+		calibLoaded = LoadDefaultCalibration();
+	
 	if (calibLoaded == 1)
-	{
 		PRINTF("IMU calibration successfully loaded\r\n");
-	}
 	else
-	{
 		PRINTF("IMU calibration failed to load!!!\r\n");
-	}
 	
 	SFTimerInit();
 }
@@ -269,9 +269,11 @@ void SF_Handler()
 void IMU_update(void)
 {	
 	/* Check if user button was pressed only when Sensor Fusion is active */
-	if ((BSP_PB_GetState(BUTTON_KEY) == GPIO_PIN_RESET) /*&& SF_Active*/)
+	if ((HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13)) == GPIO_PIN_RESET && 0 == 1)
+	//if ((BSP_PB_GetState(BUTTON_KEY) == GPIO_PIN_RESET) /*&& SF_Active*/)
 	{
-		while (BSP_PB_GetState(BUTTON_KEY) == GPIO_PIN_RESET)
+		while(HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13) == GPIO_PIN_RESET)
+		//while (BSP_PB_GetState(BUTTON_KEY) == GPIO_PIN_RESET)
 			;
 		
 		/* Reset the Compass Calibration */
@@ -636,7 +638,6 @@ unsigned char RecallCalibrationFromMemory(void)
 #ifdef OSXMOTIONFX_STORE_CALIB_FLASH
 {
   /* ReLoad the Calibration Values from FLASH */
-	unsigned char Success = 1;
 	uint32_t Address = OSXMOTIONFX_FLASH_ADD;
 #if (defined (USE_STM32F4XX_NUCLEO))
 	__IO uint32_t data = *(__IO uint32_t*) Address;
@@ -699,7 +700,7 @@ unsigned char RecallCalibrationFromMemory(void)
 		isCal = 0;
 	}
   
-	return Success;
+	return (unsigned char)isCal;
 }
 #else /* OSXMOTIONFX_STORE_CALIB_FLASH */
 {
@@ -743,6 +744,38 @@ unsigned char RecallCalibrationFromMemory(void)
 	return Success;
 }
 #endif /* OSXMOTIONFX_STORE_CALIB_FLASH */
+
+uint8_t LoadDefaultCalibration()
+{
+#ifdef OSXMOTIONFX_STORE_CALIB_FLASH
+	magOffset.magOffX    = (signed short) -384;
+	magOffset.magOffY    = (signed short) -387;
+	magOffset.magOffZ    = (signed short) 561;
+	magOffset.magGainX = (float) 0;
+	magOffset.magGainY = (float) 0;
+	magOffset.magGainZ = (float) 0;
+	magOffset.expMagVect = (float) 1138665869;
+    
+	/* Set the Calibration Structure */
+	osx_MotionFX_setCalibrationData(&magOffset);
+    
+	/* Control the calibration status */
+	isCal = osx_MotionFX_compass_isCalibrated();
+    
+	if (isCal == 0x01)
+	{
+		SaveCalibrationToMemory();
+		BSP_LED_On(LED_2);
+		return 1;
+	}
+	else
+	{
+		BSP_LED_Off(LED_2);
+	}
+#endif // OSXMOTIONFX_STORE_CALIB_FLASH
+	
+	return 0;
+}
 
 #ifdef OSXMOTIONFX_STORE_CALIB_FLASH
 #if (defined (USE_STM32L4XX_NUCLEO))

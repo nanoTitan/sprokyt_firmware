@@ -338,7 +338,7 @@ bool ESP8266::gethostbyname(const char * host, char * ip)
     }
 }
 
-void ESP8266::reset()
+bool ESP8266::reset()
 {
     reset_pin = 0;
     wait_us(20);
@@ -348,9 +348,14 @@ void ESP8266::reset()
     //send("+++",3);
     wait(1);
     state.cmdMode = true;
-    sendCommand("AT", "OK", NULL, 1000);
-    sendCommand("AT+RST", "ready", NULL, 10000);
+    bool success = sendCommand("AT", "OK", NULL, 1000);
+	if (!success)
+		return false;
+	
+	success = sendCommand("AT+RST", "ready", NULL, 10000);
     state.associated = false;
+	
+	return success;
 }
 
 bool ESP8266::reboot()

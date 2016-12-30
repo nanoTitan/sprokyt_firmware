@@ -151,7 +151,7 @@ public:
     /**
     * Reset the wifi module
     */
-    void reset();
+    bool reset();
     
     /**
     * Reboot the wifi module
