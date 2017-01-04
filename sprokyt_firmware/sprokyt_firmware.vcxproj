@@ -212,6 +212,7 @@
     <ClCompile Include="src\Controller\control_manager.cpp" />
     <ClCompile Include="src\Controller\esc_programmer.cpp" />
     <ClCompile Include="src\Controller\flight_control.cpp" />
+    <ClCompile Include="src\Controller\user_control.cpp" />
     <ClCompile Include="src\cube_hal_f4.c" />
     <ClCompile Include="src\IMU\imu.c" />
     <ClCompile Include="src\IMU\MotionFX_Manager.c" />
@@ -470,6 +471,7 @@
     <ClInclude Include="src\Controller\control_manager.h" />
     <ClInclude Include="src\Controller\esc_programmer.h" />
     <ClInclude Include="src\Controller\flight_control.h" />
+    <ClInclude Include="src\Controller\user_control.h" />
     <ClInclude Include="src\cube_hal.h" />
     <ClInclude Include="src\debug.h" />
     <ClInclude Include="src\error.h" />

@@ -121,18 +121,17 @@ void MotorController_setMotor(uint8_t motorIndxMask, float power, direction_t di
 #ifdef MOTOR_STSPIN
 void MotorController_setMotors_STSPIN(uint8_t motorIndxMask, float power, direction_t dir)
 {
-	float dutyCycle = map(power, 1000, 2000, 0, 100);		// Map between 0-100 where 50 is a 50% duty cycle	
 	if (motorIndxMask & 0x01)
-		STSpinSetMotor(0, 0, dutyCycle, dir);
+		STSpinSetMotor(0, 0, power, dir);
 	
 	if (motorIndxMask & 0x02)
-		STSpinSetMotor(0, 1, dutyCycle, dir);
+		STSpinSetMotor(0, 1, power, dir);
 	
 	if (motorIndxMask & 0x04)
-		STSpinSetMotor(1, 0, dutyCycle, dir);
+		STSpinSetMotor(1, 0, power, dir);
 	
 	if (motorIndxMask & 0x08)
-		STSpinSetMotor(1, 1, dutyCycle, dir);
+		STSpinSetMotor(1, 1, power, dir);
 }
 
 #elif defined(MOTOR_ESC)
@@ -154,14 +153,13 @@ void MotorController_setMotor_ESC(uint8_t motorIndxMask, float power, uint8_t di
 #elif defined(MOTOR_TOSHIBA)
 void MotorController_setMotors_TB6612(uint8_t motorIndxMask, float power, uint8_t direction)
 {
-	float pwm = map(power, 1000, 2000, 0, 1);		// Map between 0-1.0 where 0.5 is a 50% duty cycle	
 	if (motorIndxMask & 0x01)
 	{
-		if (pwm == 0)
+		if (power == 0)
 			motorDriver1.motorA_stop();
 		else
 		{
-			motorDriver1.setPwmApulsewidth(pwm);
+			motorDriver1.setPwmApulsewidth(power);
 			if (direction == FWD)
 				motorDriver1.motorA_cw();
 			else
@@ -171,11 +169,11 @@ void MotorController_setMotors_TB6612(uint8_t motorIndxMask, float power, uint8_
 	
 	if (motorIndxMask & 0x02)
 	{
-		if (pwm == 0)
+		if (power == 0)
 			motorDriver1.motorB_stop();
 		else
 		{
-			motorDriver1.setPwmBpulsewidth(pwm);	
+			motorDriver1.setPwmBpulsewidth(power);	
 			if (direction == FWD)
 				motorDriver1.motorB_cw();
 			else
@@ -185,11 +183,11 @@ void MotorController_setMotors_TB6612(uint8_t motorIndxMask, float power, uint8_
 	
 	if (motorIndxMask & 0x04)
 	{
-		if (pwm == 0)
+		if (power == 0)
 			motorDriver2.motorA_stop();
 		else
 		{
-			motorDriver2.setPwmApulsewidth(pwm);	
+			motorDriver2.setPwmApulsewidth(power);	
 			if (direction == FWD)
 				motorDriver2.motorA_cw();
 			else
@@ -199,11 +197,11 @@ void MotorController_setMotors_TB6612(uint8_t motorIndxMask, float power, uint8_
 	
 	if (motorIndxMask & 0x08)
 	{
-		if (pwm == 0)
+		if (power == 0)
 			motorDriver2.motorB_stop();
 		else
 		{
-			motorDriver2.setPwmBpulsewidth(pwm);	
+			motorDriver2.setPwmBpulsewidth(power);	
 			if (direction == FWD)
 				motorDriver2.motorB_cw();
 			else

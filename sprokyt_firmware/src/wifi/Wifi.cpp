@@ -162,12 +162,7 @@ void Wifi::ParseInstructions()
 	bool parsedInstr = false;
 	while (indx < m_rxData.size())
 	{
-		int instrSz = m_rxData[indx++];
-		if (instrSz != 2)
-		{
-			PRINTF("Instr not size 3!!!\r\n");
-		}
-		
+		int instrSz = m_rxData[indx++];		
 		if (m_rxData.size() - 1 < instrSz)
 			break;
 		

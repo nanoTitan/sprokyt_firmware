@@ -1,6 +1,7 @@
 #include "control_manager.h"
 #include "PID.h"
 #include "Wifi.h"
+#include "user_control.h"
 #include "flight_control.h"
 #include "esc_programmer.h"
 #include "debug.h"
@@ -12,6 +13,7 @@ uint32_t m_lastPing = 0;
 
 /* Private function prototypes -----------------------------------------------*/
 static void ControlMgr_setInstruction(uint8_t instruction, uint8_t value);
+static void ResetPing();
 
 CONTROL_STATE ControlMgr_getState()
 {
@@ -48,6 +50,9 @@ void ControlMgr_update()
 	
 	switch(m_currControllerType)
 	{
+		case CONTROLLER_USER:
+			break;
+		
 		case CONTROLLER_FLIGHT:
 			FlightControl_update();
 		
@@ -58,9 +63,6 @@ void ControlMgr_update()
 			break;
 		
 		case CONTROLLER_ESC_PROGRAMMER:
-			break;
-		
-		case CONTROLLER_NONE:
 			break;
 		
 		default:
@@ -95,10 +97,7 @@ void ControlMgr_parseInstruction(uint8_t data_length, uint8_t *att_data)
 	uint8_t instruction = att_data[0];
 	if (instruction == INSTRUCTION_PING)
 	{
-		ControlMgr_setState(CONTROL_STATE_CONNECTED);
-		PRINTF("dT: %lu\r\n", HAL_GetTick() - m_lastPing);	
-		m_lastPing = HAL_GetTick();
-		
+		ResetPing();		
 		return;
 	}
 	
@@ -115,10 +114,16 @@ void ControlMgr_parseInstruction(uint8_t data_length, uint8_t *att_data)
 		if (type < CONTROLLER_COUNT)
 			ControlMgr_setType((CONTROLLER_TYPE)type);
 		
+		ResetPing();
 		return;
 	}
 	
-	if (m_currControllerType == CONTROLLER_FLIGHT)
+	// Update based on controller type
+	if(m_currControllerType == CONTROLLER_USER)
+	{
+		UserControl_parseInstruction(data_length, att_data);
+	}
+	else if (m_currControllerType == CONTROLLER_FLIGHT)
 	{
 		FlightControl_parseInstruction(data_length, att_data);
 	}
@@ -131,6 +136,15 @@ void ControlMgr_parseInstruction(uint8_t data_length, uint8_t *att_data)
 	else if (m_currControllerType == CONTROLLER_ESC_PROGRAMMER)
 	{
 	}
+	
+	ResetPing();
+}
+
+void ResetPing()
+{
+	ControlMgr_setState(CONTROL_STATE_CONNECTED);
+	PRINTF("dT: %lu\r\n", HAL_GetTick() - m_lastPing);	
+	m_lastPing = HAL_GetTick();
 }
 
 void ControlMgr_setInstruction(uint8_t instruction, uint8_t value)
