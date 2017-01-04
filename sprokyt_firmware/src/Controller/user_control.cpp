@@ -81,9 +81,9 @@ void UserControl_parseInstruction(uint8_t data_length, uint8_t *att_data)
 		uint8_t value = att_data[2];
 		
 		float newValue = map(value, 0, 255, 0, 1);
-		//UserControl_setMotor(motorIndex, newValue, dir);
+		UserControl_setMotor(motorIndex, newValue, dir);
 		
-		PRINTF("%c, %.4f\r\n", motorIndex, newValue);
+		//PRINTF("%u, %.2f, %d\r\n", motorIndex, newValue, dir);
 	}
 }
 
