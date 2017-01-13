@@ -45,6 +45,19 @@
 
 #define CTRL_UPDATE_TIME 1000
 
+//  Default supply voltage in mV
+#ifndef ADC_SUPPLY_VOLTAGE
+#define ADC_SUPPLY_VOLTAGE		3300
+#endif
+
+// Multipliers for VBAT measurement
+#if defined (STM32F40_41xxx)
+#define ADC_VBAT_MULTI			2
+#endif
+#if defined (STM32F427_437xx) || defined (STM32F429_439xx) || defined (STM32F401xx) || defined (STM32F411xE)
+#define ADC_VBAT_MULTI			4
+#endif
+
 
 // 150 Quad X Setup
 //#define MOTOR_D 0x04
