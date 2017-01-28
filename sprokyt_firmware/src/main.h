@@ -53,7 +53,7 @@
 /* Definition for TIM_SF's NVIC */
 #define TIM_SF_IRQn							 TIM3_IRQn
 #define TIM_SF_IRQHandler					 TIM3_IRQHandler
-#define TIM_SF_CHANNEL						 TIM_CHANNEL_1
+#define TIM_SF_CHANNEL						 TIM_CHANNEL_2
 
 
 /* Exported functions ------------------------------------------------------- */
