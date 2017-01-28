@@ -14,10 +14,11 @@ Timeout _motorArmTimeout;
 bool _motorsArmed = false;
 
 #if defined(MOTOR_ESC)
-//PwmOut _bldcArray[4] = { D9, D10, PC_9, PC_8  };
+
 #elif defined(MOTOR_TOSHIBA)
-TB6612FNG motorDriver1(PB_1 /*PB_3*/, PA_1, PA_0, PB_0/*PA_7*/, PA_5, PA_6, PA_4);
-TB6612FNG motorDriver2(PB_6, PA_15, PA_8, PC_7/*PB_3*/, PC_3, PC_4, PC_2);
+TB6612FNG motorDriver1(PB_1, PA_1, PA_0, PB_0, PA_5, PA_6, PA_4);
+TB6612FNG motorDriver2(PB_6, PA_15, PA_8, PC_7, PC_3, PC_4, PC_2);
+PwmOut m_bldcArray[] = { PB_15, PB_14 };
 #elif defined(MOTOR_STSPIN)
 #endif
 
@@ -30,9 +31,10 @@ void STSpinInit();
 void MotorController_setMotors_STSPIN(uint8_t motorIndxMask, float power, direction_t dir);
 void STSPIN_setMotor(uint8_t indx, float pwm, uint8_t direction);
 #elif defined(MOTOR_ESC)
-void MotorController_setMotors_ESC(uint8_t motorIndxMask, float power, uint8_t direction);
+
 #elif defined(MOTOR_TOSHIBA)
 void MotorController_setMotors_TB6612(uint8_t motorIndxMask, float power, uint8_t direction);
+void MotorController_setServos(uint8_t motorIndxMask, float power, direction_t direction);
 #endif
 
 void MotorController_init()
@@ -40,29 +42,19 @@ void MotorController_init()
 #ifdef MOTOR_STSPIN	
 	STSpinInit();
 #elif defined(MOTOR_ESC)
-//	_bldcArray[0].period_us(20000);				// 20000 us = 50 Hz, 2040.8us = 490 Hz, 83.3 us = 12 Khz	
-//	_bldcArray[1].period_us(20000);
-//	_bldcArray[2].period_us(20000);
-//	_bldcArray[3].period_us(20000);
+	
 #elif defined(MOTOR_TOSHIBA)
 	float fPwmPeriod = 0.00002f;      // 50KHz
 	motorDriver1.setPwmAperiod(fPwmPeriod);
 	motorDriver1.setPwmBperiod(fPwmPeriod);
 	motorDriver2.setPwmAperiod(fPwmPeriod);
 	motorDriver2.setPwmBperiod(fPwmPeriod);
+	
+	//m_bldcArray[0].period_us(20000);				// 20000 us = 50 Hz, 2040.8us = 490 Hz, 83.3 us = 12 Khz	
+	//m_bldcArray[1].period_us(20000);
 #endif
 	
 	MotorController_setMotor(MOTOR_ALL, 0, BWD);
-}
-
-void MotorController_armMotors()
-{
-//	for (int i = 0; i < MC_NUM_MOTORS; ++i)
-//	{
-//		_bldcArray[i].pulsewidth_us(1000);			// 1000us - 2000us equals 0% - 100% power respectively
-//	}
-	
-	_motorsArmed = true;
 }
 
 bool MotorController_isArmed()
@@ -112,48 +104,35 @@ void MotorController_setMotor(uint8_t motorIndxMask, float power, direction_t di
 #ifdef MOTOR_STSPIN	
 	MotorController_setMotors_STSPIN(motorIndxMask, power, dir);
 #elif defined(MOTOR_ESC)
-	MotorController_setMotors_ESC(motorIndxMask, power, dir);
+	
 #elif defined(MOTOR_TOSHIBA)
 	MotorController_setMotors_TB6612(motorIndxMask, power, dir);
+	MotorController_setServos(motorIndxMask, power, dir);
 #endif
 }
 
 #ifdef MOTOR_STSPIN
 void MotorController_setMotors_STSPIN(uint8_t motorIndxMask, float power, direction_t dir)
 {
-	if (motorIndxMask & 0x01)
+	if (motorIndxMask & MOTOR_A)
 		STSpinSetMotor(0, 0, power, dir);
 	
-	if (motorIndxMask & 0x02)
+	if (motorIndxMask & MOTOR_B)
 		STSpinSetMotor(0, 1, power, dir);
 	
-	if (motorIndxMask & 0x04)
+	if (motorIndxMask & MOTOR_C)
 		STSpinSetMotor(1, 0, power, dir);
 	
-	if (motorIndxMask & 0x08)
+	if (motorIndxMask & MOTOR_D)
 		STSpinSetMotor(1, 1, power, dir);
 }
 
 #elif defined(MOTOR_ESC)
-void MotorController_setMotor_ESC(uint8_t motorIndxMask, float power, uint8_t direction)
-{
-	// 1000us - 2000us is 0% - 100% power respectively
-	float pwm = clampf(power, 0, 1.0f);	
-	
-	if (motorIndxMask & 0x01)
-		_bldcArray[0].pulsewidth_us(power);	
-	if (motorIndxMask & 0x02)
-		_bldcArray[1].pulsewidth_us(power);	
-	if (motorIndxMask & 0x04)
-		_bldcArray[2].pulsewidth_us(power);	
-	if (motorIndxMask & 0x08)
-		_bldcArray[3].pulsewidth_us(power);	
-}
 
 #elif defined(MOTOR_TOSHIBA)
 void MotorController_setMotors_TB6612(uint8_t motorIndxMask, float power, uint8_t direction)
 {
-	if (motorIndxMask & 0x01)
+	if (motorIndxMask & MOTOR_A)
 	{
 		if (power == 0)
 			motorDriver1.motorA_stop();
@@ -167,7 +146,7 @@ void MotorController_setMotors_TB6612(uint8_t motorIndxMask, float power, uint8_
 		}		
 	}
 	
-	if (motorIndxMask & 0x02)
+	if (motorIndxMask & MOTOR_B)
 	{
 		if (power == 0)
 			motorDriver1.motorB_stop();
@@ -181,7 +160,7 @@ void MotorController_setMotors_TB6612(uint8_t motorIndxMask, float power, uint8_
 		}
 	}
 	
-	if (motorIndxMask & 0x04)
+	if (motorIndxMask & MOTOR_C)
 	{
 		if (power == 0)
 			motorDriver2.motorA_stop();
@@ -195,7 +174,7 @@ void MotorController_setMotors_TB6612(uint8_t motorIndxMask, float power, uint8_
 		}
 	}
 	
-	if (motorIndxMask & 0x08)
+	if (motorIndxMask & MOTOR_D)
 	{
 		if (power == 0)
 			motorDriver2.motorB_stop();
@@ -208,5 +187,20 @@ void MotorController_setMotors_TB6612(uint8_t motorIndxMask, float power, uint8_
 				motorDriver2.motorB_ccw();
 		}
 	}
+}
+
+void MotorController_setServos(uint8_t motorIndxMask, float power, direction_t direction)
+{
+	// 1000us: CCW 100%, 1500us: Stop, 2000us CW 100%
+	float pwm = mapf(power, 0, 1, 0, 500);
+	if (direction == FWD)
+		pwm += 1500;
+	else
+		pwm = 1500 - pwm;
+	
+//	if (motorIndxMask & MOTOR_A)
+//		m_bldcArray[0].pulsewidth_us(pwm);	
+//	if (motorIndxMask & MOTOR_B)
+//		m_bldcArray[1].pulsewidth_us(pwm);
 }
 #endif

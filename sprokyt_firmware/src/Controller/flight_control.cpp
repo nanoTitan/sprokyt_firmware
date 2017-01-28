@@ -218,8 +218,16 @@ void UpdateFlightControl()
 	else
 	{
 #if defined(MOTORS_ENABLED)
-		// Allow ESCs to be armed or turn motors on/off
-		FlightControl_setMotor(MOTOR_ALL, m_rcThrottle, FWD);
+		// Allow ESCs to be armed or turn motors on/off if asked; otherwise, disable
+		if (m_lastThrottleDown > 0)
+		{
+			FlightControl_setMotor(MOTOR_A, m_rcThrottle, FWD);
+			FlightControl_setMotor(MOTOR_B, m_rcThrottle, BWD);
+			FlightControl_setMotor(MOTOR_C, m_rcThrottle, FWD);
+			FlightControl_setMotor(MOTOR_D, m_rcThrottle, BWD);
+		}
+		else
+			FlightControl_setMotor(MOTOR_ALL, 0, FWD);
 #endif // MOTORS_ENABLED
 		
 		// Reset target yaw for next takeoff
@@ -325,7 +333,7 @@ void FlightControl_setPIDValue(uint8_t instruction, const PIDInfo& info)
 
 void FlightControl_setMotor(uint8_t motorIndex, float value, direction_t dir)
 {
-	float newValue = map(value, 1000, 2000, 0, 1);
+	float newValue = mapf(value, 1000, 2000, 0, 1);
 	MotorController_setMotor(motorIndex, newValue, dir);
 }
 
@@ -333,23 +341,23 @@ void FlightControl_setInstruction(uint8_t instruction, uint8_t value)
 {
 	if(instruction == INSTRUCTION_THROTTLE)
 	{
-		m_rcThrottle = map(value, 0, 255, MIN_THROTTLE, MAX_THROTTLE);
+		m_rcThrottle = mapf(value, 0, 255, MIN_THROTTLE, MAX_THROTTLE);
 	}
 	else if (instruction == INSTRUCTION_YAW)
 	{
 		int8_t adjValue = (int8_t)value;
-		m_rcYaw = map(adjValue, -128, 127, -150, 150);
+		m_rcYaw = mapf(adjValue, -128, 127, -150, 150);
 	}
 	else if (instruction == INSTRUCTION_PITCH)
 	{
 		int8_t adjValue = (int8_t)value;
-		m_rcPitch = map(adjValue, -128, 127, -45, 45);
+		m_rcPitch = mapf(adjValue, -128, 127, -45, 45);
 		m_rcPitch *= -1;
 	}
 	else if (instruction == INSTRUCTION_ROLL)
 	{
 		int8_t adjValue = (int8_t)value;
-		m_rcRoll = map(adjValue, -128, 127, -45, 45);
+		m_rcRoll = mapf(adjValue, -128, 127, -45, 45);
 	}
 	else if (instruction == INSTRUCTION_TRIM_THROTTLE)
 	{

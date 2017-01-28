@@ -28,3 +28,4 @@ void ControlMgr_setType(enum CONTROLLER_TYPE ctrlType);
 void ControlMgr_update();
 void ControlMgr_setMotor(uint8_t motorIndex, uint8_t value, direction_t dir);
 void ControlMgr_parseInstruction(uint8_t data_length, uint8_t *att_data);
+uint32_t ControlMgr_Get_Battery();

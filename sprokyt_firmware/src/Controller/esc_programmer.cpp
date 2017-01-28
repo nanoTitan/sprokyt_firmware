@@ -27,7 +27,7 @@ void EscProgrammer_setInstruction(uint8_t instruction, uint8_t value)
 	static int motor = MOTOR_ALL;
 	if(instruction == INSTRUCTION_THROTTLE)
 	{
-		float throttle = map(value, 0, 255, 1000, 2000);
+		float throttle = mapf(value, 0, 255, 1000, 2000);
 		MotorController_setMotor(motor, throttle, FWD);		
 	}
 }

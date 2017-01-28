@@ -52,15 +52,15 @@ int main()
 	
 	// Control Manager
 	ControlMgr_init();
-	ControlMgr_setType(CONTROLLER_FLIGHT);	//  CONTROLLER_ESC_PROGRAMMER CONTROLLER_FLIGHT
+	ControlMgr_setType(CONTROLLER_USER);	//  CONTROLLER_ESC_PROGRAMMER CONTROLLER_FLIGHT
+	
+	// IMU and Sensors
+	IMU_init();
 	
 	// Communication
 	//BLE::InitBLE();
 	//SWPF01SA::Instance()->InitWifi();		// ST Wifi
 	//Wifi::Instance()->Init();				// ESP Wifi
-	
-	// IMU and Sensors
-	//IMU_init();
 	
 	while (1)
 	{
@@ -70,7 +70,7 @@ int main()
 		//SWPF01SA::Instance()->Update();
 		
 		// IMU and Sensors
-		//IMU_update();
+		IMU_update();
 		
 		ControlMgr_update();		
 	}
