@@ -8,6 +8,11 @@
 #include "debug.h"
 #include <mbed.h>
 
+extern "C" 
+{
+#include "imu.h"
+}
+
 
 /* Private variables ---------------------------------------------------------*/
 
@@ -15,6 +20,8 @@
 static void UpdateUserControl();
 static void UpdateDisconnected();
 static void Disarm();
+static void RunMotorTest();
+static void PrintIMU();
 
 /* Private functions ---------------------------------------------------------*/
 void UserControl_init()
@@ -50,7 +57,8 @@ void UserControl_update()
 
 void UpdateUserControl()
 {
-	// RunMotorTest();
+	//RunMotorTest();
+	PrintIMU();
 }
 
 void UpdateDisconnected()
@@ -95,33 +103,43 @@ void UserControl_setMotor(uint8_t motorIndex, float value, direction_t dir)
 void RunMotorTest()
 {
 		// ********* Test code for servos *********
-//	static float speed = 0;	
-//	static bool up = true;
-//	static int motor = MOTOR_A;
-//	
-//	if (up)
-//	{
-//		wait_ms(50);
-//		UserControl_setMotor(motor, speed, FWD);	// TEST Servos
-//		//UserControl_setMotor(MOTOR_B, speed * 2, FWD);	// TEST Servos
-//		speed += 0.01;
-//		
-//		if (speed >= 1)
-//			up = false;
-//	}
-//	else
-//	{
-//		wait_ms(50);
-//		UserControl_setMotor(motor, speed, FWD);	// TEST Servos
-//		//UserControl_setMotor(MOTOR_B, speed * 2, FWD);	// TEST Servos
-//		speed -= 0.01;
-//		
-//		if (speed <= 0 && motor < MOTOR_D)
-//		{
-//			motor <<= 1;
-//			speed = 0;
-//			up = true;
-//		}
-//	}
+	static float speed = 0;	
+	static bool up = true;
+	static int motor = MOTOR_ALL;
+	
+	if (up)
+	{
+		wait_ms(50);
+		UserControl_setMotor(motor, speed, FWD);	// TEST Servos
+		speed += 0.01;
+		
+		if (speed >= 1)
+		{
+			up = false;
+		}	
+	}
+	else
+	{
+		wait_ms(50);
+		UserControl_setMotor(motor, speed, BWD);	// TEST Servos
+		speed -= 0.01;
+		
+		if (speed <= 0 && motor < MOTOR_D)
+		{
+			UserControl_setMotor(motor, 0, FWD);	// Stop
+			motor <<= 1;
+			speed = 0;
+			up = true;
+		}
+	}
 	// ********* End Test code for servos ********* 
+}
+
+void PrintIMU()
+{
+	float yaw =  IMU_get_sf_yaw();
+	float pitch = IMU_get_sf_pitch();
+	float roll = IMU_get_sf_roll();
+	
+	PRINTF("yaw: %.2f, pitch: %.2f, roll: %.2f\r\n", yaw, pitch, roll);			// yaw, pitch, roll
 }

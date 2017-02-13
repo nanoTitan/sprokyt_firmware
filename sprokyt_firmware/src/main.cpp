@@ -20,6 +20,7 @@ extern "C" {
 
 #include "cube_hal.h"
 #include "imu.h"
+#include "LED/LEDManager.h"
 
 #ifdef __cplusplus
 }
@@ -28,7 +29,7 @@ extern "C" {
 int main()
 {	
 	PRINTF("***************************\r\n");
-	PRINTF("Ruka Firmware Version %s\r\n", FIRMWARE_VERSION);
+	PRINTF("Ruka Firmware Version %s\r\n", FIRMWARE_VERSION_STR);
 	PRINTF("Copyright Sprokyt LLC 2016\r\n");
 	PRINTF("All Rights Reserved\r\n");
 	PRINTF("***************************\r\n\r\n");
@@ -41,8 +42,7 @@ int main()
 	// Configure the system clock
 	SystemClock_Config();
 	
-	BSP_LED_Init(LED_2);
-	BSP_LED_Off(LED_2);
+	LEDMgr_Init();
 	
 	// Initialize Button
 	BSP_PB_Init(BUTTON_KEY, BUTTON_MODE_GPIO);
@@ -55,7 +55,7 @@ int main()
 	ControlMgr_setType(CONTROLLER_USER);	//  CONTROLLER_ESC_PROGRAMMER CONTROLLER_FLIGHT
 	
 	// IMU and Sensors
-	IMU_init();
+	//IMU_init();
 	
 	// Communication
 	//BLE::InitBLE();
@@ -64,13 +64,15 @@ int main()
 	
 	while (1)
 	{
+		HAL_Delay(500);
+		
 		// Communication
 		//Wifi::Instance()->Update();
 		//BLE::Update();
 		//SWPF01SA::Instance()->Update();
 		
 		// IMU and Sensors
-		IMU_update();
+		//IMU_update();
 		
 		ControlMgr_update();		
 	}

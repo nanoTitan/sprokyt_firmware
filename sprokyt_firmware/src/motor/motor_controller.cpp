@@ -16,9 +16,15 @@ bool _motorsArmed = false;
 #if defined(MOTOR_ESC)
 
 #elif defined(MOTOR_TOSHIBA)
+#ifdef FIRMWARE_VERSION_0_2_2
 TB6612FNG motorDriver1(PB_1, PA_1, PA_0, PB_0, PA_5, PA_6, PA_4);
 TB6612FNG motorDriver2(PB_6, PA_15, PA_8, PC_7, PC_3, PC_4, PC_2);
-PwmOut m_bldcArray[] = { PB_15, PB_14 };
+PwmOut m_bldcArray[] = { PA_11, PB_10, PC_6 };
+#elseTB6612FNG motorDriver1(PB_1, PB_2, PC_5, PB_0, PB_12, PB_13, PA_4);
+TB6612FNG motorDriver2(PA_6, PB_15, PB_14, PA_8, PC_3, PC_4, PC_2);
+//PwmOut m_bldcArray[] = { PA_0, PB_10, PB_7, PB_6 };
+//PwmOut m_bldcArray[] = { PB_6, PB_6, PB_6, PB_6 };
+#endif
 #elif defined(MOTOR_STSPIN)
 #endif
 
@@ -50,8 +56,10 @@ void MotorController_init()
 	motorDriver2.setPwmAperiod(fPwmPeriod);
 	motorDriver2.setPwmBperiod(fPwmPeriod);
 	
-	//m_bldcArray[0].period_us(20000);				// 20000 us = 50 Hz, 2040.8us = 490 Hz, 83.3 us = 12 Khz	
-	//m_bldcArray[1].period_us(20000);
+//	m_bldcArray[0].period_us(20000);				// 20000 us = 50 Hz, 2040.8us = 490 Hz, 83.3 us = 12 Khz	
+//	m_bldcArray[1].period_us(20000);
+//	m_bldcArray[2].period_us(20000);
+//	m_bldcArray[3].period_us(20000);
 #endif
 	
 	MotorController_setMotor(MOTOR_ALL, 0, BWD);
@@ -106,7 +114,7 @@ void MotorController_setMotor(uint8_t motorIndxMask, float power, direction_t di
 #elif defined(MOTOR_ESC)
 	
 #elif defined(MOTOR_TOSHIBA)
-	MotorController_setMotors_TB6612(motorIndxMask, power, dir);
+	MotorController_setMotors_TB6612(motorIndxMask, power, dir);	
 	MotorController_setServos(motorIndxMask, power, dir);
 #endif
 }
@@ -192,6 +200,9 @@ void MotorController_setMotors_TB6612(uint8_t motorIndxMask, float power, uint8_
 void MotorController_setServos(uint8_t motorIndxMask, float power, direction_t direction)
 {
 	// 1000us: CCW 100%, 1500us: Stop, 2000us CW 100%
+	if (power < 0)
+		power = 0;
+	
 	float pwm = mapf(power, 0, 1, 0, 500);
 	if (direction == FWD)
 		pwm += 1500;
@@ -202,5 +213,9 @@ void MotorController_setServos(uint8_t motorIndxMask, float power, direction_t d
 //		m_bldcArray[0].pulsewidth_us(pwm);	
 //	if (motorIndxMask & MOTOR_B)
 //		m_bldcArray[1].pulsewidth_us(pwm);
+//	if (motorIndxMask & MOTOR_C)
+//		m_bldcArray[2].pulsewidth_us(pwm);
+//	if (motorIndxMask & MOTOR_D)
+//		m_bldcArray[3].pulsewidth_us(pwm);
 }
 #endif

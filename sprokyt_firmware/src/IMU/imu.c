@@ -337,11 +337,13 @@ float IMU_get_roll()
  * @param  None
  */
 void InitializeAllSensors(void)
-{
+{	
 	PRINTF("Initializing IMU sensors\r\n");
 	
+	DrvStatusTypeDef result = 0;
+		
 	/* Try to use LSM6DS3 DIL24 if present, otherwise use LSM6DS0 on board */
-	DrvStatusTypeDef result = BSP_ACCELERO_Init(ACCELERO_SENSORS_AUTO, &ACCELERO_handle);		// ACCELERO_SENSORS_AUTO, LSM6DS3_X_0, LSM6DS0_X_0
+	result = BSP_ACCELERO_Init(ACCELERO_SENSORS_AUTO, &ACCELERO_handle);		// ACCELERO_SENSORS_AUTO, LSM6DS3_X_0, LSM6DS0_X_0
 	if (result != COMPONENT_OK)
 		CError_Handler();
 	
@@ -349,6 +351,8 @@ void InitializeAllSensors(void)
 	result = BSP_GYRO_Init(GYRO_SENSORS_AUTO, &GYRO_handle);
 	if (result != COMPONENT_OK)
 		CError_Handler();
+	
+	
 	
 	/* Force to use LIS3MDL */
 	if (!SF_6x_enabled)

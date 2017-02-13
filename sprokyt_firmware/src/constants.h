@@ -2,7 +2,10 @@
 #ifndef _CONSTANTS_H_
 #define _CONSTANTS_H_
 
-#define FIRMWARE_VERSION "0.2.0"
+#define FIRMWARE_VERSION_0_2_2
+//#define FIRMWARE_VERSION_0_2_3
+
+#define FIRMWARE_VERSION_STR "0.2.2"
 
 #define WIFI_PING_TIMEOUT 3600
 
